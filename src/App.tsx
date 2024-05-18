@@ -45,9 +45,22 @@ function App() {
         filteredTasks = tasks.filter(task => task.isDone === false)
     }
 
+    function changeStatus(taskId: string, isDone:boolean) {
+        let task = tasks.find(t => t.id === taskId)
+        if(task){
+            task.isDone=isDone
+        }
+        setTasks([...tasks])//return copy!!!
+    }
+
     return <div className="App">
-        <ToDoList title={"What to learn"} task={filteredTasks} removeTask={removeTask} changeFilter={changeFilter}
-                  addTask={addTask}/>
+        <ToDoList title={"What to learn"}
+                  task={filteredTasks}
+                  removeTask={removeTask}
+                  changeFilter={changeFilter}
+                  addTask={addTask}
+                  changeTaskStatus={changeStatus}
+        />
     </div>
 }
 
