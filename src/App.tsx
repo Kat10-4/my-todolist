@@ -1,18 +1,25 @@
 import React, {useState} from 'react';
 import './App.css';
-import {TaskType, ToDoList} from "./ToDoList";
-import {v1} from "uuid";
+import {TaskType, ToDoList} from './ToDoList';
+import {v1} from 'uuid';
 
-export type FilterValuesType = "all" | "active" | "completed"
+export type FilterValuesType = 'all' | 'active' | 'completed'
+
+type ToDoListsType = {
+    id: string,
+    title: string,
+    filter:FilterValuesType
+}
 
 function App() {
     let [tasks, setTasks] = useState<Array<TaskType>>([
-        {id: v1(), title: "CSS", isDone: true},
-        {id: v1(), title: "JS", isDone: true},
-        {id: v1(), title: "React", isDone: false},
-        {id: v1(), title: "Redux", isDone: false},
+        {id: v1(), title: 'CSS', isDone: true},
+        {id: v1(), title: 'JS', isDone: true},
+        {id: v1(), title: 'React', isDone: false},
+        {id: v1(), title: 'Redux', isDone: false},
     ])
-    let [filter, setFilter] = useState<FilterValuesType>("all")
+
+    let [filter, setFilter] = useState<FilterValuesType>('all')
 
     function addTask(newTaskTitle: string) {
         setTasks([{
@@ -33,10 +40,10 @@ function App() {
 
     let filteredTasks = tasks
 
-    if (filter === "completed") {
+    if (filter === 'completed') {
         filteredTasks = tasks.filter(task => task.isDone === true)
     }
-    if (filter === "active") {
+    if (filter === 'active') {
         filteredTasks = tasks.filter(task => task.isDone === false)
     }
 
@@ -48,15 +55,22 @@ function App() {
         setTasks([...tasks])//return copy!!!
     }
 
+    let toDoLists: Array<ToDoListsType> = [
+        {id: v1(), title: 'what to learn', filter: 'active'},
+        {id: v1(), title: 'what to buy', filter: 'completed'}
+    ]
+
     return <div className="App">
-        <ToDoList title={"What to learn"}
-                  task={filteredTasks}
-                  removeTask={removeTask}
-                  changeFilter={changeFilter}
-                  addTask={addTask}
-                  changeTaskStatus={changeStatus}
-                  filter={filter}
-        />
+        {toDoLists.map((tl) => {
+            return <ToDoList title={tl.title}
+                             task={filteredTasks}
+                             removeTask={removeTask}
+                             changeFilter={changeFilter}
+                             addTask={addTask}
+                             changeTaskStatus={changeStatus}
+                             filter={tl.filter}
+            />
+        })}
     </div>
 }
 
