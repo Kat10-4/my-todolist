@@ -2,6 +2,7 @@ import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {FilterValuesType} from './App';
 import {Simulate} from 'react-dom/test-utils';
 import error = Simulate.error;
+import {Button} from './components/Button';
 
 export type TaskType = {
     id: string,
@@ -65,8 +66,7 @@ export function ToDoList({id, title, task, removeTask, changeFilter, addTask, ch
                    onChange={onChangeHandler}
                    onKeyUp={onKeyUpHandler}
                    className={error ? 'error' : ''}/>
-            <button onClick={addTaskHandler}>+
-            </button>
+            <Button title="+" onClick={addTaskHandler}/>
             {error && <div className={'error-message'}>{error}</div>}
         </div>
         <ul>
@@ -81,20 +81,18 @@ export function ToDoList({id, title, task, removeTask, changeFilter, addTask, ch
                                    checked={t.isDone}
                                    onChange={onChangeHandler}/>
                             <span>{t.title}</span>
-                            <button onClick={onRemoveHandler}>x</button>
+                            <Button title="X" onClick={onRemoveHandler}/>
                         </li>)
                 }
             )
             }
         </ul>
         <div>
-            <button className={filter === 'all' ? 'active-filter' : ''} onClick={onAllClickHandler}>All</button>
-            <button className={filter === 'active' ? 'active-filter' : ''}
-                    onClick={onActiveClickHandler}>Active
-            </button>
-            <button className={filter === 'completed' ? 'active-filter' : ''}
-                    onClick={onCompletedClickHandler}>Completed
-            </button>
+            <Button title="All" className={filter === 'all' ? 'active-filter' : ''} onClick={onAllClickHandler}/>
+            <Button title="Active" className={filter === 'active' ? 'active-filter' : ''}
+                    onClick={onActiveClickHandler}/>
+            <Button title="Completed" className={filter === 'completed' ? 'active-filter' : ''}
+                    onClick={onCompletedClickHandler}/>
         </div>
     </div>
 }

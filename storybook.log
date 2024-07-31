@@ -1,0 +1,33 @@
+yarn add v1.22.21
+warning ../../../package.json: No license field
+[1/4] Resolving packages...
+(node:8288) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+warning storybook > jscodeshift > temp > rimraf@2.6.3: Rimraf versions prior to v4 are no longer supported
+warning @storybook/react-webpack5 > @storybook/builder-webpack5 > webpack-dev-middleware > memfs@3.6.0: this will be v4
+warning @storybook/react-webpack5 > @storybook/builder-webpack5 > fork-ts-checker-webpack-plugin > memfs@3.6.0: this will be v4
+[2/4] Fetching packages...
+[3/4] Linking dependencies...
+warning " > @testing-library/user-event@13.5.0" has unmet peer dependency "@testing-library/dom@>=7.21.4".
+warning "react-scripts > eslint-config-react-app > eslint-plugin-flowtype@8.0.3" has unmet peer dependency "@babel/plugin-syntax-flow@^7.14.5".
+warning "react-scripts > eslint-config-react-app > eslint-plugin-flowtype@8.0.3" has unmet peer dependency "@babel/plugin-transform-react-jsx@^7.14.9".
+warning " > @babel/plugin-transform-private-property-in-object@7.24.1" has unmet peer dependency "@babel/core@^7.0.0-0".
+warning "eslint-plugin-storybook > @typescript-eslint/utils@5.62.0" has unmet peer dependency "eslint@^6.0.0 || ^7.0.0 || ^8.0.0".
+warning "@storybook/preset-create-react-app > @pmmmwh/react-refresh-webpack-plugin@0.5.15" has unmet peer dependency "react-refresh@>=0.10.0 <1.0.0".
+warning " > eslint-plugin-storybook@0.8.0" has unmet peer dependency "eslint@>=6".
+[4/4] Building fresh packages...
+error Error: /Users/kateryna_diachenko/WebstormProjects/React 01/my-todolist/node_modules/esbuild: Cannot find module 'pnpapi'
+Require stack:
+- /Users/kateryna_diachenko/.cache/node/corepack/yarn/1.22.21/lib/cli.js
+- /Users/kateryna_diachenko/.cache/node/corepack/yarn/1.22.21/bin/yarn.js
+Require stack:
+- /Users/kateryna_diachenko/.cache/node/corepack/yarn/1.22.21/lib/cli.js
+- /Users/kateryna_diachenko/.cache/node/corepack/yarn/1.22.21/bin/yarn.js
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1149:15)
+    at require$$0.Module._resolveFilename (/private/var/folders/yb/2g5913lx7d59g9q580r5xv5r0000gn/T/xfs-72aac3f7/dlx-8233/.pnp.cjs:11735:54)
+    at require.resolve (/Users/kateryna_diachenko/.cache/node/corepack/yarn/1.22.21/lib/v8-compile-cache.js:162:23)
+    at /Users/kateryna_diachenko/.cache/node/corepack/yarn/1.22.21/lib/cli.js:34246:76
+    at Generator.next (<anonymous>)
+    at step (/Users/kateryna_diachenko/.cache/node/corepack/yarn/1.22.21/lib/cli.js:310:30)
+    at /Users/kateryna_diachenko/.cache/node/corepack/yarn/1.22.21/lib/cli.js:321:13
+info Visit https://yarnpkg.com/en/docs/cli/add for documentation about this command.
