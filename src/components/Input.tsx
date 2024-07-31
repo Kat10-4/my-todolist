@@ -1,10 +1,20 @@
-import React from 'react';
+import React, {ChangeEvent, KeyboardEvent} from 'react';
 
-export const Input = () => {
+type InputPropsType = {
+    value: string,
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void,
+    onKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void,
+    className?: string,
+    error?:string | null
+}
+
+export const Input = (props: InputPropsType) => {
     return (
-        <div>
-
-        </div>
-    );
+        <input value={props.value}
+               onChange={props.onChange}
+               onKeyUp={props.onKeyUp}
+               className={props.error ? 'error' : ''}/>
+    )
+        ;
 };
 
