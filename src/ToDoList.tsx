@@ -1,10 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {FilterValuesType} from './App';
-import {Simulate} from 'react-dom/test-utils';
-import error = Simulate.error;
 import {Button} from './components/Button';
 import {Input} from './components/Input';
-import {func} from 'prop-types';
 
 export type TaskType = {
     id: string,

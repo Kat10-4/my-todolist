@@ -1,14 +1,18 @@
+import type { Meta } from '@storybook/react';
+
+import {Button} from './Button';
 import React from 'react';
 
-type ButtonPropsType={
-    title: string,
-    onClick:()=>void
-    className?:string
-}
-
-export const Button = (props:ButtonPropsType) => {
-    return (
-  <button onClick={props.onClick}>{props.title}</button>
-    );
+const meta: Meta<typeof Button> = {
+    component: Button,
 };
+
+export default meta;
+
+export const  toDoListButton=()=>{
+    return <Button title="X" onClick={()=>{}}/>
+}
+export const  taskButton=()=>{
+    return <Button title="+" onClick={()=>{}}/>
+}
 
