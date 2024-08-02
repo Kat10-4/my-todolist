@@ -2,6 +2,7 @@ import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {FilterValuesType} from './App';
 import {Button} from './components/Button';
 import {Input} from './components/Input';
+import './App.css'
 
 export type TaskType = {
     id: string,
@@ -69,21 +70,20 @@ export function ToDoList({
     const removeToDoListHandler = () => removeToDoList(id)
 
     const tasksList = task.map(t => {
-                const onRemoveHandler = () => removeTask(t.id, id)
-                const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                    changeTaskStatus(t.id, e.currentTarget.checked, id)
-                }
-                return (
-                    <li key={t.id} className={t.isDone ? 'is-done' : ''}>
-                        <input type="checkbox"
-                               checked={t.isDone}
-                               onChange={onChangeHandler}/>
-                        <span>{t.title}</span>
-                        <Button title="X" onClick={onRemoveHandler}/>
-                    </li>)
+            const onRemoveHandler = () => removeTask(t.id, id)
+            const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                changeTaskStatus(t.id, e.currentTarget.checked, id)
             }
-        )
-
+            return (
+                <li key={t.id} className={t.isDone ? 'is-done' : ''}>
+                    <input type="checkbox"
+                           checked={t.isDone}
+                           onChange={onChangeHandler}/>
+                    <span>{t.title}</span>
+                    <Button title="X" onClick={onRemoveHandler}/>
+                </li>)
+        }
+    )
 
 
     return <div>
@@ -94,7 +94,8 @@ export function ToDoList({
             <Input value={newTaskTitle}
                    onChange={onChangeHandler}
                    onKeyUp={onKeyUpHandler}
-                   className={error ? 'error' : ''}/>
+                   className={error ? 'error' : ''}
+                   error={error}/>
             <Button title="+" onClick={addTaskHandler}/>
             {error && <div className={'error-message'}>{error}</div>}
         </div>

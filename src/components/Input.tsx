@@ -1,4 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent} from 'react';
+import '..//App.css';
+
 
 type InputPropsType = {
     value: string,
