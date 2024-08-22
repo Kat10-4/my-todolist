@@ -1,8 +1,8 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {FilterValuesType} from './App';
-import {Button} from './components/Button';
-import {Input} from './components/Input';
-import './App.css'
+import {FilterValuesType} from '../../App';
+import {Button} from '../Button/Button';
+import {Input} from '../Input/Input';
+import '../../App.css'
 
 export type TaskType = {
     id: string,

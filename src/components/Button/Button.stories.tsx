@@ -1,5 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react';
-import '..//App.css';
+import '../../App.css';
 import {Button} from './Button';
 import React, {useState} from 'react';
 import {action} from '@storybook/addon-actions'

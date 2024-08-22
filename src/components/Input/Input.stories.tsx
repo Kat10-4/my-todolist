@@ -1,5 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react';
-import '..//App.css';
+import '../../App.css';
 import React, {useState} from 'react';
 import {action} from '@storybook/addon-actions'
 import {Input} from './Input';
@@ -32,4 +32,8 @@ export const FilledInput = () => {
 export const ErrorInput = () => {
     const [error, setError] = useState('error')
     return <Input value={''} onChange={onChangeCallBack} onKeyUp={onKeyUpCallBack} className={error ? 'active-filter' : ''}/>
+}
+
+export const ChangeInput = () => {
+    return <input defaultValue={"hello"}/>//can change in stories
 }
