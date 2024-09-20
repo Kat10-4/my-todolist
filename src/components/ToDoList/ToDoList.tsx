@@ -1,9 +1,9 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent} from 'react';
 import {FilterValuesType} from '../../App';
 import {Button} from '../Button/Button';
-import {Input} from '../Input/Input';
 import '../../App.css'
 import {AddItemForm} from '../AddItemForm/AddItemForm';
+import {EditableSpan} from '../EditableSpan/EditableSpan';
 
 export type TaskType = {
     id: string,
@@ -21,6 +21,8 @@ type PropsType = {
     changeTaskStatus: (taskId: string, isDone: boolean, toDolistId: string) => void
     filter: FilterValuesType,
     removeToDoList: (toDoListId: string) => void
+    updateTaskTitle: (toDoListId: string, taskId: string, title: string) => void
+    updateListTitle: (toDoListId: string, title: string) => void
 }
 
 export function ToDoList({
@@ -32,9 +34,19 @@ export function ToDoList({
                              addTask,
                              changeTaskStatus,
                              filter,
-                             removeToDoList
+                             removeToDoList,
+                             updateTaskTitle,
+                             updateListTitle
                          }: PropsType) {
 
+    let filteredTasks = task
+
+    if (filter === 'completed') {
+        filteredTasks = filteredTasks.filter(task => task.isDone === true)
+    }
+    if (filter === 'active') {
+        filteredTasks = filteredTasks.filter(task => task.isDone === false)
+    }
 
     const onAllClickHandler = () => changeFilter('all', id)
 
@@ -44,7 +56,19 @@ export function ToDoList({
 
     const removeToDoListHandler = () => removeToDoList(id)
 
-    const tasksList = task.map(t => {
+    const addTaskHandler = (title: string) => {
+        addTask(title, id)
+    }
+
+    const updateTaskTitleHandler = (taskId: string, updatedTitle: string) => {
+        updateTaskTitle(id, taskId, updatedTitle)
+    }
+
+    const updateListTitleHandler = (updatedTitle: string) => {
+        updateListTitle(id, updatedTitle)
+    }
+
+    const tasksList = filteredTasks.map(t => {
             const onRemoveHandler = () => removeTask(t.id, id)
             const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
                 changeTaskStatus(t.id, e.currentTarget.checked, id)
@@ -54,18 +78,17 @@ export function ToDoList({
                     <input type="checkbox"
                            checked={t.isDone}
                            onChange={onChangeHandler}/>
-                    <span>{t.title}</span>
+                    <EditableSpan oldTitle={t.title}
+                                  onClick={(updatedTitle) => updateTaskTitleHandler(t.id, updatedTitle)}/>
                     <Button title="X" onClick={onRemoveHandler}/>
                 </li>)
         }
     )
 
-    const addTaskHandler = (title: string) => {
-        addTask(title, id)
-    }
 
     return <div>
-        <h3>{title}
+        <h3>
+            <EditableSpan oldTitle={title} onClick={(updatedTitle) => updateListTitleHandler(updatedTitle)}/>
             <button onClick={removeToDoListHandler}>X</button>
         </h3>
         <AddItemForm addItem={addTaskHandler}/>

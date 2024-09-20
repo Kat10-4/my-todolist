@@ -12,7 +12,7 @@ type ToDoListsType = {
     filter: FilterValuesType
 }
 
-function App(){
+function App() {
     const toDoListId1 = v1()
     const toDoListId2 = v1()
 
@@ -34,10 +34,9 @@ function App(){
         ]
     })
 
-    let [filter, setFilter] = useState<FilterValuesType>('all')
 
     const addTask = (newTaskTitle: string, toDolistId: string) => {
-        let newTask:TaskType = {id: v1(), title: newTaskTitle, isDone: false}
+        let newTask: TaskType = {id: v1(), title: newTaskTitle, isDone: false}
         setTasks({
             ...tasksObj, [toDolistId]: [...tasksObj[toDolistId], newTask]
         })
@@ -69,36 +68,37 @@ function App(){
         setTasks({...tasksObj})
     }
 
-    const addListHandler=(title:string)=>{
+    const addListHandler = (title: string) => {
         const id = v1()
-        setToDoLists([...toDoLists,{id, title, filter: 'all'}])
-        setTasks({...tasksObj,[id]:[]})
+        setToDoLists([...toDoLists, {id, title, filter: 'all'}])
+        setTasks({...tasksObj, [id]: []})
+    }
+
+    const updateTaskTitle = (toDoListId: string, taskId: string, title: string) => {
+        setTasks({...tasksObj, [toDoListId]: tasksObj[toDoListId].map(el => el.id === taskId ? {...el, title} : el)})
+    }
+
+    const updateListTitle = (toDoListId: string, title: string) => {
+        setToDoLists(toDoLists.map(el=>el.id===toDoListId?{...el,title}:el))
     }
 
     return <div className="App">
         <AddItemForm addItem={addListHandler}/>
         {toDoLists.map((tl) => {
 
-            let filteredTasks = tasksObj[tl.id]
-
-            if (tl.filter === 'completed') {
-                filteredTasks = filteredTasks.filter(task => task.isDone === true)
-            }
-            if (tl.filter === 'active') {
-                filteredTasks = filteredTasks.filter(task => task.isDone === false)
-            }
-
             return <ToDoList
                 key={tl.id}
                 id={tl.id}
                 title={tl.title}
-                task={filteredTasks}
+                task={tasksObj[tl.id]}
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
                 changeTaskStatus={changeStatus}
                 filter={tl.filter}
                 removeToDoList={removeToDoList}
+                updateTaskTitle={updateTaskTitle}
+                updateListTitle={updateListTitle}
             />
         })}
     </div>
