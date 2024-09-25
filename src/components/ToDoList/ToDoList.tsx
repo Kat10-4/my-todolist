@@ -39,13 +39,16 @@ export function ToDoList({
                              updateListTitle
                          }: PropsType) {
 
-    let filteredTasks = task
+    const filterTasks=()=> {
+        let filteredTasks = task
 
-    if (filter === 'completed') {
-        filteredTasks = filteredTasks.filter(task => task.isDone === true)
-    }
-    if (filter === 'active') {
-        filteredTasks = filteredTasks.filter(task => task.isDone === false)
+        if (filter === 'completed') {
+            filteredTasks = filteredTasks.filter(task => task.isDone === true)
+        }
+        if (filter === 'active') {
+            filteredTasks = filteredTasks.filter(task => task.isDone === false)
+        }
+        return filteredTasks
     }
 
     const onAllClickHandler = () => changeFilter('all', id)
@@ -68,7 +71,7 @@ export function ToDoList({
         updateListTitle(id, updatedTitle)
     }
 
-    const tasksList = filteredTasks.map(t => {
+    const tasksList = filterTasks().map(t => {
             const onRemoveHandler = () => removeTask(t.id, id)
             const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
                 changeTaskStatus(t.id, e.currentTarget.checked, id)
