@@ -4,6 +4,8 @@ import {Button} from '../Button/Button';
 import '../../App.css'
 import {AddItemForm} from '../AddItemForm/AddItemForm';
 import {EditableSpan} from '../EditableSpan/EditableSpan';
+import {v1} from 'uuid';
+import {filterButton} from '../Button/Button.stories';
 
 export type TaskType = {
     id: string,
@@ -39,7 +41,26 @@ export function ToDoList({
                              updateListTitle
                          }: PropsType) {
 
-    const filterTasks=()=> {
+    const buttonData = [
+        {
+            id: v1(),
+            title: 'All',
+            onClickHandler: () => changeFilter('all', id),
+            className: filter === 'all' ? 'active-filter' : ''
+        }, {
+            id: v1(),
+            title: 'Active',
+            onClickHandler: () => changeFilter('active', id),
+            className: filter === 'active' ? 'active-filter' : ''
+        }, {
+            id: v1(),
+            title: 'Completed',
+            onClickHandler: () => changeFilter('completed', id),
+            className: filter === 'completed' ? 'active-filter' : ''
+        }
+    ]
+
+    const filterTasks = () => {
         let filteredTasks = task
 
         if (filter === 'completed') {
@@ -50,12 +71,6 @@ export function ToDoList({
         }
         return filteredTasks
     }
-
-    const onAllClickHandler = () => changeFilter('all', id)
-
-    const onActiveClickHandler = () => changeFilter('active', id)
-
-    const onCompletedClickHandler = () => changeFilter('completed', id)
 
     const removeToDoListHandler = () => removeToDoList(id)
 
@@ -70,6 +85,10 @@ export function ToDoList({
     const updateListTitleHandler = (updatedTitle: string) => {
         updateListTitle(id, updatedTitle)
     }
+
+    const filterButtons = buttonData.map(el => {
+        return <Button key={el.id} title={el.title} onClick={el.onClickHandler} className={el.className}/>
+    })
 
     const tasksList = filterTasks().map(t => {
             const onRemoveHandler = () => removeTask(t.id, id)
@@ -99,11 +118,7 @@ export function ToDoList({
             {tasksList}
         </ul>
         <div>
-            <Button title="All" className={filter === 'all' ? 'active-filter' : ''} onClick={onAllClickHandler}/>
-            <Button title="Active" className={filter === 'active' ? 'active-filter' : ''}
-                    onClick={onActiveClickHandler}/>
-            <Button title="Completed" className={filter === 'completed' ? 'active-filter' : ''}
-                    onClick={onCompletedClickHandler}/>
+            {filterButtons}
         </div>
     </div>
 }
