@@ -19,14 +19,16 @@ export default meta;
 //     }
 // }
 
-const onChangeCallBack=action("onChange")
+const onChangeCallBack = action('onChange')
 
 export const toDoListButton = () => {
-    return <Button title="X" onClick={() => {onChangeCallBack()
+    return <Button title="X" onClick={() => {
+        onChangeCallBack()
     }}/>
 }
 export const taskButton = () => {
-    return <Button title="+" onClick={() => {onChangeCallBack()
+    return <Button title="+" onClick={() => {
+        onChangeCallBack()
     }}/>
 }
 

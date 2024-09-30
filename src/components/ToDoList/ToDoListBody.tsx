@@ -7,25 +7,33 @@ import {ButtonType} from './ToDoList';
 
 
 type ToDoListBodyProps = {
-    addTaskHandler: (newTaskTitle: string) => void
+    toDoListId: string
     buttonData: ButtonType[]
     filterTasks: () => TaskType[]
     removeTask: (id: string, toDolistId: string) => void,
-    id: string
-    changeTaskStatus:(taskId: string, isDone: boolean, toDolistId: string) => void
-    updateTaskTitleHandler:(taskId: string, updatedTitle: string)=>void
+    changeTaskStatus: (taskId: string, isDone: boolean, toDolistId: string) => void
+    addTaskHandler: (newTaskTitle: string) => void
+    updateTaskTitleHandler: (taskId: string, updatedTitle: string) => void
 };
 
-export const ToDoListBody = ({addTaskHandler, buttonData, filterTasks, removeTask,id,changeTaskStatus,updateTaskTitleHandler}: ToDoListBodyProps) => {
+export const ToDoListBody = ({
+                                 addTaskHandler,
+                                 buttonData,
+                                 filterTasks,
+                                 removeTask,
+                                 toDoListId,
+                                 changeTaskStatus,
+                                 updateTaskTitleHandler
+                             }: ToDoListBodyProps) => {
 
     const filterButtons = buttonData.map(el => {
         return <Button key={el.id} title={el.title} onClick={el.onClickHandler} className={el.className}/>
     })
 
     const tasksList = filterTasks().map(t => {
-            const onRemoveHandler = () => removeTask(t.id, id)
+            const onRemoveHandler = () => removeTask(t.id, toDoListId)
             const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                changeTaskStatus(t.id, e.currentTarget.checked, id)
+                changeTaskStatus(t.id, e.currentTarget.checked, toDoListId)
             }
             return (
                 <li key={t.id} className={t.isDone ? 'is-done' : ''}>

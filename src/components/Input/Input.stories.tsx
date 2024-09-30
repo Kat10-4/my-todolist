@@ -31,9 +31,10 @@ export const FilledInput = () => {
 
 export const ErrorInput = () => {
     const [error, setError] = useState('error')
-    return <Input value={''} onChange={onChangeCallBack} onKeyUp={onKeyUpCallBack} className={error ? 'active-filter' : ''}/>
+    return <Input value={''} onChange={onChangeCallBack} onKeyUp={onKeyUpCallBack}
+                  className={error ? 'active-filter' : ''}/>
 }
 
 export const ChangeInput = () => {
-    return <input defaultValue={"hello"}/>//can change in stories
+    return <input defaultValue={'hello'}/>//can change in stories
 }

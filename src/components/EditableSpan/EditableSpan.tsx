@@ -4,7 +4,7 @@ import {ChangeEvent, useState} from 'react';
 
 type Props = {
     oldTitle: string
-    onClick:(updatedTitle:string)=>void
+    onClick: (updatedTitle: string) => void
 };
 export const EditableSpan = ({oldTitle, onClick}: Props) => {
     const [edit, setEdit] = useState<boolean>(false)

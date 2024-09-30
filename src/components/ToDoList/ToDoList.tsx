@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import {FilterValuesType, TaskType} from '../../App';
 import '../../App.css'
 import {v1} from 'uuid';
@@ -6,17 +6,17 @@ import {ToDoListHeader} from './ToDoListHeader';
 import {ToDoListBody} from './ToDoListBody';
 
 type PropsType = {
-    id: string
-    title: string,
-    tasks: Array<TaskType>,
-    removeTask: (id: string, toDolistId: string) => void,
+    toDoListId: string
+    toDoListTitle: string,
+    removeToDoList: (toDoListId: string) => void
+    filter: FilterValuesType,
     changeFilter: (newFilter: FilterValuesType, toDolistId: string) => void,
+    updateToDoListTitle: (toDoListId: string, title: string) => void
+    tasks: TaskType[],
+    removeTask: (id: string, toDolistId: string) => void,
     addTask: (newTaskTitle: string, toDolistId: string) => void,
     changeTaskStatus: (taskId: string, isDone: boolean, toDolistId: string) => void
-    filter: FilterValuesType,
-    removeToDoList: (toDoListId: string) => void
     updateTaskTitle: (toDoListId: string, taskId: string, title: string) => void
-    updateListTitle: (toDoListId: string, title: string) => void
 }
 
 export type ButtonType = {
@@ -27,8 +27,8 @@ export type ButtonType = {
 }
 
 export function ToDoList({
-                             id,
-                             title,
+                             toDoListId,
+                             toDoListTitle,
                              tasks,
                              removeTask,
                              changeFilter,
@@ -37,24 +37,24 @@ export function ToDoList({
                              filter,
                              removeToDoList,
                              updateTaskTitle,
-                             updateListTitle
+                             updateToDoListTitle
                          }: PropsType) {
 
     const buttonData: ButtonType[] = [
         {
             id: v1(),
             title: 'All',
-            onClickHandler: () => changeFilter('all', id),
+            onClickHandler: () => changeFilter('all', toDoListId),
             className: filter === 'all' ? 'active-filter' : ''
         }, {
             id: v1(),
             title: 'Active',
-            onClickHandler: () => changeFilter('active', id),
+            onClickHandler: () => changeFilter('active', toDoListId),
             className: filter === 'active' ? 'active-filter' : ''
         }, {
             id: v1(),
             title: 'Completed',
-            onClickHandler: () => changeFilter('completed', id),
+            onClickHandler: () => changeFilter('completed', toDoListId),
             className: filter === 'completed' ? 'active-filter' : ''
         }
     ]
@@ -71,28 +71,28 @@ export function ToDoList({
         return filteredTasks
     }
 
-    const removeToDoListHandler = () => removeToDoList(id)
+    const removeToDoListHandler = () => removeToDoList(toDoListId)
 
     const addTaskHandler = (title: string) => {
-        addTask(title, id)
+        addTask(title, toDoListId)
     }
 
     const updateTaskTitleHandler = (taskId: string, updatedTitle: string) => {
-        updateTaskTitle(id, taskId, updatedTitle)
+        updateTaskTitle(toDoListId, taskId, updatedTitle)
     }
 
-    const updateListTitleHandler = (updatedTitle: string) => {
-        updateListTitle(id, updatedTitle)
+    const updateToDoListTitleHandler = (updatedTitle: string) => {
+        updateToDoListTitle(toDoListId, updatedTitle)
     }
 
 
     return <div>
         <ToDoListHeader
-            title={title}
+            toDoListTitle={toDoListTitle}
             removeToDoList={removeToDoListHandler}
-            updateListTitle={updateListTitleHandler}/>
+            updateToDoListTitle={updateToDoListTitleHandler}/>
         <ToDoListBody
-            id={id}
+            toDoListId={toDoListId}
             addTaskHandler={addTaskHandler}
             buttonData={buttonData}
             filterTasks={filterTasks}

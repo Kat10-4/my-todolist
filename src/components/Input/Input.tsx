@@ -7,7 +7,7 @@ type InputPropsType = {
     onChange: (e: ChangeEvent<HTMLInputElement>) => void,
     onKeyUp: (e: KeyboardEvent<HTMLInputElement>) => void,
     className?: string,
-    error?:string | null
+    error?: string | null
 }
 
 export const Input = (props: InputPropsType) => {

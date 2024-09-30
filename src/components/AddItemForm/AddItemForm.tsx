@@ -5,7 +5,7 @@ import {Button} from '../Button/Button';
 import {ChangeEvent, KeyboardEvent, useState} from 'react';
 
 type Props = {
-    addItem:(newItemTitle:string)=>void
+    addItem: (newItemTitle: string) => void
 };
 
 export const AddItemForm = ({addItem}: Props) => {
@@ -36,7 +36,7 @@ export const AddItemForm = ({addItem}: Props) => {
             setError('Field is required')
         }
     }
-    
+
     return (
         <div>
             <Input value={newItemTitle}
