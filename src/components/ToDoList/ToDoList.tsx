@@ -1,22 +1,14 @@
 import React, {ChangeEvent} from 'react';
-import {FilterValuesType} from '../../App';
-import {Button} from '../Button/Button';
+import {FilterValuesType, TaskType} from '../../App';
 import '../../App.css'
-import {AddItemForm} from '../AddItemForm/AddItemForm';
-import {EditableSpan} from '../EditableSpan/EditableSpan';
 import {v1} from 'uuid';
-import {filterButton} from '../Button/Button.stories';
-
-export type TaskType = {
-    id: string,
-    title: string,
-    isDone: boolean
-}
+import {ToDoListHeader} from './ToDoListHeader';
+import {ToDoListBody} from './ToDoListBody';
 
 type PropsType = {
     id: string
     title: string,
-    task: Array<TaskType>,
+    tasks: Array<TaskType>,
     removeTask: (id: string, toDolistId: string) => void,
     changeFilter: (newFilter: FilterValuesType, toDolistId: string) => void,
     addTask: (newTaskTitle: string, toDolistId: string) => void,
@@ -27,10 +19,17 @@ type PropsType = {
     updateListTitle: (toDoListId: string, title: string) => void
 }
 
+export type ButtonType={
+    id:string
+    title:string
+    onClickHandler:()=>void
+    className:string
+}
+
 export function ToDoList({
                              id,
                              title,
-                             task,
+                             tasks,
                              removeTask,
                              changeFilter,
                              addTask,
@@ -41,7 +40,7 @@ export function ToDoList({
                              updateListTitle
                          }: PropsType) {
 
-    const buttonData = [
+    const buttonData:ButtonType[] = [
         {
             id: v1(),
             title: 'All',
@@ -61,13 +60,13 @@ export function ToDoList({
     ]
 
     const filterTasks = () => {
-        let filteredTasks = task
+        let filteredTasks = tasks
 
         if (filter === 'completed') {
-            filteredTasks = filteredTasks.filter(task => task.isDone === true)
+            filteredTasks = filteredTasks.filter(task => task.isDone)
         }
         if (filter === 'active') {
-            filteredTasks = filteredTasks.filter(task => task.isDone === false)
+            filteredTasks = filteredTasks.filter(task => !task.isDone)
         }
         return filteredTasks
     }
@@ -86,39 +85,13 @@ export function ToDoList({
         updateListTitle(id, updatedTitle)
     }
 
-    const filterButtons = buttonData.map(el => {
-        return <Button key={el.id} title={el.title} onClick={el.onClickHandler} className={el.className}/>
-    })
-
-    const tasksList = filterTasks().map(t => {
-            const onRemoveHandler = () => removeTask(t.id, id)
-            const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                changeTaskStatus(t.id, e.currentTarget.checked, id)
-            }
-            return (
-                <li key={t.id} className={t.isDone ? 'is-done' : ''}>
-                    <input type="checkbox"
-                           checked={t.isDone}
-                           onChange={onChangeHandler}/>
-                    <EditableSpan oldTitle={t.title}
-                                  onClick={(updatedTitle) => updateTaskTitleHandler(t.id, updatedTitle)}/>
-                    <Button title="X" onClick={onRemoveHandler}/>
-                </li>)
-        }
-    )
 
 
     return <div>
-        <h3>
-            <EditableSpan oldTitle={title} onClick={(updatedTitle) => updateListTitleHandler(updatedTitle)}/>
-            <button onClick={removeToDoListHandler}>X</button>
-        </h3>
-        <AddItemForm addItem={addTaskHandler}/>
-        <ul>
-            {tasksList}
-        </ul>
-        <div>
-            {filterButtons}
-        </div>
+        <ToDoListHeader
+            title={title}
+            removeToDoList={removeToDoListHandler}
+            updateListTitle={updateListTitleHandler}/>
+        <ToDoListBody addTaskHandler={addTaskHandler} buttonData={buttonData} filterTasks={filterTasks}/>
     </div>
 }
