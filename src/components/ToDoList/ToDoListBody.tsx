@@ -8,11 +8,15 @@ import {ButtonType} from './ToDoList';
 
 type ToDoListBodyProps = {
     addTaskHandler: (newTaskTitle: string) => void
-    buttonData:ButtonType[]
-    filterTasks:()=>TaskType[]
+    buttonData: ButtonType[]
+    filterTasks: () => TaskType[]
+    removeTask: (id: string, toDolistId: string) => void,
+    id: string
+    changeTaskStatus:(taskId: string, isDone: boolean, toDolistId: string) => void
+    updateTaskTitleHandler:(taskId: string, updatedTitle: string)=>void
 };
 
-export const ToDoListBody = ({addTaskHandler,buttonData,filterTasks}: ToDoListBodyProps) => {
+export const ToDoListBody = ({addTaskHandler, buttonData, filterTasks, removeTask,id,changeTaskStatus,updateTaskTitleHandler}: ToDoListBodyProps) => {
 
     const filterButtons = buttonData.map(el => {
         return <Button key={el.id} title={el.title} onClick={el.onClickHandler} className={el.className}/>

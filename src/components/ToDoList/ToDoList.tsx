@@ -19,11 +19,11 @@ type PropsType = {
     updateListTitle: (toDoListId: string, title: string) => void
 }
 
-export type ButtonType={
-    id:string
-    title:string
-    onClickHandler:()=>void
-    className:string
+export type ButtonType = {
+    id: string
+    title: string
+    onClickHandler: () => void
+    className: string
 }
 
 export function ToDoList({
@@ -40,7 +40,7 @@ export function ToDoList({
                              updateListTitle
                          }: PropsType) {
 
-    const buttonData:ButtonType[] = [
+    const buttonData: ButtonType[] = [
         {
             id: v1(),
             title: 'All',
@@ -86,12 +86,18 @@ export function ToDoList({
     }
 
 
-
     return <div>
         <ToDoListHeader
             title={title}
             removeToDoList={removeToDoListHandler}
             updateListTitle={updateListTitleHandler}/>
-        <ToDoListBody addTaskHandler={addTaskHandler} buttonData={buttonData} filterTasks={filterTasks}/>
+        <ToDoListBody
+            id={id}
+            addTaskHandler={addTaskHandler}
+            buttonData={buttonData}
+            filterTasks={filterTasks}
+            removeTask={removeTask}
+            changeTaskStatus={changeTaskStatus}
+            updateTaskTitleHandler={updateTaskTitleHandler}/>
     </div>
 }
