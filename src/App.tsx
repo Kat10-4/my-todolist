@@ -124,7 +124,7 @@ function App() {
 
 
     const changeModeHandler = () => {
-        setThemeMode(themeMode == 'light' ? 'dark' : 'light')
+        setThemeMode(themeMode === 'light' ? 'dark' : 'light')
     }
 
     return <ThemeProvider theme={theme}>
@@ -147,7 +147,7 @@ function App() {
                     <MenuButton>Login</MenuButton>
                     <MenuButton>Logout</MenuButton>
                     <MenuButton background={theme.palette.primary.dark}>Faq</MenuButton>
-                    <Switch color={'default'} onChange={changeModeHandler} />
+                    <Switch color={'default'} onChange={changeModeHandler}/>
                 </Toolbar>
             </Container>
         </AppBar>
