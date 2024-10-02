@@ -3,8 +3,21 @@ import './App.css';
 import {ToDoList} from './components/ToDoList/ToDoList';
 import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm/AddItemForm';
-import {AppBar, Button, Container, Grid2, IconButton, Paper, Toolbar, Typography} from '@mui/material';
+import {
+    AppBar,
+    Button,
+    Container,
+    createTheme,
+    Grid2,
+    IconButton,
+    Paper,
+    ThemeProvider,
+    Toolbar,
+    Typography
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import {MenuButton} from './components/Button/MenuButton';
+import {orange, purple} from '@mui/material/colors';
 
 type ToDoListsType = {
     id: string,
@@ -24,6 +37,12 @@ export type TaskType = {
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 
+export const theme = createTheme({
+    palette: {
+        primary: purple,
+        secondary: orange,
+    },
+})
 
 function App() {
     const toDoListId1 = v1()
@@ -68,7 +87,7 @@ function App() {
 
     const addToDoList = (title: string) => {
         const id = v1()
-        setToDoLists([...toDoLists, {id, title, filter: 'all'}])
+        setToDoLists([{id, title, filter: 'all'}, ...toDoLists])
         setTasks({...tasksObj, [id]: []})
     }
 
@@ -76,7 +95,7 @@ function App() {
     const addTask = (newTaskTitle: string, toDolistId: string) => {
         let newTask: TaskType = {id: v1(), title: newTaskTitle, isDone: false}
         setTasks({
-            ...tasksObj, [toDolistId]: [...tasksObj[toDolistId], newTask]
+            ...tasksObj, [toDolistId]: [newTask, ...tasksObj[toDolistId]]
         })
     }
 
@@ -97,10 +116,10 @@ function App() {
     }
 
 
-    return <div className="App">
+    return <ThemeProvider theme={theme}>
         <AppBar position="static">
             <Container sx={{maxWidth: '1140px'}} maxWidth={false}>
-                <Toolbar>
+                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <IconButton
                         size="large"
                         edge="start"
@@ -113,18 +132,20 @@ function App() {
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         To Do Lists
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    <MenuButton>Login</MenuButton>
+                    <MenuButton>Logout</MenuButton>
+                    <MenuButton background={theme.palette.primary.dark}>Faq</MenuButton>
                 </Toolbar>
             </Container>
         </AppBar>
         <Container sx={{maxWidth: '1140px'}} maxWidth={false}>
-            <Grid2 container>
+            <Grid2 container sx={{padding: '30px'}}>
                 <AddItemForm addItem={addToDoList}/>
             </Grid2>
-            <Grid2 container spacing={4}>
+            <Grid2 container spacing={3}>
                 {toDoLists.map((tl) => {
                     return <Grid2 key={tl.id}>
-                        <Paper>
+                        <Paper sx={{padding: '20px'}} elevation={10} square>
                             <ToDoList
                                 toDoListId={tl.id}
                                 toDoListTitle={tl.title}
@@ -139,12 +160,11 @@ function App() {
                                 updateToDoListTitle={updateToDoListTitle}
                             />
                         </Paper>
-
                     </Grid2>
                 })}
             </Grid2>
         </Container>
-    </div>
+    </ThemeProvider>
 }
 
 export default App;

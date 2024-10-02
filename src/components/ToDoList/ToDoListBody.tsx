@@ -3,8 +3,9 @@ import React, {ChangeEvent} from 'react';
 import {TaskType} from '../../App';
 import {EditableSpan} from '../EditableSpan/EditableSpan';
 import {ButtonType} from './ToDoList';
-import {Button, Checkbox, IconButton, List, ListItem} from '@mui/material';
+import {Box, Button, Checkbox, IconButton, List, ListItem} from '@mui/material';
 import {Delete} from '@mui/icons-material';
+import {filterButtonsContainerSx, listItemsSx} from './Todolist.styles';
 
 
 type ToDoListBodyProps = {
@@ -31,7 +32,10 @@ export const ToDoListBody = ({
         return <Button key={el.id}
                        variant={'contained'}
                        onClick={el.onClickHandler}
-                       color={el.color}>{el.title}</Button>
+                       color={el.color}
+                       sx={{borderRadius: '0'}}
+        >{el.title}
+        </Button>
     })
 
     const tasksList = filterTasks().map(t => {
@@ -43,11 +47,11 @@ export const ToDoListBody = ({
                 <ListItem key={t.id}
                           disableGutters
                           disablePadding
-                          className={t.isDone ? 'is-done' : ''}>
+                          sx={listItemsSx(t.isDone)}>
                     <Checkbox checked={t.isDone}
                               color="secondary"
                               onChange={onChangeHandler}
-                              />
+                    />
                     <EditableSpan oldTitle={t.title}
                                   onClick={(updatedTitle) => updateTaskTitleHandler(t.id, updatedTitle)}/>
                     <IconButton aria-label="delete"
@@ -65,9 +69,9 @@ export const ToDoListBody = ({
             <List>
                 {tasksList}
             </List>
-            <div>
+            <Box sx={filterButtonsContainerSx}>
                 {filterButtons}
-            </div>
+            </Box>
         </div>
     );
 };

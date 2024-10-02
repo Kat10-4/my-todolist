@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {Input} from '../Input/Input';
 import {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {IconButton} from '@mui/material';
+import {Grid2, IconButton, TextField} from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 
 type Props = {
@@ -38,15 +37,27 @@ export const AddItemForm = ({addItem}: Props) => {
     }
 
     return (
-        <div>
-            <Input value={newItemTitle}
-                   onChange={onChangeHandler}
-                   onKeyUp={onKeyUpHandler}
-                   className={error ? 'error' : ''}
-                   error={error}/>
-            <IconButton onClick={addItemHandler}
-                color={'primary'}
-            ><AddBoxIcon/></IconButton>
-        </div>
+        <Grid2 container sx={{alignItems: 'flex-end'}}>
+            <Grid2>
+                <TextField
+                    variant="standard"
+                    color={'primary'}
+                    size="small"
+                    className={error ? 'error' : ''}
+                    value={newItemTitle}
+                    onChange={onChangeHandler}
+                    onKeyUp={onKeyUpHandler}
+                    error={!!error}
+                    helperText={error}
+                    label="Enter a title"/>
+            </Grid2>
+            <Grid2>
+                <IconButton
+                    onClick={addItemHandler}
+                    color={'primary'}>
+                    <AddBoxIcon/>
+                </IconButton>
+            </Grid2>
+        </Grid2>
     );
 };

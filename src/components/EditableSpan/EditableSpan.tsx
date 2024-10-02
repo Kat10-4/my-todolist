@@ -28,8 +28,14 @@ export const EditableSpan = ({oldTitle, onClick}: Props) => {
 
     return (
         edit ?
-            <TextField variant="standard" value={updatedTitle} autoFocus onBlur={editHandler} onChange={onChangeHandler} error={!!error}
-                       helperText={'Type new value'}/> :
+            <TextField
+                variant="standard"
+                value={updatedTitle}
+                autoFocus
+                onBlur={editHandler}
+                onChange={onChangeHandler}
+                error={!!error}
+                helperText={'Type new value'}/> :
             <span onDoubleClick={editHandler}>{oldTitle}</span>
     );
 };

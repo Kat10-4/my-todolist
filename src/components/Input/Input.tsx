@@ -23,6 +23,5 @@ export const Input = (props: InputPropsType) => {
             error={!!props.error}
             helperText={props.error}/>
     )
-        ;
 };
 
