@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import './App.css';
-import { ToDoList} from './components/ToDoList/ToDoList';
+import {ToDoList} from './components/ToDoList/ToDoList';
 import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm/AddItemForm';
-import {AppBar, Button, IconButton, Toolbar} from '@mui/material';
+import {AppBar, Button, Container, Grid2, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 type ToDoListsType = {
@@ -12,8 +12,8 @@ type ToDoListsType = {
     filter: FilterValuesType
 }
 
-export type TasksType={
-    [key:string]:TaskType[]
+export type TasksType = {
+    [key: string]: TaskType[]
 }
 
 export type TaskType = {
@@ -57,7 +57,7 @@ function App() {
     }
 
     const updateToDoListTitle = (toDoListId: string, title: string) => {
-        setToDoLists(toDoLists.map(el=>el.id===toDoListId?{...el,title}:el))
+        setToDoLists(toDoLists.map(el => el.id === toDoListId ? {...el, title} : el))
     }
 
     const removeToDoList = (toDoListId: string) => {
@@ -99,30 +99,51 @@ function App() {
 
     return <div className="App">
         <AppBar position="static">
-            <Toolbar>
-                <IconButton color="inherit">
-                    <MenuIcon />
-                </IconButton>
-                <Button color="inherit">Login</Button>
-            </Toolbar>
+            <Container sx={{maxWidth: '1140px'}} maxWidth={false}>
+                <Toolbar>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{mr: 2}}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                        To Do Lists
+                    </Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+            </Container>
         </AppBar>
-        <AddItemForm addItem={addToDoList}/>
-        {toDoLists.map((tl) => {
-            return <ToDoList
-                key={tl.id}
-                toDoListId={tl.id}
-                toDoListTitle={tl.title}
-                tasks={tasksObj[tl.id]}
-                removeTask={removeTask}
-                changeFilter={changeFilter}
-                addTask={addTask}
-                changeTaskStatus={changeStatus}
-                filter={tl.filter}
-                removeToDoList={removeToDoList}
-                updateTaskTitle={updateTaskTitle}
-                updateToDoListTitle={updateToDoListTitle}
-            />
-        })}
+        <Container sx={{maxWidth: '1140px'}} maxWidth={false}>
+            <Grid2 container>
+                <AddItemForm addItem={addToDoList}/>
+            </Grid2>
+            <Grid2 container spacing={4}>
+                {toDoLists.map((tl) => {
+                    return <Grid2 key={tl.id}>
+                        <Paper>
+                            <ToDoList
+                                toDoListId={tl.id}
+                                toDoListTitle={tl.title}
+                                tasks={tasksObj[tl.id]}
+                                removeTask={removeTask}
+                                changeFilter={changeFilter}
+                                addTask={addTask}
+                                changeTaskStatus={changeStatus}
+                                filter={tl.filter}
+                                removeToDoList={removeToDoList}
+                                updateTaskTitle={updateTaskTitle}
+                                updateToDoListTitle={updateToDoListTitle}
+                            />
+                        </Paper>
+
+                    </Grid2>
+                })}
+            </Grid2>
+        </Container>
     </div>
 }
 
