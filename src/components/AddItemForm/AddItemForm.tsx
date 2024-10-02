@@ -47,7 +47,6 @@ export const AddItemForm = ({addItem}: Props) => {
                 variant={'contained'}
                 color={'primary'}
             >+</Button>
-            {error && <div className={'error-message'}>{error}</div>}
         </div>
     );
 };
