@@ -3,7 +3,7 @@ import React, {ChangeEvent} from 'react';
 import {TaskType} from '../../App';
 import {EditableSpan} from '../EditableSpan/EditableSpan';
 import {ButtonType} from './ToDoList';
-import {Button, IconButton} from '@mui/material';
+import {Button, Checkbox, IconButton} from '@mui/material';
 import {Delete} from '@mui/icons-material';
 
 
@@ -41,9 +41,10 @@ export const ToDoListBody = ({
             }
             return (
                 <li key={t.id} className={t.isDone ? 'is-done' : ''}>
-                    <input type="checkbox"
-                           checked={t.isDone}
-                           onChange={onChangeHandler}/>
+                    <Checkbox checked={t.isDone}
+                              color="secondary"
+                              onChange={onChangeHandler}
+                              />
                     <EditableSpan oldTitle={t.title}
                                   onClick={(updatedTitle) => updateTaskTitleHandler(t.id, updatedTitle)}/>
                     <IconButton aria-label="delete"
