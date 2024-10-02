@@ -3,7 +3,7 @@ import React, {ChangeEvent} from 'react';
 import {TaskType} from '../../App';
 import {EditableSpan} from '../EditableSpan/EditableSpan';
 import {ButtonType} from './ToDoList';
-import {Button, Checkbox, IconButton} from '@mui/material';
+import {Button, Checkbox, IconButton, List, ListItem} from '@mui/material';
 import {Delete} from '@mui/icons-material';
 
 
@@ -40,7 +40,10 @@ export const ToDoListBody = ({
                 changeTaskStatus(t.id, e.currentTarget.checked, toDoListId)
             }
             return (
-                <li key={t.id} className={t.isDone ? 'is-done' : ''}>
+                <ListItem key={t.id}
+                          disableGutters
+                          disablePadding
+                          className={t.isDone ? 'is-done' : ''}>
                     <Checkbox checked={t.isDone}
                               color="secondary"
                               onChange={onChangeHandler}
@@ -51,7 +54,7 @@ export const ToDoListBody = ({
                                 onClick={onRemoveHandler}>
                         <Delete/>
                     </IconButton>
-                </li>)
+                </ListItem>)
         }
     )
 
@@ -59,9 +62,9 @@ export const ToDoListBody = ({
     return (
         <div>
             <AddItemForm addItem={addTaskHandler}/>
-            <ul>
+            <List>
                 {tasksList}
-            </ul>
+            </List>
             <div>
                 {filterButtons}
             </div>

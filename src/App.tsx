@@ -3,6 +3,8 @@ import './App.css';
 import { ToDoList} from './components/ToDoList/ToDoList';
 import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm/AddItemForm';
+import {AppBar, Button, IconButton, Toolbar} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
 type ToDoListsType = {
     id: string,
@@ -96,6 +98,14 @@ function App() {
 
 
     return <div className="App">
+        <AppBar position="static">
+            <Toolbar>
+                <IconButton color="inherit">
+                    <MenuIcon />
+                </IconButton>
+                <Button color="inherit">Login</Button>
+            </Toolbar>
+        </AppBar>
         <AddItemForm addItem={addToDoList}/>
         {toDoLists.map((tl) => {
             return <ToDoList
