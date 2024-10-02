@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {Input} from '../Input/Input';
 import {ChangeEvent, KeyboardEvent, useState} from 'react';
-import {Button} from '@mui/material';
+import {IconButton} from '@mui/material';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 
 type Props = {
     addItem: (newItemTitle: string) => void
@@ -43,10 +44,9 @@ export const AddItemForm = ({addItem}: Props) => {
                    onKeyUp={onKeyUpHandler}
                    className={error ? 'error' : ''}
                    error={error}/>
-            <Button onClick={addItemHandler}
-                variant={'contained'}
+            <IconButton onClick={addItemHandler}
                 color={'primary'}
-            >+</Button>
+            ><AddBoxIcon/></IconButton>
         </div>
     );
 };
