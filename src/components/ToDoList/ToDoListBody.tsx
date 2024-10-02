@@ -44,20 +44,25 @@ export const ToDoListBody = ({
                 changeTaskStatus(t.id, e.currentTarget.checked, toDoListId)
             }
             return (
-                <ListItem key={t.id}
-                          disableGutters
-                          disablePadding
-                          sx={listItemsSx(t.isDone)}>
-                    <Checkbox checked={t.isDone}
-                              color="secondary"
-                              onChange={onChangeHandler}
-                    />
-                    <EditableSpan oldTitle={t.title}
-                                  onClick={(updatedTitle) => updateTaskTitleHandler(t.id, updatedTitle)}/>
-                    <IconButton aria-label="delete"
-                                onClick={onRemoveHandler}>
+                <ListItem
+                    key={t.id}
+                    disableGutters
+                    disablePadding
+                    sx={listItemsSx(t.isDone)}
+                    divider={true}
+                    secondaryAction={<IconButton
+                        aria-label="delete"
+                        onClick={onRemoveHandler}>
                         <Delete/>
-                    </IconButton>
+                    </IconButton>}>
+                    <Checkbox
+                        checked={t.isDone}
+                        color="secondary"
+                        onChange={onChangeHandler}
+                    />
+                    <EditableSpan
+                        oldTitle={t.title}
+                        onClick={(updatedTitle) => updateTaskTitleHandler(t.id, updatedTitle)}/>
                 </ListItem>)
         }
     )

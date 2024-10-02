@@ -14,11 +14,7 @@ export const EditableSpan = ({oldTitle, onClick}: Props) => {
 
     const editHandler = () => {
         setEdit(!edit)
-        if (!error) {
-            onClick(updatedTitle)
-        } else {
-            onClick(oldTitle)
-        }
+        error ? onClick(oldTitle) : onClick(updatedTitle)
     }
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -26,8 +22,7 @@ export const EditableSpan = ({oldTitle, onClick}: Props) => {
         setError(!e.currentTarget.value.trim())
     }
 
-    return (
-        edit ?
+    return (edit ?
             <TextField
                 variant="standard"
                 value={updatedTitle}

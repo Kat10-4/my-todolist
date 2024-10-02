@@ -5,9 +5,8 @@ import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {
     AppBar,
-    Button,
     Container,
-    createTheme,
+    createTheme, CssBaseline,
     Grid2,
     IconButton,
     Paper,
@@ -18,12 +17,15 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import {MenuButton} from './components/Button/MenuButton';
 import {orange, purple} from '@mui/material/colors';
+import Switch from '@mui/material/Switch'
 
 type ToDoListsType = {
     id: string,
     title: string,
     filter: FilterValuesType
 }
+
+type ThemeMode = 'dark' | 'light'
 
 export type TasksType = {
     [key: string]: TaskType[]
@@ -37,12 +39,6 @@ export type TaskType = {
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 
-export const theme = createTheme({
-    palette: {
-        primary: purple,
-        secondary: orange,
-    },
-})
 
 function App() {
     const toDoListId1 = v1()
@@ -65,6 +61,17 @@ function App() {
             {id: v1(), title: 'milk', isDone: true}
         ]
     })
+
+    const [themeMode, setThemeMode] = useState<ThemeMode>('light')
+
+    const theme = createTheme({
+        palette: {
+            primary: purple,
+            secondary: orange,
+            mode: themeMode === 'light' ? 'light' : 'dark',
+        },
+    })
+
 
 //ToDoList logic
     const changeFilter = (newFilter: FilterValuesType, toDolistId: string) => {
@@ -116,10 +123,15 @@ function App() {
     }
 
 
+    const changeModeHandler = () => {
+        setThemeMode(themeMode == 'light' ? 'dark' : 'light')
+    }
+
     return <ThemeProvider theme={theme}>
+        <CssBaseline/>
         <AppBar position="static">
             <Container sx={{maxWidth: '1140px'}} maxWidth={false}>
-                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
                     <IconButton
                         size="large"
                         edge="start"
@@ -135,6 +147,7 @@ function App() {
                     <MenuButton>Login</MenuButton>
                     <MenuButton>Logout</MenuButton>
                     <MenuButton background={theme.palette.primary.dark}>Faq</MenuButton>
+                    <Switch color={'default'} onChange={changeModeHandler} />
                 </Toolbar>
             </Container>
         </AppBar>
