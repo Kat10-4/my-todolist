@@ -23,7 +23,7 @@ export type ButtonType = {
     id: string
     title: string
     onClickHandler: () => void
-    className: string
+    color: 'secondary' | 'primary' | 'inherit' | 'success' | 'error' | 'info' | 'warning'
 }
 
 export function ToDoList({
@@ -45,17 +45,17 @@ export function ToDoList({
             id: v1(),
             title: 'All',
             onClickHandler: () => changeFilter('all', toDoListId),
-            className: filter === 'all' ? 'active-filter' : ''
+            color: filter === 'all' ? 'secondary' : 'primary'
         }, {
             id: v1(),
             title: 'Active',
             onClickHandler: () => changeFilter('active', toDoListId),
-            className: filter === 'active' ? 'active-filter' : ''
+            color: filter === 'active' ? 'secondary' : 'primary'
         }, {
             id: v1(),
             title: 'Completed',
             onClickHandler: () => changeFilter('completed', toDoListId),
-            className: filter === 'completed' ? 'active-filter' : ''
+            color: filter === 'completed' ? 'secondary' : 'primary'
         }
     ]
 

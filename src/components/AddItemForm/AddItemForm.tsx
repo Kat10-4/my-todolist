@@ -1,8 +1,7 @@
-// @flow 
 import * as React from 'react';
 import {Input} from '../Input/Input';
-import {Button} from '../Button/Button';
 import {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {Button} from '@mui/material';
 
 type Props = {
     addItem: (newItemTitle: string) => void
@@ -44,7 +43,10 @@ export const AddItemForm = ({addItem}: Props) => {
                    onKeyUp={onKeyUpHandler}
                    className={error ? 'error' : ''}
                    error={error}/>
-            <Button title="+" onClick={addItemHandler}/>
+            <Button onClick={addItemHandler}
+                variant={'contained'}
+                color={'primary'}
+            >+</Button>
             {error && <div className={'error-message'}>{error}</div>}
         </div>
     );

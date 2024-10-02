@@ -1,9 +1,10 @@
 import {AddItemForm} from '../AddItemForm/AddItemForm';
 import React, {ChangeEvent} from 'react';
 import {TaskType} from '../../App';
-import {Button} from '../Button/Button';
 import {EditableSpan} from '../EditableSpan/EditableSpan';
 import {ButtonType} from './ToDoList';
+import {Button, IconButton} from '@mui/material';
+import {Delete} from '@mui/icons-material';
 
 
 type ToDoListBodyProps = {
@@ -27,7 +28,10 @@ export const ToDoListBody = ({
                              }: ToDoListBodyProps) => {
 
     const filterButtons = buttonData.map(el => {
-        return <Button key={el.id} title={el.title} onClick={el.onClickHandler} className={el.className}/>
+        return <Button key={el.id}
+                       variant={'contained'}
+                       onClick={el.onClickHandler}
+                       color={el.color}>{el.title}</Button>
     })
 
     const tasksList = filterTasks().map(t => {
@@ -42,7 +46,10 @@ export const ToDoListBody = ({
                            onChange={onChangeHandler}/>
                     <EditableSpan oldTitle={t.title}
                                   onClick={(updatedTitle) => updateTaskTitleHandler(t.id, updatedTitle)}/>
-                    <Button title="X" onClick={onRemoveHandler}/>
+                    <IconButton aria-label="delete"
+                                onClick={onRemoveHandler}>
+                        <Delete/>
+                    </IconButton>
                 </li>)
         }
     )

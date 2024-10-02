@@ -1,5 +1,8 @@
 import {EditableSpan} from '../EditableSpan/EditableSpan';
 import React from 'react';
+import {IconButton} from '@mui/material';
+import {Delete} from '@mui/icons-material';
+
 
 
 type ToDoListHeaderProps = {
@@ -13,7 +16,10 @@ export const ToDoListHeader = ({toDoListTitle, updateToDoListTitle, removeToDoLi
             <EditableSpan
                 oldTitle={toDoListTitle}
                 onClick={(updatedTitle) => updateToDoListTitle(updatedTitle)}/>
-            <button onClick={removeToDoList}>X</button>
+            <IconButton aria-label="delete"
+                        onClick={removeToDoList}>
+                <Delete/>
+            </IconButton>
         </h3>
     );
 };
