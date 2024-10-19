@@ -1,12 +1,43 @@
 import {v1} from 'uuid';
-import {ToDoListsType} from '../App';
+import {FilterValuesType, ToDoListsType} from '../App';
 
-type ActionType = {
-    type: string
-    payload: any
+export type RemoveTodolistActionType = {
+    type: 'REMOVE_TODOLIST'
+    payload: {
+        id: string
+    }
 }
 
-export const toDoListsReducer = (state: ToDoListsType[], action: ActionType) => {
+export type AddTodolistActionType = {
+    type: 'ADD_TODOLIST'
+    payload: {
+        title: string
+    }
+}
+
+export type ChangeTodolistTitleActionType = {
+    type: 'CHANGE_TODOLIST_TITLE'
+    payload: {
+        id: string
+        title: string
+    }
+}
+
+export type ChangeTodolistFilterActionType = {
+    type: 'CHANGE_TODOLIST_FILTER'
+    payload: {
+        id: string
+        filter: FilterValuesType
+    }
+}
+
+type ActionsType =
+    | RemoveTodolistActionType
+    | AddTodolistActionType
+    | ChangeTodolistTitleActionType
+    | ChangeTodolistFilterActionType
+
+export const toDoListsReducer = (state: ToDoListsType[], action: ActionsType) => {
     switch (action.type) {
         case 'REMOVE_TODOLIST': {
             return state.filter(td => td.id !== action.payload.id)
