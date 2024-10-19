@@ -19,7 +19,7 @@ import {MenuButton} from './components/Button/MenuButton';
 import {orange, purple} from '@mui/material/colors';
 import Switch from '@mui/material/Switch'
 
-type ToDoListsType = {
+export type ToDoListsType = {
     id: string,
     title: string,
     filter: FilterValuesType

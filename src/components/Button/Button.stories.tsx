@@ -35,5 +35,4 @@ export const taskButton = () => {
 export const filterButton = () => {
     const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('active')
     return <Button title="All" className={filter === 'all' ? 'active-filter' : ''} onClick={() => setFilter('all')}/>
-
 }
