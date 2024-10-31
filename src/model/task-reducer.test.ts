@@ -1,8 +1,9 @@
-import { removeTaskAC, tasksReducer } from './task-reducer'
-import { TasksStateType } from '../App'
+import {removeTaskAC, taskReducer} from './task-reducer'
+import {TasksType} from '../App';
+
 
 test('correct task should be deleted from correct array', () => {
-    const startState: TasksStateType = {
+    const startState: TasksType = {
         todolistId1: [
             { id: '1', title: 'CSS', isDone: false },
             { id: '2', title: 'JS', isDone: true },
@@ -15,7 +16,7 @@ test('correct task should be deleted from correct array', () => {
         ],
     }
 
-    const endState = tasksReducer(startState, removeTaskAC('2', 'todolistId2'))
+    const endState = taskReducer(startState, removeTaskAC('2', 'todolistId2'))
 
     expect(endState).toEqual({
         todolistId1: [

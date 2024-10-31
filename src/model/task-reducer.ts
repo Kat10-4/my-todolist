@@ -2,20 +2,14 @@ import {v1} from 'uuid';
 import {FilterValuesType, TasksType, ToDoListsType} from '../App';
 
 
-export type ChangeToDoListFilterActionType = {
-    type: 'CHANGE_TODOLIST_FILTER'
-    payload: {
-        id: string
-        filter: FilterValuesType
-    }
-}
+export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
 
-type ActionsType =
+type ActionsType = RemoveTaskActionType
 
-export const taskReducer = (state: TasksType[], action: ActionsType): TasksType[] => {
+export const taskReducer = (state: TasksType, action: ActionsType): TasksType => {
     switch (action.type) {
-        case 'REMOVE_TODOLIST': {
-            return state.filter(td => td.id !== action.payload.id)
+        case 'REMOVE_TASK': {
+            return {...state, [action.payload.todolistId]: state[action.payload.todolistId].filter(el => el.id !== action.payload.id)}
         }
 
         default:
@@ -23,11 +17,12 @@ export const taskReducer = (state: TasksType[], action: ActionsType): TasksType[
     }
 }
 
-export const removeTaskAC = (id: string): RemoveToDoListActionType => {
+export const removeTaskAC = (id: string,todolistId: string) => {
     return {
-        type: 'REMOVE_TODOLIST',
+        type: 'REMOVE_TASK',
         payload: {
-            id
+            id,
+            todolistId
         },
     } as const
 }

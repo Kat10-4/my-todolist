@@ -53,7 +53,7 @@ test('correct todolist should change its name', () => {
 
     const newTitle: string = 'New Title'
 
-    const endState = todolistReducer(startState, changeToDoListTitleAC(toDoListId1, newTitle))
+    const endState = todolistReducer(startState, changeToDoListTitleAC({id: toDoListId1,title: newTitle}))
 
     expect(endState.length).toBe(2)
     expect(endState[0].title).toBe(newTitle)
@@ -71,7 +71,7 @@ test('correct todolist filter should change', () => {
 
     const filter: FilterValuesType = 'active'
 
-    const endState = todolistReducer(startState, changeToDoListFilterAC(toDoListId1, filter))
+    const endState = todolistReducer(startState, changeToDoListFilterAC({id:toDoListId1, filter}))
 
     expect(endState.length).toBe(2)
     expect(endState[0].filter).toBe(filter)
