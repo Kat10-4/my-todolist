@@ -1,5 +1,6 @@
 import {v1} from 'uuid';
 import {FilterValuesType, TasksType, TaskType, ToDoListsType} from '../App';
+import {AddToDoListActionType} from './todolists-reducer';
 
 
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
@@ -7,7 +8,7 @@ export type AddTaskActionType = ReturnType<typeof addTaskAC>
 export type ChangeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
 export type ChangeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
 
-type ActionsType = RemoveTaskActionType | AddTaskActionType | ChangeTaskStatusActionType|ChangeTaskTitleActionType
+type ActionsType = RemoveTaskActionType | AddTaskActionType | ChangeTaskStatusActionType | ChangeTaskTitleActionType | AddToDoListActionType
 
 export const tasksReducer = (state: TasksType, action: ActionsType): TasksType => {
     switch (action.type) {
@@ -32,8 +33,16 @@ export const tasksReducer = (state: TasksType, action: ActionsType): TasksType =
                 } : task)]
             }
         }
-        case 'CHANGE_TASK_TITLE':{
-            return{...tasksObj, [toDoListId]: tasksObj[toDoListId].map(el => el.id === taskId ? {...el, title} : el)}
+        case 'CHANGE_TASK_TITLE': {
+            return {...state,
+                [action.payload.todolistId]: state[action.payload.todolistId].map(el => el.id === action.payload.taskId ? {
+                    ...el,
+                    title: action.payload.newTitle
+                } : el)
+            }
+        }
+        case 'ADD_TODOLIST':{
+            return {...state,[action.payload.id]:[]}
         }
         default:
             throw new Error('Can\'t find this action type')
@@ -46,7 +55,6 @@ export const removeTaskAC = (payload: { id: string, todolistId: string }) => {
         payload
     } as const
 }
-
 
 export const addTaskAC = (payload: { newTitle: string, todolistId: string }) => {
     return {
@@ -62,7 +70,7 @@ export const changeTaskStatusAC = (payload: { taskId: string, isDone: boolean, t
     } as const
 }
 
-export const changeTaskTitleAC = (payload: { toDoListId: string, taskId: string, newTitle: string }) => {
+export const changeTaskTitleAC = (payload: { todolistId: string, taskId: string, newTitle: string }) => {
     return {
         type: 'CHANGE_TASK_TITLE',
         payload
