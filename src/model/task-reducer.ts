@@ -17,13 +17,10 @@ export const taskReducer = (state: TasksType, action: ActionsType): TasksType =>
     }
 }
 
-export const removeTaskAC = (id: string,todolistId: string) => {
+export const removeTaskAC = (payload:{id: string,todolistId: string}) => {
     return {
         type: 'REMOVE_TASK',
-        payload: {
-            id,
-            todolistId
-        },
+        payload
     } as const
 }
 
