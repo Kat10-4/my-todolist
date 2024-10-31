@@ -1,6 +1,6 @@
 import {v1} from 'uuid';
-import {FilterValuesType, TasksType, TaskType, ToDoListsType} from '../App';
-import {AddToDoListActionType} from './todolists-reducer';
+import {TasksType, TaskType} from '../App';
+import {AddToDoListActionType, RemoveToDoListActionType} from './todolists-reducer';
 
 
 export type RemoveTaskActionType = ReturnType<typeof removeTaskAC>
@@ -8,7 +8,13 @@ export type AddTaskActionType = ReturnType<typeof addTaskAC>
 export type ChangeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
 export type ChangeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
 
-type ActionsType = RemoveTaskActionType | AddTaskActionType | ChangeTaskStatusActionType | ChangeTaskTitleActionType | AddToDoListActionType
+type ActionsType =
+    RemoveTaskActionType
+    | AddTaskActionType
+    | ChangeTaskStatusActionType
+    | ChangeTaskTitleActionType
+    | AddToDoListActionType
+    | RemoveToDoListActionType
 
 export const tasksReducer = (state: TasksType, action: ActionsType): TasksType => {
     switch (action.type) {
@@ -34,15 +40,21 @@ export const tasksReducer = (state: TasksType, action: ActionsType): TasksType =
             }
         }
         case 'CHANGE_TASK_TITLE': {
-            return {...state,
+            return {
+                ...state,
                 [action.payload.todolistId]: state[action.payload.todolistId].map(el => el.id === action.payload.taskId ? {
                     ...el,
                     title: action.payload.newTitle
                 } : el)
             }
         }
-        case 'ADD_TODOLIST':{
-            return {...state,[action.payload.id]:[]}
+        case 'ADD_TODOLIST': {
+            return {...state, [action.payload.id]: []}
+        }
+        case 'REMOVE_TODOLIST': {
+            let copyState = {...state}
+            delete copyState[action.payload.id]
+            return copyState
         }
         default:
             throw new Error('Can\'t find this action type')
