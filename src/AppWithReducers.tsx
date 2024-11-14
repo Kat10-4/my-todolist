@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useReducer, useState} from 'react';
 import './App.css';
 import {ToDoList} from './components/ToDoList/ToDoList';
 import {v1} from 'uuid';
@@ -18,14 +18,20 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {MenuButton} from './components/Button/MenuButton';
 import {orange, purple} from '@mui/material/colors';
 import Switch from '@mui/material/Switch'
+import {
+    addTodolistAC,
+    changeToDoListFilterAC,
+    changeToDoListTitleAC,
+    removeToDoListAC,
+    todolistsReducer
+} from './model/todolists-reducer';
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './model/tasks-reducer';
 
 export type ToDoListsType = {
     id: string,
     title: string,
     filter: FilterValuesType
 }
-
-type ThemeMode = 'dark' | 'light'
 
 export type TasksType = {
     [key: string]: TaskType[]
@@ -39,28 +45,13 @@ export type TaskType = {
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 
+type ThemeMode = 'dark' | 'light'
 
-function AppWithReducers() {
-    const toDoListId1 = v1()
-    const toDoListId2 = v1()
+export const AppWithReducers = () => {
 
-    const [toDoLists, setToDoLists] = useState<ToDoListsType[]>([
-        {id: toDoListId1, title: 'what to learn', filter: 'all'},
-        {id: toDoListId2, title: 'what to buy', filter: 'all'}
-    ])
+    const [toDoLists, dispatchToTodolists] = useReducer(todolistsReducer, [])
 
-    const [tasksObj, setTasks] = useState<TasksType>({
-        [toDoListId1]: [
-            {id: v1(), title: 'CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'React', isDone: false},
-            {id: v1(), title: 'Redux', isDone: false},
-        ],
-        [toDoListId2]: [
-            {id: v1(), title: 'book', isDone: false},
-            {id: v1(), title: 'milk', isDone: true}
-        ]
-    })
+    const [tasksObj, dispatchToTasks] = useReducer(tasksReducer, {})
 
     const [themeMode, setThemeMode] = useState<ThemeMode>('light')
 
@@ -74,52 +65,42 @@ function AppWithReducers() {
 
 
 //ToDoList logic
-    const changeFilter = (newFilter: FilterValuesType, toDolistId: string) => {
-        let toDoList = toDoLists.find((tl) => tl.id === toDolistId)
-        if (toDoList) {
-            toDoList.filter = newFilter
-            setToDoLists([...toDoLists])
-        }
+
+    const removeToDoList = (id: string) => {
+        dispatchToTodolists(removeToDoListAC(id))
+        dispatchToTasks(removeToDoListAC(id))
     }
 
-    const updateToDoListTitle = (toDoListId: string, title: string) => {
-        setToDoLists(toDoLists.map(el => el.id === toDoListId ? {...el, title} : el))
+    const addTodolist = (title: string) => {
+        const action = addTodolistAC(title)
+        dispatchToTodolists(action)
+        dispatchToTasks(action)
     }
 
-    const removeToDoList = (toDoListId: string) => {
-        setToDoLists(toDoLists.filter(td => td.id !== toDoListId))
-        delete tasksObj[toDoListId]
-        setTasks({...tasksObj})
+    const changeFilter = (filter: FilterValuesType, id: string) => {
+        dispatchToTodolists(changeToDoListFilterAC({filter, id}))
     }
 
-    const addToDoList = (title: string) => {
-        const id = v1()
-        setToDoLists([{id, title, filter: 'all'}, ...toDoLists])
-        setTasks({...tasksObj, [id]: []})
+    const updateToDoListTitle = (id: string, title: string) => {
+        dispatchToTodolists(changeToDoListTitleAC({id, title}))
     }
+
 
     //Task logic
-    const addTask = (newTaskTitle: string, toDolistId: string) => {
-        let newTask: TaskType = {id: v1(), title: newTaskTitle, isDone: false}
-        setTasks({
-            ...tasksObj, [toDolistId]: [newTask, ...tasksObj[toDolistId]]
-        })
+    const addTask = (newTitle: string, todolistId: string) => {
+        dispatchToTasks(addTaskAC({newTitle, todolistId}))
     }
 
-    const removeTask = (id: string, toDolistId: string) => {
-        setTasks({...tasksObj, [toDolistId]: tasksObj[toDolistId].filter(el => el.id !== id)})
-        delete tasksObj[toDolistId]
+    const removeTask = (id: string, todolistId: string) => {
+        dispatchToTasks(removeTaskAC({id, todolistId}))
     }
 
-    const changeStatus = (taskId: string, isDone: boolean, toDolistId: string) => {
-        setTasks({
-            ...tasksObj,
-            [toDolistId]: [...tasksObj[toDolistId].map(task => task.id === taskId ? {...task, isDone} : task)]
-        })
+    const changeStatus = (taskId: string, isDone: boolean, todolistId: string) => {
+        dispatchToTasks(changeTaskStatusAC({taskId, isDone, todolistId}))
     }
 
-    const updateTaskTitle = (toDoListId: string, taskId: string, title: string) => {
-        setTasks({...tasksObj, [toDoListId]: tasksObj[toDoListId].map(el => el.id === taskId ? {...el, title} : el)})
+    const updateTaskTitle = (todolistId: string, taskId: string, newTitle: string) => {
+        dispatchToTasks(changeTaskTitleAC({todolistId, taskId, newTitle}))
     }
 
 
@@ -153,7 +134,7 @@ function AppWithReducers() {
         </AppBar>
         <Container sx={{maxWidth: '1140px'}} maxWidth={false}>
             <Grid2 container sx={{padding: '30px'}}>
-                <AddItemForm addItem={addToDoList}/>
+                <AddItemForm addItem={addTodolist}/>
             </Grid2>
             <Grid2 container spacing={3}>
                 {toDoLists.map((tl) => {
@@ -180,4 +161,4 @@ function AppWithReducers() {
     </ThemeProvider>
 }
 
-export default AppWithReducers;
+

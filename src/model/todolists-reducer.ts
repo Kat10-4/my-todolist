@@ -3,7 +3,7 @@ import {FilterValuesType, ToDoListsType} from '../App';
 
 export type RemoveToDoListActionType = ReturnType<typeof removeToDoListAC>
 
-export type AddToDoListActionType = ReturnType<typeof addToDoListAC>
+export type AddToDoListActionType = ReturnType<typeof addTodolistAC>
 
 export type ChangeToDoListTitleActionType = ReturnType<typeof changeToDoListTitleAC>
 
@@ -43,24 +43,24 @@ export const removeToDoListAC = (id: string) => {
     } as const
 }
 
-export const addToDoListAC = (title: string) => {
+export const addTodolistAC = (title: string) => {
     return {
         type: 'ADD_TODOLIST',
         payload: {
             title,
-            id:v1()
+            id: v1()
         },
     } as const
 }
 
-export const changeToDoListTitleAC = (payload:{id: string, title: string}) => {
+export const changeToDoListTitleAC = (payload: { id: string, title: string }) => {
     return {
         type: 'CHANGE_TODOLIST_TITLE',
         payload
     } as const
 }
 
-export const changeToDoListFilterAC = (payload:{id: string, filter: FilterValuesType}) => {
+export const changeToDoListFilterAC = (payload: { id: string, filter: FilterValuesType }) => {
     return {
         type: 'CHANGE_TODOLIST_FILTER',
         payload
