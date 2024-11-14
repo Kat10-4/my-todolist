@@ -1,6 +1,6 @@
 import React from 'react';
-import {FilterValuesType, TaskType} from '../../App';
-import '../../App.css'
+import {FilterValuesType, TaskType} from '../../app/App';
+import '../../app/App.css'
 import {v1} from 'uuid';
 import {ToDoListHeader} from './ToDoListHeader';
 import {ToDoListBody} from './ToDoListBody';

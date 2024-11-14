@@ -1,6 +1,6 @@
 import {AddItemForm} from '../AddItemForm/AddItemForm';
 import React, {ChangeEvent} from 'react';
-import {TaskType} from '../../App';
+import {TaskType} from '../../app/App';
 import {EditableSpan} from '../EditableSpan/EditableSpan';
 import {ButtonType} from './ToDoList';
 import {Box, Button, Checkbox, IconButton, List, ListItem} from '@mui/material';
