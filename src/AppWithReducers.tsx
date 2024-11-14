@@ -1,7 +1,6 @@
 import React, {useReducer, useState} from 'react';
 import './App.css';
 import {ToDoList} from './components/ToDoList/ToDoList';
-import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm/AddItemForm';
 import {
     AppBar,
