@@ -67,13 +67,15 @@ export const ToDoListBody = ({
         }
     )
 
-
     return (
         <div>
             <AddItemForm addItem={addTaskHandler}/>
-            <List>
-                {tasksList}
-            </List>
+            {
+                filterTasks().length === 0
+                    ? <p>No tasks</p>
+                    : <List>
+                        {tasksList}
+                    </List>}
             <Box sx={filterButtonsContainerSx}>
                 {filterButtons}
             </Box>
