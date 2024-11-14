@@ -1,6 +1,6 @@
 // @flow 
 import * as React from 'react';
-import {ChangeEvent, useState} from 'react';
+import {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {TextField} from '@mui/material';
 
 type Props = {
@@ -22,6 +22,15 @@ export const EditableSpan = ({oldTitle, onClick}: Props) => {
         setError(!e.currentTarget.value.trim())
     }
 
+    const onKeyUpHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if(e.key==='Enter'){
+            setEdit(false)
+            error ? onClick(oldTitle) : onClick(updatedTitle)
+        }
+
+
+    }
+
     return (edit ?
             <TextField
                 variant="standard"
@@ -29,7 +38,8 @@ export const EditableSpan = ({oldTitle, onClick}: Props) => {
                 autoFocus
                 onBlur={editHandler}
                 onChange={onChangeHandler}
-                error={!!error}
+                onKeyUp={onKeyUpHandler}
+                error={error}
                 helperText={'Type new value'}/> :
             <span onDoubleClick={editHandler}>{oldTitle}</span>
     );
