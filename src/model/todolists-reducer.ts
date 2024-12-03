@@ -1,21 +1,15 @@
 import {v1} from 'uuid';
-import {FilterValuesType, ToDoListsType} from '../app/App';
-
-export type RemoveToDoListActionType = ReturnType<typeof removeToDoListAC>
-
-export type AddToDoListActionType = ReturnType<typeof addTodolistAC>
-
-export type ChangeToDoListTitleActionType = ReturnType<typeof changeToDoListTitleAC>
-
-export type ChangeToDoListFilterActionType = ReturnType<typeof changeToDoListFilterAC>
-
-type ActionsType =
-    | RemoveToDoListActionType
-    | AddToDoListActionType
-    | ChangeToDoListTitleActionType
-    | ChangeToDoListFilterActionType
 
 const initialState: ToDoListsType[] = []
+
+export type ToDoListsType = {
+    id: string,
+    title: string,
+    filter: FilterValuesType
+}
+
+export type FilterValuesType = 'all' | 'active' | 'completed'
+
 
 export const todolistsReducer = (state: ToDoListsType[]=initialState, action: ActionsType): ToDoListsType[] => {
     switch (action.type) {
@@ -36,6 +30,7 @@ export const todolistsReducer = (state: ToDoListsType[]=initialState, action: Ac
     }
 }
 
+//Actions creators
 export const removeToDoListAC = (id: string) => {
     return {
         type: 'REMOVE_TODOLIST',
@@ -68,3 +63,20 @@ export const changeToDoListFilterAC = (payload: { id: string, filter: FilterValu
         payload
     } as const
 }
+
+//Action types
+export type RemoveToDoListActionType = ReturnType<typeof removeToDoListAC>
+
+export type AddToDoListActionType = ReturnType<typeof addTodolistAC>
+
+export type ChangeToDoListTitleActionType = ReturnType<typeof changeToDoListTitleAC>
+
+export type ChangeToDoListFilterActionType = ReturnType<typeof changeToDoListFilterAC>
+
+type ActionsType =
+    | RemoveToDoListActionType
+    | AddToDoListActionType
+    | ChangeToDoListTitleActionType
+    | ChangeToDoListFilterActionType
+
+

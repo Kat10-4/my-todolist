@@ -1,51 +1,28 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
+import {getTheme} from '../common/theme/Theme';
 import {ToDoList} from '../components/ToDoList/ToDoList';
 import {AddItemForm} from '../components/AddItemForm/AddItemForm';
 import {
-    AppBar,
     Container,
-    createTheme, CssBaseline,
+    CssBaseline,
     Grid2,
-    IconButton,
     Paper,
     ThemeProvider,
-    Toolbar,
-    Typography
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import {MenuButton} from '../components/Button/MenuButton';
-import {orange, purple} from '@mui/material/colors';
-import Switch from '@mui/material/Switch'
+import {Header} from '../Header';
 import {
     addTodolistAC,
     changeToDoListFilterAC,
-    changeToDoListTitleAC,
-    removeToDoListAC,
+    changeToDoListTitleAC, type FilterValuesType,
+    removeToDoListAC, type ToDoListsType,
 } from '../model/todolists-reducer';
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from '../model/tasks-reducer';
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, type TasksType} from '../model/tasks-reducer';
 import {useDispatch, useSelector} from 'react-redux';
+import {type ThemeMode} from './app-reducer';
 import {RootState} from './store';
 
-export type ToDoListsType = {
-    id: string,
-    title: string,
-    filter: FilterValuesType
-}
 
-export type TasksType = {
-    [key: string]: TaskType[]
-}
-
-export type TaskType = {
-    id: string,
-    title: string,
-    isDone: boolean
-}
-
-export type FilterValuesType = 'all' | 'active' | 'completed'
-
-type ThemeMode = 'dark' | 'light'
 
 export const App = () => {
 
@@ -55,16 +32,9 @@ export const App = () => {
 
     const dispatch=useDispatch()
 
-    const [themeMode, setThemeMode] = useState<ThemeMode>('light')
+    const themeMode = useSelector<RootState,ThemeMode>(state=>state.app.themeMode)
 
-    const theme = createTheme({
-        palette: {
-            primary: purple,
-            secondary: orange,
-            mode: themeMode === 'light' ? 'light' : 'dark',
-        },
-    })
-
+    const theme = getTheme(themeMode)
 
 //ToDoList logic
 
@@ -103,34 +73,9 @@ export const App = () => {
     }
 
 
-    const changeModeHandler = () => {
-        setThemeMode(themeMode === 'light' ? 'dark' : 'light')
-    }
-
     return <ThemeProvider theme={theme}>
         <CssBaseline/>
-        <AppBar position="static">
-            <Container sx={{maxWidth: '1140px'}} maxWidth={false}>
-                <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{mr: 2}}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
-                        To Do Lists
-                    </Typography>
-                    <MenuButton>Login</MenuButton>
-                    <MenuButton>Logout</MenuButton>
-                    <MenuButton background={theme.palette.primary.dark}>Faq</MenuButton>
-                    <Switch color={'default'} onChange={changeModeHandler}/>
-                </Toolbar>
-            </Container>
-        </AppBar>
+        <Header/>
         <Container sx={{maxWidth: '1140px'}} maxWidth={false}>
             <Grid2 container sx={{padding: '30px'}}>
                 <AddItemForm addItem={addTodolist}/>
