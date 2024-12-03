@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import './App.css';
 import {ToDoList} from '../components/ToDoList/ToDoList';
 import {AddItemForm} from '../components/AddItemForm/AddItemForm';
@@ -72,9 +72,9 @@ export const App = () => {
         dispatch(removeToDoListAC(id))
     }
 
-    const addTodolist = (title: string) => {
+    const addTodolist = useCallback ((title: string) => {
         dispatch( addTodolistAC(title))
-    }
+    }, [])
 
     const changeFilter = (filter: FilterValuesType, id: string) => {
         dispatch(changeToDoListFilterAC({filter, id}))

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {FilterValuesType, TaskType} from '../../app/App';
 import '../../app/App.css'
 import {v1} from 'uuid';
@@ -73,9 +73,9 @@ export function ToDoList({
 
     const removeToDoListHandler = () => removeToDoList(toDoListId)
 
-    const addTaskHandler = (title: string) => {
+    const addTaskHandler = useCallback((title: string) => {
         addTask(title, toDoListId)
-    }
+    },[])
 
     const updateTaskTitleHandler = (taskId: string, updatedTitle: string) => {
         updateTaskTitle(toDoListId, taskId, updatedTitle)

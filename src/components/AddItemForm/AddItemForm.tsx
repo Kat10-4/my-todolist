@@ -7,7 +7,8 @@ type Props = {
     addItem: (newItemTitle: string) => void
 };
 
-export const AddItemForm = ({addItem}: Props) => {
+export const AddItemForm = React.memo(({addItem}: Props) => {
+
     const [newItemTitle, setNewItemTitle] = useState<string>('')
     const [error, setError] = useState<string | null>('')
 
@@ -16,7 +17,9 @@ export const AddItemForm = ({addItem}: Props) => {
     }
 
     const onKeyUpHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError('')
+        if (error !== null) {
+            setError(null)
+        }
         if (e.key === 'Enter') {
             if (newItemTitle.trim() !== '') {
                 addItem(newItemTitle);
@@ -60,4 +63,4 @@ export const AddItemForm = ({addItem}: Props) => {
             </Grid2>
         </Grid2>
     );
-};
+})
