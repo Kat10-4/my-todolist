@@ -1,63 +1,23 @@
+import {Delete} from '@mui/icons-material';
+import {Container, Grid2, IconButton} from '@mui/material';
 import React, {useCallback} from 'react';
-import {FilterValuesType, TaskType} from '../../app/App';
 import '../../app/App.css'
 import {v1} from 'uuid';
+import {FilterTasksButtons} from '../../FilterTasksButtons';
+import type {ToDoListsType} from '../../model/todolists-reducer';
+import {EditableSpan} from '../EditableSpan/EditableSpan';
 import {ToDoListHeader} from './ToDoListHeader';
 import {ToDoListBody} from './ToDoListBody';
 
 type PropsType = {
-    toDoListId: string
-    toDoListTitle: string,
-    removeToDoList: (toDoListId: string) => void
-    filter: FilterValuesType,
-    changeFilter: (newFilter: FilterValuesType, toDolistId: string) => void,
-    updateToDoListTitle: (toDoListId: string, title: string) => void
-    tasks: TaskType[],
-    removeTask: (id: string, toDolistId: string) => void,
-    addTask: (newTaskTitle: string, toDolistId: string) => void,
-    changeTaskStatus: (taskId: string, isDone: boolean, toDolistId: string) => void
-    updateTaskTitle: (toDoListId: string, taskId: string, title: string) => void
+    todolist: ToDoListsType
 }
 
-export type ButtonType = {
-    id: string
-    title: string
-    onClickHandler: () => void
-    color: 'secondary' | 'primary' | 'inherit' | 'success' | 'error' | 'info' | 'warning'
-}
 
-export function ToDoList({
-                             toDoListId,
-                             toDoListTitle,
-                             tasks,
-                             removeTask,
-                             changeFilter,
-                             addTask,
-                             changeTaskStatus,
-                             filter,
-                             removeToDoList,
-                             updateTaskTitle,
-                             updateToDoListTitle
-                         }: PropsType) {
 
-    const buttonData: ButtonType[] = [
-        {
-            id: v1(),
-            title: 'All',
-            onClickHandler: () => changeFilter('all', toDoListId),
-            color: filter === 'all' ? 'secondary' : 'primary'
-        }, {
-            id: v1(),
-            title: 'Active',
-            onClickHandler: () => changeFilter('active', toDoListId),
-            color: filter === 'active' ? 'secondary' : 'primary'
-        }, {
-            id: v1(),
-            title: 'Completed',
-            onClickHandler: () => changeFilter('completed', toDoListId),
-            color: filter === 'completed' ? 'secondary' : 'primary'
-        }
-    ]
+export function ToDoList({todolist}: PropsType) {
+
+
 
     const filterTasks = () => {
         let filteredTasks = tasks
@@ -75,7 +35,7 @@ export function ToDoList({
 
     const addTaskHandler = useCallback((title: string) => {
         addTask(title, toDoListId)
-    },[])
+    }, [])
 
     const updateTaskTitleHandler = (taskId: string, updatedTitle: string) => {
         updateTaskTitle(toDoListId, taskId, updatedTitle)
@@ -86,18 +46,56 @@ export function ToDoList({
     }
 
 
-    return <div>
-        <ToDoListHeader
-            toDoListTitle={toDoListTitle}
-            removeToDoList={removeToDoListHandler}
-            updateToDoListTitle={updateToDoListTitleHandler}/>
-        <ToDoListBody
-            toDoListId={toDoListId}
-            addTaskHandler={addTaskHandler}
-            buttonData={buttonData}
-            filterTasks={filterTasks}
-            removeTask={removeTask}
-            changeTaskStatus={changeTaskStatus}
-            updateTaskTitleHandler={updateTaskTitleHandler}/>
-    </div>
+    return <Container>
+        <Grid2 container sx={{justifyContent: 'space-between',alignItems:'center'}}>
+            <Grid2>
+                <h3 style={{textTransform: 'uppercase'}}>
+                    <EditableSpan
+                        oldTitle={todolist.title}
+                        onClick={(updatedTitle) => updateToDoListTitle(updatedTitle)}/>
+                </h3>
+            </Grid2>
+            <Grid2>
+                <IconButton
+                    aria-label="delete"
+                    onClick={removeToDoList}>
+                    <Delete/>
+                </IconButton>
+            </Grid2>
+        </Grid2>
+
+        {tasks.length === 0 ? (
+            <p>Тасок нет</p>
+        ) : (
+            <List>
+                {tasks.map(task => {
+                    const removeTaskHandler = () => {
+                        removeTask(task.id, todolist.id)
+                    }
+
+                    const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                        const newStatusValue = e.currentTarget.checked
+                        changeTaskStatus(task.id, newStatusValue, todolist.id)
+                    }
+
+                    const changeTaskTitleHandler = (title: string) => {
+                        updateTask(todolist.id, task.id, title)
+                    }
+                    return (
+                        <ListItem key={task.id} sx={getListItemSx(task.isDone)}>
+                            <div>
+                                <Checkbox checked={task.isDone} onChange={changeTaskStatusHandler}/>
+                                <EditableSpan value={task.title} onChange={changeTaskTitleHandler}/>
+                            </div>
+                            <IconButton onClick={removeTaskHandler}>
+                                <DeleteIcon/>
+                            </IconButton>
+                        </ListItem>
+                    )
+                })}
+            </List>
+        )}
+
+        <FilterTasksButtons todolist={todolist}/>
+    </Container>
 }

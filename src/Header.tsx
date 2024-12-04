@@ -10,10 +10,9 @@ import {MenuButton} from './components/Button/MenuButton';
 
 export const Header = () => {
     const themeMode = useSelector<RootState, ThemeMode>(state => state.app.themeMode)
+    const theme = getTheme(themeMode)
 
     const dispatch = useDispatch()
-
-    const theme = getTheme(themeMode)
 
     const changeModeHandler = () => {
         dispatch(changeThemeAC(themeMode === 'light' ? 'dark' : 'light'))

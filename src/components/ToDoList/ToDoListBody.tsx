@@ -1,6 +1,6 @@
-import {AddItemForm} from '../AddItemForm/AddItemForm';
+import type {TaskType} from '../../model/tasks-reducer';
+import {AddItemForm} from '../../AddItemForm';
 import React, {ChangeEvent} from 'react';
-import {TaskType} from '../../app/App';
 import {EditableSpan} from '../EditableSpan/EditableSpan';
 import {ButtonType} from './ToDoList';
 import {Box, Button, Checkbox, IconButton, List, ListItem} from '@mui/material';
@@ -28,15 +28,7 @@ export const ToDoListBody = ({
                                  updateTaskTitleHandler
                              }: ToDoListBodyProps) => {
 
-    const filterButtons = buttonData.map(el => {
-        return <Button key={el.id}
-                       variant={'contained'}
-                       onClick={el.onClickHandler}
-                       color={el.color}
-                       sx={{borderRadius: '0'}}
-        >{el.title}
-        </Button>
-    })
+
 
     const tasksList = filterTasks().map(t => {
             const onRemoveHandler = () => removeTask(t.id, toDoListId)
