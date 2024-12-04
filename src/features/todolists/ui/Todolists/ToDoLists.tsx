@@ -1,12 +1,11 @@
 import {Grid2, Paper} from '@mui/material';
-import {useSelector} from 'react-redux';
-import {RootState} from './app/store';
-import {ToDoList} from './ToDoList';
-import {type ToDoListsType} from './model/todolists-reducer';
+import {useAppSelector} from '../../../../common/hooks/useAppSelector';
+import {selectTodolist} from '../../model/todlistSelectors';
+import {ToDoList} from './Todolist/ToDoList';
 
 
 export const ToDoLists = () => {
-    const toDoLists = useSelector<RootState, ToDoListsType[]>(state => state.todolists)
+    const toDoLists = useAppSelector(selectTodolist)
 
     return <>
         {toDoLists.map((tl) => {

@@ -1,20 +1,20 @@
 import {Delete} from '@mui/icons-material';
 import {Grid2, IconButton} from '@mui/material';
-import React from 'react';
-import {useDispatch} from 'react-redux';
-import {EditableSpan} from './EditableSpan';
-import {changeToDoListTitleAC, removeToDoListAC, type ToDoListsType} from './model/todolists-reducer';
+import {useAppDispatch} from '../../../../../../common/hooks/useAppDispatch';
+import s from './TodolistTitle.module.css'
+import {EditableSpan} from '../../../../../../common/components/EditableSpan/EditableSpan';
+import {changeToDoListTitleAC, removeToDoListAC, type ToDoListsType} from '../../../../model/todolists-reducer';
 
 type Props = {
-    todolist:ToDoListsType
+    todolist: ToDoListsType
 };
 
 export const TodolistTitle = ({todolist}: Props) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const updateToDoListTitle = (title: string) => {
-        dispatch(changeToDoListTitleAC({id:todolist.id, title}))
+        dispatch(changeToDoListTitleAC({id: todolist.id, title}))
     }
 
     const removeToDoList = () => {
@@ -23,7 +23,7 @@ export const TodolistTitle = ({todolist}: Props) => {
 
 
     return (
-        <Grid2 container sx={{justifyContent: 'space-between',alignItems:'center'}}>
+        <div className={s.container}>
             <Grid2>
                 <h3 style={{textTransform: 'uppercase'}}>
                     <EditableSpan
@@ -38,6 +38,6 @@ export const TodolistTitle = ({todolist}: Props) => {
                     <Delete/>
                 </IconButton>
             </Grid2>
-        </Grid2>
+        </div>
     );
 };

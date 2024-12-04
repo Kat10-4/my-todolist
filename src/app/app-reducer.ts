@@ -19,7 +19,7 @@ export const appReducer = (
 }
 
 //Action creators
-export const changeThemeAC = (mode:ThemeMode) => {
+export const changeThemeAC = (mode: ThemeMode) => {
     return {
         type: 'CHANGE_THEME',
         payload: {

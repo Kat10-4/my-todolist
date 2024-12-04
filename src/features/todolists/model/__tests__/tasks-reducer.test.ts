@@ -5,8 +5,8 @@ import {
     removeTaskAC,
     tasksReducer,
     type TasksType
-} from './tasks-reducer'
-import {addTodolistAC, removeToDoListAC} from './todolists-reducer';
+} from '../tasks-reducer'
+import {addTodolistAC, removeToDoListAC} from '../todolists-reducer';
 
 let startState: TasksType = {}
 
