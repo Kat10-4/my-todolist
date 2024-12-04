@@ -1,5 +1,3 @@
-// @flow 
-import * as React from 'react';
 import {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {TextField} from '@mui/material';
 
@@ -7,6 +5,7 @@ type Props = {
     oldTitle: string
     onClick: (updatedTitle: string) => void
 };
+
 export const EditableSpan = ({oldTitle, onClick}: Props) => {
     const [edit, setEdit] = useState<boolean>(false)
     const [updatedTitle, setUpdatedTitle] = useState(oldTitle)
@@ -27,8 +26,6 @@ export const EditableSpan = ({oldTitle, onClick}: Props) => {
             setEdit(false)
             error ? onClick(oldTitle) : onClick(updatedTitle)
         }
-
-
     }
 
     return (edit ?

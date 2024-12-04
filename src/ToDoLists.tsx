@@ -1,7 +1,7 @@
 import {Grid2, Paper} from '@mui/material';
 import {useSelector} from 'react-redux';
 import {RootState} from './app/store';
-import {ToDoList} from './components/ToDoList/ToDoList';
+import {ToDoList} from './ToDoList';
 import {type ToDoListsType} from './model/todolists-reducer';
 
 

@@ -1,4 +1,4 @@
-import {EditableSpan} from '../EditableSpan/EditableSpan';
+import {EditableSpan} from '../../EditableSpan';
 import React from 'react';
 import {Grid2, IconButton} from '@mui/material';
 import {Delete} from '@mui/icons-material';

@@ -2,7 +2,7 @@ import {Box, Button} from '@mui/material';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {v1} from 'uuid';
-import {filterButtonsContainerSx} from './components/ToDoList/Todolist.styles';
+import {filterButtonsContainerSx} from './Todolist.styles';
 import {changeToDoListFilterAC, type FilterValuesType, type ToDoListsType} from './model/todolists-reducer';
 
 export type FilterButtons = {

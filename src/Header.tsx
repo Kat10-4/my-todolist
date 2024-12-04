@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {changeThemeAC, type ThemeMode} from './app/app-reducer';
 import type {RootState} from './app/store';
 import {getTheme} from './common/theme/Theme';
-import {MenuButton} from './components/Button/MenuButton';
+import {MenuButton} from './MenuButton';
 
 
 export const Header = () => {
@@ -43,3 +43,4 @@ export const Header = () => {
         </AppBar>
     );
 };
+
