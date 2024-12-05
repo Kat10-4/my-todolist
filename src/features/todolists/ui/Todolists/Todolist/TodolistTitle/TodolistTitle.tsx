@@ -1,5 +1,5 @@
 import {Delete} from '@mui/icons-material';
-import {Grid2, IconButton} from '@mui/material';
+import {IconButton} from '@mui/material';
 import {useAppDispatch} from '../../../../../../common/hooks/useAppDispatch';
 import s from './TodolistTitle.module.css'
 import {EditableSpan} from '../../../../../../common/components/EditableSpan/EditableSpan';
@@ -24,20 +24,16 @@ export const TodolistTitle = ({todolist}: Props) => {
 
     return (
         <div className={s.container}>
-            <Grid2>
-                <h3 style={{textTransform: 'uppercase'}}>
-                    <EditableSpan
-                        oldTitle={todolist.title}
-                        onClick={(updatedTitle) => updateToDoListTitle(updatedTitle)}/>
-                </h3>
-            </Grid2>
-            <Grid2>
-                <IconButton
-                    aria-label="delete"
-                    onClick={removeToDoList}>
-                    <Delete/>
-                </IconButton>
-            </Grid2>
+            <h3 style={{textTransform: 'uppercase'}}>
+                <EditableSpan
+                    oldTitle={todolist.title}
+                    onClick={(updatedTitle) => updateToDoListTitle(updatedTitle)}/>
+            </h3>
+            <IconButton
+                aria-label="delete"
+                onClick={removeToDoList}>
+                <Delete/>
+            </IconButton>
         </div>
     );
 };
