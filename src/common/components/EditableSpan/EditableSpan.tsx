@@ -38,6 +38,6 @@ export const EditableSpan = ({oldTitle, onClick}: Props) => {
                 onKeyUp={onKeyUpHandler}
                 error={error}
                 helperText={'Type new value'}/> :
-            <span onDoubleClick={editHandler}>{oldTitle}</span>
+            <span onDoubleClick={editHandler} style={{textAlign:'left'}}>{oldTitle}</span>
     );
 };

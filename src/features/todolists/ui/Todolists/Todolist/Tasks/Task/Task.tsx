@@ -1,38 +1,38 @@
-import {Checkbox, IconButton, ListItem} from '@mui/material';
+import {Box, Checkbox, IconButton, ListItem} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {EditableSpan} from '../../../../../../../common/components/EditableSpan/EditableSpan';
 import {useAppDispatch} from '../../../../../../../common/hooks/useAppDispatch';
 import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, type TaskType} from '../../../../../model/tasks-reducer';
-import {getListItemSx} from './Task.styles';
+import {getBoxSx, getListItemSx} from './Task.styles';
 
 type Props = {
-    task:TaskType
-    todolistId:string
+    task: TaskType
+    todolistId: string
 };
 
-export const Task = ({task,todolistId}: Props) => {
+export const Task = ({task, todolistId}: Props) => {
     const dispatch = useAppDispatch()
 
     const removeTask = () => {
-        dispatch(removeTaskAC({id:task.id, todolistId}))
+        dispatch(removeTaskAC({id: task.id, todolistId}))
     }
 
     const changeTaskStatus = () => {
-        dispatch(changeTaskStatusAC({taskId:task.id, isDone: !task.isDone, todolistId}))
+        dispatch(changeTaskStatusAC({taskId: task.id, isDone: !task.isDone, todolistId}))
     }
 
     const updateTask = (title: string) => {
-        dispatch(changeTaskTitleAC({taskId:task.id, newTitle:title, todolistId}))
+        dispatch(changeTaskTitleAC({taskId: task.id, newTitle: title, todolistId}))
     }
 
 
     return (
         <ListItem key={task.id} sx={getListItemSx(task.isDone)}>
-            <div>
-                <Checkbox checked={task.isDone} onChange={changeTaskStatus}/>
+            <Box sx={getBoxSx()}>
+                <Checkbox checked={task.isDone} onChange={changeTaskStatus} sx={{m:'0'}}/>
                 <EditableSpan oldTitle={task.title} onClick={updateTask}/>
-            </div>
-            <IconButton onClick={removeTask}>
+            </Box>
+            <IconButton onClick={removeTask} sx={{m:'0'}}>
                 <DeleteIcon/>
             </IconButton>
         </ListItem>

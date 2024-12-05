@@ -40,7 +40,7 @@ export const AddItemForm = React.memo(({addItem}: Props) => {
     }
 
     return (
-        <Grid2 container sx={{alignItems: 'flex-end',mb:'3ch'}}>
+        <Grid2 container sx={{alignItems: 'flex-end',justifyContent:'center'}}>
             <Grid2>
                 <TextField
                     variant="standard"
@@ -53,7 +53,7 @@ export const AddItemForm = React.memo(({addItem}: Props) => {
                     error={!!error}
                     helperText={error}
                     label="Enter a title"
-                    sx={{width:'30ch'}}/>
+                    sx={{width:'20ch'}}/>
             </Grid2>
             <Grid2>
                 <IconButton

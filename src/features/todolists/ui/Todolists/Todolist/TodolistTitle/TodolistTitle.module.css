@@ -1,5 +1,13 @@
 .container {
-    display:flex;
+    display: flex;
     align-items: center;
     justify-content: space-between;
+
+}
+
+.title {
+    hyphens: auto;
+    overflow-wrap: break-word;
+    text-transform: uppercase;
+    max-width: 80%;
 }

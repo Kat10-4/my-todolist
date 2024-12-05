@@ -24,14 +24,15 @@ export const TodolistTitle = ({todolist}: Props) => {
 
     return (
         <div className={s.container}>
-            <h3 style={{textTransform: 'uppercase'}}>
+            <h3 className={s.title}>
                 <EditableSpan
                     oldTitle={todolist.title}
                     onClick={(updatedTitle) => updateToDoListTitle(updatedTitle)}/>
             </h3>
             <IconButton
                 aria-label="delete"
-                onClick={removeToDoList}>
+                onClick={removeToDoList}
+            sx={{m:'0'}}>
                 <Delete/>
             </IconButton>
         </div>

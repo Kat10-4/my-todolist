@@ -28,7 +28,7 @@ export const Tasks = ({todolist}: Props) => {
             {
                 tasksForTodolist.length === 0
                     ? <p>No tasks</p>
-                    : <List>
+                    : <List sx={{p:'4ch 0',m:'0'}}>
                         {tasksForTodolist.map((task) => <Task key={task.id} task={task} todolistId={todolist.id}/>)}
                     </List>
             }
