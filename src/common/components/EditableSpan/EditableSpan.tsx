@@ -7,6 +7,7 @@ type Props = {
 };
 
 export const EditableSpan = ({oldTitle, onClick}: Props) => {
+
     const [edit, setEdit] = useState<boolean>(false)
     const [updatedTitle, setUpdatedTitle] = useState(oldTitle)
     const [error, setError] = useState<boolean>(false)
@@ -22,7 +23,7 @@ export const EditableSpan = ({oldTitle, onClick}: Props) => {
     }
 
     const onKeyUpHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if(e.key==='Enter'){
+        if (e.key === 'Enter') {
             setEdit(false)
             error ? onClick(oldTitle) : onClick(updatedTitle)
         }
@@ -38,6 +39,6 @@ export const EditableSpan = ({oldTitle, onClick}: Props) => {
                 onKeyUp={onKeyUpHandler}
                 error={error}
                 helperText={'Type new value'}/> :
-            <span onDoubleClick={editHandler} style={{textAlign:'left'}}>{oldTitle}</span>
+            <span onDoubleClick={editHandler} style={{textAlign: 'left'}}>{oldTitle}</span>
     );
 };

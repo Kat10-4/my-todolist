@@ -1,6 +1,6 @@
 import {Grid2, Paper} from '@mui/material';
 import {useAppSelector} from '../../../../common/hooks/useAppSelector';
-import {selectTodolist} from '../../model/todlistSelectors';
+import {selectTodolist} from '../../model/todolistSelectors';
 import {ToDoList} from './Todolist/ToDoList';
 
 
@@ -11,7 +11,7 @@ export const ToDoLists = () => {
         {toDoLists.map((tl) => {
             return (
                 <Grid2 key={tl.id}>
-                    <Paper sx={{p: '0 20px 20px 20px', width:'375px'}}>
+                    <Paper sx={{p: '0 20px 20px 20px', width:'375px'}} elevation={3} square>
                         <ToDoList
                             key={tl.id}
                             todolist={tl}

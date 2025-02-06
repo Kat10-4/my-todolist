@@ -13,8 +13,7 @@ type PropsType = {
     todolist: ToDoListsType
 }
 
-export function ToDoList({todolist}: PropsType) {
-
+export const ToDoList=React.memo(({todolist}: PropsType)=> {
     const dispatch = useAppDispatch()
 
     const addTask = useCallback((title: string) => {
@@ -28,4 +27,4 @@ export function ToDoList({todolist}: PropsType) {
         <Tasks todolist={todolist}/>
         <FilterTasksButtons todolist={todolist}/>
     </Container>
-}
+})
