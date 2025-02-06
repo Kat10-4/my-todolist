@@ -1,4 +1,4 @@
-import {v1} from 'uuid';
+import {nanoid} from '@reduxjs/toolkit';
 import {AddToDoListActionType, RemoveToDoListActionType} from './todolists-reducer';
 
 const initialState: TasksType= {}
@@ -22,7 +22,7 @@ export const tasksReducer = (state: TasksType=initialState, action: ActionsType)
             }
         }
         case 'ADD_TASK': {
-            let newTask: TaskType = {id: v1(), title: action.payload.newTitle, isDone: false}
+            let newTask: TaskType = {id: nanoid(), title: action.payload.newTitle, isDone: false}
             return {
                 ...state, [action.payload.todolistId]: [newTask, ...state[action.payload.todolistId]]
             }

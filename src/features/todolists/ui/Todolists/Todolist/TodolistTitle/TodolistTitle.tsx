@@ -18,7 +18,7 @@ export const TodolistTitle = ({todolist}: Props) => {
     }
 
     const removeToDoList = () => {
-        dispatch(removeToDoListAC(todolist.id))
+        dispatch(removeToDoListAC({id:todolist.id}))
     }
 
 
