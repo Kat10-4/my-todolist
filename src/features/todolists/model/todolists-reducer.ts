@@ -11,6 +11,16 @@ export type ToDoListsType = {
 export type FilterValuesType = 'all' | 'active' | 'completed'
 
 
+export const removeToDoListAC = createAction<{ id: string }>('todolists/removeToDoList')
+export const addToDoListAC = createAction('todolists/addToDoList', (title: string) => {
+    return {payload: {title, id: nanoid()}}
+})
+export const changeToDoListTitleAC = createAction<{ id: string, title: string }>('todolists/changeToDoListTitle')
+export const changeToDoListFilterAC = createAction<{
+    id: string,
+    filter: FilterValuesType
+}>('todolists/changeToDoListFilter')
+
 export const todolistsReducer = createReducer(initialState, builder => {
     builder
         .addCase(removeToDoListAC, (state, action) => {
@@ -37,33 +47,7 @@ export const todolistsReducer = createReducer(initialState, builder => {
 })
 
 
-//Actions creators
-export const removeToDoListAC = createAction<{ id: string }>('todolists/removeToDoList')
 
-export const addToDoListAC = createAction('todolists/addToDoList', (title: string) => {
-    return {payload: {title, id: nanoid()}}
-})
 
-export const changeToDoListTitleAC = createAction<{ id: string, title: string }>('todolists/changeToDoListTitle')
-
-export const changeToDoListFilterAC = createAction<{
-    id: string,
-    filter: FilterValuesType
-}>('todolists/changeToDoListFilter')
-
-//Action types
-export type RemoveToDoListActionType = ReturnType<typeof removeToDoListAC>
-
-export type AddToDoListActionType = ReturnType<typeof addToDoListAC>
-
-export type ChangeToDoListTitleActionType = ReturnType<typeof changeToDoListTitleAC>
-
-export type ChangeToDoListFilterActionType = ReturnType<typeof changeToDoListFilterAC>
-
-type ActionsType =
-    | RemoveToDoListActionType
-    | AddToDoListActionType
-    | ChangeToDoListTitleActionType
-    | ChangeToDoListFilterActionType
 
 

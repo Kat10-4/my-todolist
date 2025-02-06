@@ -15,7 +15,7 @@ export const Task = React.memo(({task, todolistId}: Props) => {
     const dispatch = useAppDispatch()
 
     const removeTask = () => {
-        dispatch(removeTaskAC({id: task.id, todolistId}))
+        dispatch(removeTaskAC({taskId: task.id, todolistId}))
     }
 
     const changeTaskStatus = () => {

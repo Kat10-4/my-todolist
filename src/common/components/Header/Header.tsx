@@ -16,7 +16,7 @@ export const Header = () => {
     const dispatch = useAppDispatch()
 
     const changeModeHandler = () => {
-        dispatch(changeThemeAC(themeMode === 'light' ? 'dark' : 'light'))
+        dispatch(changeThemeAC({mode: themeMode === 'light' ? 'dark' : 'light'}))
     }
 
     return (
