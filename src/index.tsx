@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import {AppHttpRequests} from './app/AppHttpRequests';
 import reportWebVitals from './reportWebVitals';
 import {App} from './app/App';
 import {Provider} from 'react-redux';
@@ -11,7 +12,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <Provider store={store}>
-        <App/>
+        <AppHttpRequests/>
     </Provider>
 );
 
