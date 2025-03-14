@@ -24,18 +24,28 @@ export const AppHttpRequests = () => {
     }, [])
 
     const createTodolist = (title: string) => {
-        axios.post<any>('https://social-network.samuraijs.com/api/1.1/todo-lists', {title}, {
+        axios.post<CreateTodolistResponse>('https://social-network.samuraijs.com/api/1.1/todo-lists', {title}, {
             headers: {
                 Authorization: `Bearer ${token}`,
-                'API-KEY':apiKey
+                'API-KEY': apiKey
             }
         })
             .then(res => {
-                console.log(res.data)
+                const newTodolist = res.data.data.item
+                setTodolists([newTodolist, ...todolists])
             })
     }
 
     const deleteTodolist = (id: string) => {
+        axios.delete<DeleteTodolistResponse>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'API-KEY': apiKey
+            }
+        })
+            .then(res => {
+                setTodolists(todolists.filter(td=>td.id!==id))
+            })
     }
 
     const changeTodolistTitle = (id: string, title: string) => {
@@ -94,4 +104,23 @@ export type TodoList = {
     addedDate: string
     order: number
     title: string
+}
+
+export type FieldError = {
+    error: string
+    field: string
+}
+
+type CreateTodolistResponse = {
+    data: { item: TodoList }
+    resultCode: number
+    messages: string[]
+    fieldsErrors: FieldError[]
+}
+
+type DeleteTodolistResponse = {
+    data: { item: TodoList }
+    resultCode: number
+    messages: string[]
+    fieldsErrors: FieldError[]
 }
