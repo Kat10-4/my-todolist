@@ -24,7 +24,7 @@ export const AppHttpRequests = () => {
     }, [])
 
     const createTodolist = (title: string) => {
-        axios.post<CreateTodolistResponse>('https://social-network.samuraijs.com/api/1.1/todo-lists', {title}, {
+        axios.post<BaseResponse<{ item: TodoList }>>('https://social-network.samuraijs.com/api/1.1/todo-lists', {title}, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'API-KEY': apiKey
@@ -37,18 +37,27 @@ export const AppHttpRequests = () => {
     }
 
     const deleteTodolist = (id: string) => {
-        axios.delete<DeleteTodolistResponse>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`, {
+        axios.delete<BaseResponse>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'API-KEY': apiKey
             }
         })
-            .then(res => {
-                setTodolists(todolists.filter(td=>td.id!==id))
+            .then(() => {
+                setTodolists(todolists.filter(td => td.id !== id))
             })
     }
 
     const changeTodolistTitle = (id: string, title: string) => {
+        axios.put<BaseResponse>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${id}`, {title}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'API-KEY': apiKey
+            }
+        })
+            .then(() => {
+                setTodolists(todolists.map(td => td.id === id ? {...td, title} : td))
+            })
     }
 
     const createTask = (todolistId: string, title: string) => {
@@ -111,15 +120,8 @@ export type FieldError = {
     field: string
 }
 
-type CreateTodolistResponse = {
-    data: { item: TodoList }
-    resultCode: number
-    messages: string[]
-    fieldsErrors: FieldError[]
-}
-
-type DeleteTodolistResponse = {
-    data: { item: TodoList }
+type BaseResponse<T = {}> = {
+    data: T
     resultCode: number
     messages: string[]
     fieldsErrors: FieldError[]
