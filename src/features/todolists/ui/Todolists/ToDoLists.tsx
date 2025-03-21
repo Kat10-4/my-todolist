@@ -1,5 +1,5 @@
 import {Grid2, Paper} from '@mui/material';
-import {useAppSelector} from '../../../../common/hooks/useAppSelector';
+import {useAppSelector} from '../../../../common/hooks';
 import {selectTodolist} from '../../model/todolistSelectors';
 import {ToDoList} from './Todolist/ToDoList';
 

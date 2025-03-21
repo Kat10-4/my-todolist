@@ -1,7 +1,7 @@
 import {Box, Button} from '@mui/material';
 import React from 'react';
 import {v1} from 'uuid';
-import {useAppDispatch} from '../../../../../../common/hooks/useAppDispatch';
+import {useAppDispatch} from '../../../../../../common/hooks';
 import {changeToDoListFilterAC, type FilterValuesType, type ToDoListsType} from '../../../../model/todolists-reducer';
 import {filterButtonsContainerSx} from './FilterTasksButton.styles';
 

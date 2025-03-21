@@ -1,8 +1,8 @@
 import {Delete} from '@mui/icons-material';
 import {IconButton} from '@mui/material';
-import {useAppDispatch} from '../../../../../../common/hooks/useAppDispatch';
+import {EditableSpan} from '../../../../../../common/components';
+import {useAppDispatch} from '../../../../../../common/hooks';
 import s from './TodolistTitle.module.css'
-import {EditableSpan} from '../../../../../../common/components/EditableSpan/EditableSpan';
 import {changeToDoListTitleAC, removeToDoListAC, type ToDoListsType} from '../../../../model/todolists-reducer';
 
 type Props = {
