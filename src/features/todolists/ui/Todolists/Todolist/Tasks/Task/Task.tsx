@@ -3,7 +3,12 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import React from "react"
 import { EditableSpan } from "../../../../../../../common/components"
 import { useAppDispatch } from "../../../../../../../common/hooks"
-import { changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, type TaskType } from "../../../../../model/tasks-reducer"
+import {
+  changeTaskStatusAC,
+  changeTaskTitleAC,
+  removeTaskAC,
+  type Task as TaskType,
+} from "../../../../../model/tasks-reducer"
 import { getBoxSx, getListItemSx } from "./Task.styles"
 
 type Props = {

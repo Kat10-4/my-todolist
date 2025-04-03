@@ -3,11 +3,9 @@ import { addToDoListAC, removeToDoListAC } from "./todolists-reducer"
 
 const initialState: TasksType = {}
 
-export type TasksType = {
-  [key: string]: TaskType[]
-}
+export type TasksType = Record<string, Task[]>
 
-export type TaskType = {
+export type Task = {
   id: string
   title: string
   isDone: boolean
