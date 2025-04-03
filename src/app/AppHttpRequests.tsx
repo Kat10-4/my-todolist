@@ -1,6 +1,7 @@
 import { type ChangeEvent, type CSSProperties, useEffect, useState } from "react"
 import Checkbox from "@mui/material/Checkbox"
 import { CreateItemForm, EditableSpan } from "../common/components"
+import { TaskStatus } from "../common/enums"
 import { tasksApi, type DomainTask, todolistsApi, type TodoList, type UpdateTaskModel } from "../features/todolists/api"
 
 export const AppHttpRequests = () => {
@@ -51,7 +52,7 @@ export const AppHttpRequests = () => {
       priority: task.priority,
       startDate: task.startDate,
       deadline: task.deadline,
-      status: e.target.checked ? 2 : 0,
+      status: e.target.checked ? TaskStatus.Completed : TaskStatus.New,
     }
 
     tasksApi.changeTaskStatus(todolistId, task.id, model).then(() => {
@@ -73,7 +74,7 @@ export const AppHttpRequests = () => {
           <CreateItemForm onCreateItem={(title) => createTask(todolist.id, title)} />
           {tasks[todolist.id]?.map((task) => (
             <div key={task.id}>
-              <Checkbox checked={task.status === 2} onChange={(e) => changeTaskStatus(e, task)} />
+              <Checkbox checked={task.status === TaskStatus.Completed} onChange={(e) => changeTaskStatus(e, task)} />
               <EditableSpan oldTitle={task.title} onClick={(title) => changeTaskTitle(task, title)} />
               <button onClick={() => deleteTask(todolist.id, task.id)}>x</button>
             </div>
