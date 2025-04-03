@@ -19,11 +19,4 @@ export type GetTasksResponse = {
   items: DomainTask[]
 }
 
-export type UpdateTaskModel = {
-  title: string
-  description: string | null
-  status: TaskStatus
-  priority: TaskPriority
-  startDate: string | null
-  deadline: string | null
-}
+export type UpdateTaskModel = Omit<DomainTask, "id" | "todoListId" | "order" | "addedDate">
