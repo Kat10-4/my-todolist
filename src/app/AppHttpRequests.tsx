@@ -1,7 +1,7 @@
 import { type ChangeEvent, type CSSProperties, useEffect, useState } from "react"
 import Checkbox from "@mui/material/Checkbox"
 import { CreateItemForm, EditableSpan } from "../common/components"
-import { tasksApi, type DomainTask, todolistsApi, type TodoList } from "../features/todolists/api"
+import { tasksApi, type DomainTask, todolistsApi, type TodoList, type UpdateTaskModel } from "../features/todolists/api"
 
 export const AppHttpRequests = () => {
   const [todolists, setTodolists] = useState<TodoList[]>([])
@@ -42,7 +42,22 @@ export const AppHttpRequests = () => {
 
   const deleteTask = (todolistId: string, taskId: string) => {}
 
-  const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>, task: any) => {}
+  const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>, task: DomainTask) => {
+    const todolistId = task.todoListId
+
+    const model: UpdateTaskModel = {
+      description: task.description,
+      title: task.title,
+      priority: task.priority,
+      startDate: task.startDate,
+      deadline: task.deadline,
+      status: e.target.checked ? 2 : 0,
+    }
+
+    tasksApi.changeTaskStatus(todolistId, task.id, model).then(() => {
+      setTasks({ ...tasks, [todolistId]: tasks[todolistId].map((t) => (t.id === task.id ? { ...t, ...model } : t)) })
+    })
+  }
 
   const changeTaskTitle = (task: any, title: string) => {}
 
@@ -56,9 +71,9 @@ export const AppHttpRequests = () => {
             <button onClick={() => deleteTodolist(todolist.id)}>x</button>
           </div>
           <CreateItemForm onCreateItem={(title) => createTask(todolist.id, title)} />
-          {tasks[todolist.id]?.map((task: any) => (
+          {tasks[todolist.id]?.map((task) => (
             <div key={task.id}>
-              <Checkbox checked={task.isDone} onChange={(e) => changeTaskStatus(e, task)} />
+              <Checkbox checked={task.status === 2} onChange={(e) => changeTaskStatus(e, task)} />
               <EditableSpan oldTitle={task.title} onClick={(title) => changeTaskTitle(task, title)} />
               <button onClick={() => deleteTask(todolist.id, task.id)}>x</button>
             </div>
