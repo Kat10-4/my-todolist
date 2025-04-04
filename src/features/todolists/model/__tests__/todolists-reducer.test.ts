@@ -1,18 +1,18 @@
 import { nanoid } from "@reduxjs/toolkit"
 import {
-  addToDoListAC,
+  createToDoListAC,
   changeToDoListFilterAC,
   changeToDoListTitleAC,
   type FilterValuesType,
   removeToDoListAC,
+  type TodoList,
   todolistsReducer,
-  type ToDoListsType,
-} from "../todolists-reducer"
+} from "../todolists-slice"
 
 let toDoListId1: string
 let toDoListId2: string
 
-let startState: ToDoListsType[] = []
+let startState: TodoList[] = []
 
 beforeEach(() => {
   toDoListId1 = nanoid()
@@ -34,7 +34,7 @@ test("correct ToDoList should be removed", () => {
 test("correct todolist should be added", () => {
   const newTitle: string = "New Title"
 
-  const endState = todolistsReducer(startState, addToDoListAC(newTitle))
+  const endState = todolistsReducer(startState, createToDoListAC(newTitle))
 
   expect(endState.length).toBe(3)
   expect(endState[2].title).toBe(newTitle)

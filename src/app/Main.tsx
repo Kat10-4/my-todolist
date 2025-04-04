@@ -2,14 +2,14 @@ import { Container, Grid2 } from "@mui/material"
 import React, { useCallback } from "react"
 import { useDispatch } from "react-redux"
 import { AddItemForm } from "../common/components"
-import { addToDoListAC } from "../features/todolists/model/todolists-reducer"
+import { createToDoListAC } from "../features/todolists/model/todolists-slice"
 import { ToDoLists } from "../features/todolists/ui/Todolists/ToDoLists"
 
 export const Main = () => {
   const dispatch = useDispatch()
 
   const addTodolist = useCallback((title: string) => {
-    dispatch(addToDoListAC(title))
+    dispatch(createToDoListAC(title))
   }, [])
 
   return (
