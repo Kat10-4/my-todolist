@@ -1,7 +1,7 @@
 import MenuIcon from "@mui/icons-material/Menu"
 import { AppBar, Container, IconButton, Toolbar, Typography } from "@mui/material"
 import Switch from "@mui/material/Switch"
-import { changeThemeAC } from "../../../app/app-reducer"
+import { changeThemeModeAC } from "../../../app/app-slice"
 import { selectThemeMode } from "../../../app/appSelectors"
 import { useAppDispatch, useAppSelector } from "../../hooks"
 import { getTheme } from "../../theme"
@@ -14,7 +14,7 @@ export const Header = () => {
   const dispatch = useAppDispatch()
 
   const changeModeHandler = () => {
-    dispatch(changeThemeAC({ mode: themeMode === "light" ? "dark" : "light" }))
+    dispatch(changeThemeModeAC({ themeMode: themeMode === "light" ? "dark" : "light" }))
   }
 
   return (
