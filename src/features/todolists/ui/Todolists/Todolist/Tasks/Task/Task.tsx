@@ -8,7 +8,7 @@ import {
   changeTaskTitleAC,
   removeTaskAC,
   type Task as TaskType,
-} from "../../../../../model/tasks-reducer"
+} from "../../../../../model/tasks-slice"
 import { getBoxSx, getListItemSx } from "./Task.styles"
 
 type Props = {
