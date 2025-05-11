@@ -13,7 +13,7 @@ export const tasksSlice = createSlice({
         }
       }),
       addTaskAC: create.preparedReducer(
-        (newTitle: string, todolistId: string) => {
+        (todolistId: string, newTitle: string) => {
           const id = nanoid()
           return { payload: { id, newTitle, todolistId } }
         },
@@ -58,7 +58,7 @@ export const tasksSlice = createSlice({
   },
 })
 
-export const {} = tasksSlice.actions
+export const { removeTaskAC, addTaskAC, changeTaskStatusAC, changeTaskTitleAC } = tasksSlice.actions
 export const tasksReducer = tasksSlice.reducer
 
 export type TasksState = Record<string, Task[]>
