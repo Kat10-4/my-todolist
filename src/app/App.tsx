@@ -3,7 +3,7 @@ import { useAppSelector } from "../common/hooks"
 import { getTheme } from "../common/theme"
 import { CssBaseline, ThemeProvider } from "@mui/material"
 import { Header } from "../common/components"
-import { selectThemeMode } from "./appSelectors"
+import { selectThemeMode } from "./app-slice"
 import { Main } from "./Main"
 
 export const App = () => {

@@ -1,6 +1,6 @@
 import { Grid2, Paper } from "@mui/material"
 import { useAppSelector } from "../../../../common/hooks"
-import { selectTodolist } from "../../model/todolistSelectors"
+import { selectTodolist } from "../../model/todolists-slice"
 import { ToDoList } from "./Todolist/ToDoList"
 
 export const ToDoLists = () => {

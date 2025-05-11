@@ -3,6 +3,9 @@ import { createSlice, nanoid } from "@reduxjs/toolkit"
 export const todolistsSlice = createSlice({
   name: "todolists",
   initialState: [] as TodoList[],
+  selectors: {
+    selectTodolist: (state) => state,
+  },
   reducers: (create) => {
     return {
       removeToDoListAC: create.reducer<{ id: string }>((state, action) => {
@@ -42,6 +45,7 @@ export const todolistsSlice = createSlice({
 export const todolistsReducer = todolistsSlice.reducer
 export const { removeToDoListAC, createToDoListAC, changeToDoListTitleAC, changeToDoListFilterAC } =
   todolistsSlice.actions
+export const { selectTodolist } = todolistsSlice.selectors
 
 export type TodoList = {
   id: string
