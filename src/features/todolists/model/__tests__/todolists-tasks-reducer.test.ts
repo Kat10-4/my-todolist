@@ -1,13 +1,13 @@
-import { tasksSlice, type TasksType } from "../tasks-slice"
-import { createToDoListAC, type TodoList, todolistsReducer } from "../todolists-slice"
+import { tasksReducer, type TasksState } from "../tasks-slice"
+import { createToDoListAC, todolistsReducer } from "../todolists-slice"
 
 test("ids should be equals", () => {
-  const startTasksState: TasksType = {}
+  const startTasksState: TasksState = {}
   const startTodolistsState: TodoList[] = []
 
   const action = createToDoListAC("new todolist")
 
-  const endTasksState = tasksSlice(startTasksState, action)
+  const endTasksState = tasksReducer(startTasksState, action)
   const endTodolistsState = todolistsReducer(startTodolistsState, action)
 
   const keys = Object.keys(endTasksState)

@@ -4,12 +4,12 @@ import { AddItemForm } from "../../../../../common/components"
 import { useAppDispatch } from "../../../../../common/hooks"
 import { addTaskAC } from "../../../model/tasks-slice"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
-import { type TodoList } from "../../../model/todolists-slice"
+import { type DomainTodolist } from "../../../model/todolists-slice"
 import { Tasks } from "./Tasks/Tasks"
 import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
 
 type PropsType = {
-  todolist: TodoList
+  todolist: DomainTodolist
 }
 
 export const ToDoList = React.memo(({ todolist }: PropsType) => {

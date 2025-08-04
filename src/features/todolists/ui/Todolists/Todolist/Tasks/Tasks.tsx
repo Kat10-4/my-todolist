@@ -2,11 +2,11 @@ import React, { useMemo } from "react"
 import List from "@mui/material/List"
 import { useAppSelector } from "../../../../../../common/hooks"
 import { selectTasks } from "../../../../model/tasks-slice"
-import type { TodoList } from "../../../../model/todolists-slice"
+import type { DomainTodolist } from "../../../../model/todolists-slice"
 import { Task } from "./Task/Task"
 
 type Props = {
-  todolist: TodoList
+  todolist: DomainTodolist
 }
 
 export const Tasks = React.memo(({ todolist }: Props) => {

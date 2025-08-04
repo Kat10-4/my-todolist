@@ -1,13 +1,23 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit"
+import type { Todolist } from "../api"
 
 export const todolistsSlice = createSlice({
   name: "todolists",
-  initialState: [] as TodoList[],
+  initialState: [] as DomainTodolist[],
   selectors: {
     selectTodolist: (state) => state,
   },
   reducers: (create) => {
     return {
+      setTodolistsAC: create.reducer<{ todolists: Todolist[] }>((state, action) => {
+        //1st opt
+        return action.payload.todolists.map((tl) => {
+          return { ...tl, filter: "all", entityStatus: "idle" }
+        })
+        //2 opt
+        //action.payload.todolists.forEach((tl) => {
+        //state.push({...tl, filter:'all'})}
+      }),
       removeToDoListAC: create.reducer<{ id: string }>((state, action) => {
         const index = state.findIndex((todolist) => todolist.id === action.payload.id)
         if (index !== -1) {
@@ -20,7 +30,7 @@ export const todolistsSlice = createSlice({
           return { payload: { id, title } }
         },
         (state, action) => {
-          state.push({ ...action.payload, filter: "all" })
+          state.push({ ...action.payload, filter: "all", addedDate: "", order: 0 })
         },
       ),
       changeToDoListTitleAC: create.reducer<{ id: string; title: string }>((state, action) => {
@@ -31,7 +41,7 @@ export const todolistsSlice = createSlice({
       }),
       changeToDoListFilterAC: create.reducer<{
         id: string
-        filter: FilterValuesType
+        filter: FilterValues
       }>((state, action) => {
         const todolist = state.find((todolist) => todolist.id === action.payload.id)
         if (todolist) {
@@ -43,14 +53,12 @@ export const todolistsSlice = createSlice({
 })
 
 export const todolistsReducer = todolistsSlice.reducer
-export const { removeToDoListAC, createToDoListAC, changeToDoListTitleAC, changeToDoListFilterAC } =
+export const { setTodolistsAC, removeToDoListAC, createToDoListAC, changeToDoListTitleAC, changeToDoListFilterAC } =
   todolistsSlice.actions
 export const { selectTodolist } = todolistsSlice.selectors
 
-export type TodoList = {
-  id: string
-  title: string
-  filter: FilterValuesType
+export type DomainTodolist = Todolist & {
+  filter: FilterValues
 }
 
-export type FilterValuesType = "all" | "active" | "completed"
+export type FilterValues = "all" | "active" | "completed"

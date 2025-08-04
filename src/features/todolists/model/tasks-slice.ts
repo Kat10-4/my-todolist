@@ -9,12 +9,6 @@ export const tasksSlice = createSlice({
   },
   reducers: (create) => {
     return {
-      removeTaskAC: create.reducer<{ taskId: string; todolistId: string }>((state, action) => {
-        const index = state[action.payload.todolistId].findIndex((task) => task.id === action.payload.taskId)
-        if (index !== -1) {
-          state[action.payload.todolistId].splice(index, 1)
-        }
-      }),
       addTaskAC: create.preparedReducer(
         (todolistId: string, newTitle: string) => {
           const id = nanoid()
@@ -46,6 +40,12 @@ export const tasksSlice = createSlice({
         const task = state[action.payload.todolistId].find((task) => task.id === action.payload.taskId)
         if (task) {
           task.title = action.payload.newTitle
+        }
+      }),
+      removeTaskAC: create.reducer<{ taskId: string; todolistId: string }>((state, action) => {
+        const index = state[action.payload.todolistId].findIndex((task) => task.id === action.payload.taskId)
+        if (index !== -1) {
+          state[action.payload.todolistId].splice(index, 1)
         }
       }),
     }
