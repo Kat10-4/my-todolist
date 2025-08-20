@@ -3,16 +3,16 @@ import {
   createToDoListAC,
   changeToDoListFilterAC,
   changeToDoListTitleAC,
-  type FilterValuesType,
   removeToDoListAC,
-  type TodoList,
   todolistsReducer,
+  type DomainTodolist,
+  type FilterValues,
 } from "../todolists-slice"
 
 let toDoListId1: string
 let toDoListId2: string
 
-let startState: TodoList[] = []
+let startState: DomainTodolist[] = []
 
 beforeEach(() => {
   toDoListId1 = nanoid()
@@ -52,7 +52,7 @@ test("correct todolist should change its name", () => {
 })
 
 test("correct todolist filter should change", () => {
-  const filter: FilterValuesType = "active"
+  const filter: FilterValues = "active"
 
   const endState = todolistsReducer(startState, changeToDoListFilterAC({ id: toDoListId1, filter }))
 

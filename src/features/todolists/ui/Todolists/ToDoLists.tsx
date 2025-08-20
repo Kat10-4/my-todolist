@@ -6,7 +6,7 @@ import { selectTodolist, setTodolistsAC } from "../../model/todolists-slice"
 import { ToDoList } from "./Todolist/ToDoList"
 
 export const ToDoLists = () => {
-  const toDoLists = useAppSelector(selectTodolist)
+  const todolists = useAppSelector(selectTodolist)
 
   const dispatch = useAppDispatch()
 
@@ -18,7 +18,7 @@ export const ToDoLists = () => {
 
   return (
     <>
-      {toDoLists.map((tl) => {
+      {todolists.map((tl) => {
         return (
           <Grid2 key={tl.id}>
             <Paper sx={{ p: "0 20px 20px 20px", width: "375px" }} elevation={3} square>

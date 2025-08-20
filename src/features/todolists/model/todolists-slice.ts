@@ -11,12 +11,13 @@ export const todolistsSlice = createSlice({
     return {
       setTodolistsAC: create.reducer<{ todolists: Todolist[] }>((state, action) => {
         //1st opt
-        return action.payload.todolists.map((tl) => {
-          return { ...tl, filter: "all", entityStatus: "idle" }
-        })
+        // return action.payload.todolists.map((tl) => {
+        //   return { ...tl, filter: "all", entityStatus: "idle" }
+        // }) //not recommended bu rtk as the state is return immutable
         //2 opt
-        //action.payload.todolists.forEach((tl) => {
-        //state.push({...tl, filter:'all'})}
+        action.payload.todolists.forEach((tl) => {
+          state.push({ ...tl, filter: "all" })
+        })
       }),
       removeToDoListAC: create.reducer<{ id: string }>((state, action) => {
         const index = state.findIndex((todolist) => todolist.id === action.payload.id)
@@ -51,6 +52,8 @@ export const todolistsSlice = createSlice({
     }
   },
 })
+
+export const setTodolistTC
 
 export const todolistsReducer = todolistsSlice.reducer
 export const { setTodolistsAC, removeToDoListAC, createToDoListAC, changeToDoListTitleAC, changeToDoListFilterAC } =
