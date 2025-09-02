@@ -1,6 +1,8 @@
 import { nanoid } from "@reduxjs/toolkit"
-import {createTodolistTC, deleteTodolistTC } from "./todolists-slice"
+import { createTodolistTC, deleteTodolistTC } from "./todolists-slice"
 import { createAppSlice } from "../../../common/utils"
+import { tasksApi, type DomainTask } from "../api"
+import { TaskPriority, TaskStatus } from "../../../common/enums"
 
 export const tasksSlice = createAppSlice({
   name: "tasks",
@@ -10,19 +12,38 @@ export const tasksSlice = createAppSlice({
   },
   reducers: (create) => {
     return {
-      addTaskAC: create.preparedReducer(
-        (todolistId: string, newTitle: string) => {
-          const id = nanoid()
-          return { payload: { id, newTitle, todolistId } }
+      fetchTasksTC: create.asyncThunk(
+        async (todolistId: string, thunkAPI) => {
+          try {
+            const res = await tasksApi.getTasks(todolistId)
+            return { todolistId, tasks: res.data.items }
+          } catch (error) {
+            return thunkAPI.rejectWithValue(null)
+          }
         },
-        (state, action) => {
-          state[action.payload.todolistId].push({
-            id: action.payload.id,
-            title: action.payload.newTitle,
-            isDone: false,
-          })
+        {
+          fulfilled: (state, action) => {
+            state[action.payload.todolistId] = action.payload.tasks
+          },
         },
       ),
+
+      addTaskAC: create.reducer<{ todolistId: string; title: string }>((state, action) => {
+      const newTask: DomainTask = {
+        title: action.payload.title,
+        todoListId: action.payload.todolistId,
+        startDate: '',
+        priority: TaskPriority.Low,
+        description: '',
+        deadline: '',
+        status: TaskStatus.New,
+        addedDate: '',
+        order: 0,
+        id: nanoid(),
+      }
+      state[action.payload.todolistId].unshift(newTask)
+    }),
+
       changeTaskStatusAC: create.reducer<{
         taskId: string
         isDone: boolean
@@ -30,7 +51,7 @@ export const tasksSlice = createAppSlice({
       }>((state, action) => {
         const task = state[action.payload.todolistId].find((task) => task.id === action.payload.taskId)
         if (task) {
-          task.isDone = action.payload.isDone
+        task.status = action.payload.isDone ? TaskStatus.Completed : TaskStatus.New
         }
       }),
       changeTaskTitleAC: create.reducer<{
@@ -62,14 +83,10 @@ export const tasksSlice = createAppSlice({
   },
 })
 
-export const { removeTaskAC, addTaskAC, changeTaskStatusAC, changeTaskTitleAC } = tasksSlice.actions
+export const { fetchTasksTC, removeTaskAC, addTaskAC, changeTaskStatusAC, changeTaskTitleAC } = tasksSlice.actions
 export const tasksReducer = tasksSlice.reducer
 export const { selectTasks } = tasksSlice.selectors
 
-export type TasksState = Record<string, Task[]>
+export type TasksState = Record<string, DomainTask[]>
 
-export type Task = {
-  id: string
-  title: string
-  isDone: boolean
-}
+
