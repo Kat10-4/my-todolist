@@ -1,5 +1,6 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit"
-import type { Todolist } from "../api"
+import { createAsyncThunk, createSlice, nanoid } from "@reduxjs/toolkit"
+import { todolistsApi, type Todolist } from "../api"
+import { useState } from "react"
 
 export const todolistsSlice = createSlice({
   name: "todolists",
@@ -53,8 +54,14 @@ export const todolistsSlice = createSlice({
   },
 })
 
-export const setTodolistTC
-
+export const fetchTodolistsTC = createAsyncThunk(
+  `${todolistsSlice.name}/fetchTodolistsTC`,
+  (_, thunkAPI) => {
+    todolistsApi.getTodolists().then(res => {
+      thunkAPI.dispatch(setTodolistsAC({ todolists: res.data }))
+    })
+  }
+)
 export const todolistsReducer = todolistsSlice.reducer
 export const { setTodolistsAC, removeToDoListAC, createToDoListAC, changeToDoListTitleAC, changeToDoListFilterAC } =
   todolistsSlice.actions
@@ -65,3 +72,4 @@ export type DomainTodolist = Todolist & {
 }
 
 export type FilterValues = "all" | "active" | "completed"
+

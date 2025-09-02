@@ -2,7 +2,7 @@ import { Grid2, Paper } from "@mui/material"
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../common/hooks"
 import { todolistsApi } from "../../api"
-import { selectTodolist, setTodolistsAC } from "../../model/todolists-slice"
+import { fetchTodolistsTC, selectTodolist, setTodolistsAC } from "../../model/todolists-slice"
 import { ToDoList } from "./Todolist/ToDoList"
 
 export const ToDoLists = () => {
@@ -11,9 +11,7 @@ export const ToDoLists = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    todolistsApi.getTodolists().then((res) => {
-      dispatch(setTodolistsAC({ todolists: res.data }))
-    })
+    dispatch(fetchTodolistsTC())
   }, [])
 
   return (
