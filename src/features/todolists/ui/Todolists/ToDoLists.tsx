@@ -1,7 +1,6 @@
 import { Grid2, Paper } from "@mui/material"
 import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../common/hooks"
-import { todolistsApi } from "../../api"
 import { fetchTodolistsTC, selectTodolist } from "../../model/todolists-slice"
 import { ToDoList } from "./Todolist/ToDoList"
 
