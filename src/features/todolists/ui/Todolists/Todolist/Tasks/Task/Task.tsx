@@ -3,11 +3,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import React from "react"
 import { EditableSpan } from "../../../../../../../common/components"
 import { useAppDispatch } from "../../../../../../../common/hooks"
-import {
-  changeTaskStatusAC,
-  changeTaskTitleAC,
-  removeTaskAC,
-} from "../../../../../model/tasks-slice"
+import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskTC } from "../../../../../model/tasks-slice"
 import { getBoxSx, getListItemSx } from "./Task.styles"
 import type { DomainTask } from "../../../../../api"
 import { TaskStatus } from "../../../../../../../common/enums"
@@ -22,9 +18,8 @@ export const Task = React.memo(({ task, todolistId }: Props) => {
 
   const isTaskCompleted = task.status === TaskStatus.Completed
 
-
   const removeTask = () => {
-    dispatch(removeTaskAC({ taskId: task.id, todolistId }))
+    dispatch(deleteTaskTC({ todolistId, taskId: task.id }))
   }
 
   const changeTaskStatus = () => {
@@ -34,7 +29,6 @@ export const Task = React.memo(({ task, todolistId }: Props) => {
   const updateTask = (title: string) => {
     dispatch(changeTaskTitleAC({ taskId: task.id, newTitle: title, todolistId }))
   }
-
 
   return (
     <ListItem key={task.id} sx={getListItemSx(isTaskCompleted)}>
