@@ -28,21 +28,21 @@ export const tasksSlice = createAppSlice({
         },
       ),
 
-      addTaskAC: create.reducer<{ todolistId: string; title: string }>((state, action) => {
-      const newTask: DomainTask = {
-        title: action.payload.title,
-        todoListId: action.payload.todolistId,
-        startDate: '',
-        priority: TaskPriority.Low,
-        description: '',
-        deadline: '',
-        status: TaskStatus.New,
-        addedDate: '',
-        order: 0,
-        id: nanoid(),
+      createTaskTC: create.asyncThunk(
+      async (payload: { todolistId: string; title: string }, thunkAPI) => {
+        try {
+          const res = await tasksApi.createTask(payload)
+          return { task: res.data.data.item }
+        } catch (error) {
+          return thunkAPI.rejectWithValue(null)
+        }
+      },
+      {
+        fulfilled: (state, action) => {
+          state[action.payload.task.todoListId].unshift(action.payload.task)
+        },
       }
-      state[action.payload.todolistId].unshift(newTask)
-    }),
+    ),
 
       changeTaskStatusAC: create.reducer<{
         taskId: string
@@ -51,7 +51,7 @@ export const tasksSlice = createAppSlice({
       }>((state, action) => {
         const task = state[action.payload.todolistId].find((task) => task.id === action.payload.taskId)
         if (task) {
-        task.status = action.payload.isDone ? TaskStatus.Completed : TaskStatus.New
+          task.status = action.payload.isDone ? TaskStatus.Completed : TaskStatus.New
         }
       }),
       changeTaskTitleAC: create.reducer<{
@@ -83,10 +83,8 @@ export const tasksSlice = createAppSlice({
   },
 })
 
-export const { fetchTasksTC, removeTaskAC, addTaskAC, changeTaskStatusAC, changeTaskTitleAC } = tasksSlice.actions
+export const { fetchTasksTC, removeTaskAC, createTaskTC, changeTaskStatusAC, changeTaskTitleAC } = tasksSlice.actions
 export const tasksReducer = tasksSlice.reducer
 export const { selectTasks } = tasksSlice.selectors
 
 export type TasksState = Record<string, DomainTask[]>
-
-

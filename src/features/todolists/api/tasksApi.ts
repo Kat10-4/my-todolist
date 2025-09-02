@@ -7,7 +7,8 @@ export const tasksApi = {
     return instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`)
   },
 
-  createTask(todolistId: string, title: string) {
+  createTask(payload: { todolistId: string; title: string }) {
+    const { todolistId, title } = payload
     return instance.post<BaseResponse<{ item: DomainTask }>>(`/todo-lists/${todolistId}/tasks`, { title })
   },
 
