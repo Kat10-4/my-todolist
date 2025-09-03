@@ -1,9 +1,9 @@
 import { Box, Checkbox, IconButton, ListItem } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
-import React from "react"
+import React, { type ChangeEvent } from "react"
 import { EditableSpan } from "../../../../../../../common/components"
 import { useAppDispatch } from "../../../../../../../common/hooks"
-import { changeTaskStatusAC, changeTaskTitleAC, deleteTaskTC } from "../../../../../model/tasks-slice"
+import { changeTaskTitleAC, deleteTaskTC, updateTaskTC } from "../../../../../model/tasks-slice"
 import { getBoxSx, getListItemSx } from "./Task.styles"
 import type { DomainTask } from "../../../../../api"
 import { TaskStatus } from "../../../../../../../common/enums"
@@ -22,8 +22,15 @@ export const Task = React.memo(({ task, todolistId }: Props) => {
     dispatch(deleteTaskTC({ todolistId, taskId: task.id }))
   }
 
-  const changeTaskStatus = () => {
-    dispatch(changeTaskStatusAC({ taskId: task.id, isDone: !isTaskCompleted, todolistId }))
+  const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
+    const newStatusValue = e.currentTarget.checked
+    dispatch(
+      updateTaskTC({
+        todolistId,
+        taskId: task.id,
+        status: newStatusValue ? TaskStatus.Completed : TaskStatus.New,
+      }),
+    )
   }
 
   const updateTask = (title: string) => {
