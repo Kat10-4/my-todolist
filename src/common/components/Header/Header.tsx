@@ -1,7 +1,7 @@
 import MenuIcon from "@mui/icons-material/Menu"
-import { AppBar, Container, IconButton, Toolbar, Typography } from "@mui/material"
+import { AppBar, Container, IconButton, LinearProgress, Toolbar, Typography } from "@mui/material"
 import Switch from "@mui/material/Switch"
-import { changeThemeModeAC, selectThemeMode } from "../../../app/app-slice"
+import { changeThemeModeAC, selectAppStatus, selectThemeMode } from "../../../app/app-slice"
 import { useAppDispatch, useAppSelector } from "../../hooks"
 import { getTheme } from "../../theme"
 import { MenuButton } from "../"
@@ -9,6 +9,7 @@ import { MenuButton } from "../"
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
   const theme = getTheme(themeMode)
+  const status = useAppSelector(selectAppStatus)
 
   const dispatch = useAppDispatch()
 
@@ -32,6 +33,8 @@ export const Header = () => {
           <Switch color={"default"} onChange={changeModeHandler} />
         </Toolbar>
       </Container>
+     {status === "loading" && <LinearProgress />}
     </AppBar>
   )
 }
+
