@@ -1,7 +1,7 @@
 import { createTodolistTC, deleteTodolistTC } from "./todolists-slice"
 import { createAppSlice } from "../../../common/utils"
 import { tasksApi, type DomainTask, type UpdateTaskModel } from "../api"
-import { TaskPriority, TaskStatus } from "../../../common/enums"
+import { TaskPriority } from "../../../common/enums"
 import type { RootState } from "../../../app/store"
 import { setAppStatusAC } from "../../../app/app-slice"
 
@@ -74,8 +74,11 @@ export const tasksSlice = createAppSlice({
       ),
 
       updateTaskTC: create.asyncThunk(
-        async (payload: { todolistId: string; taskId: string; status: TaskStatus }, { dispatch, rejectWithValue,getState }) => {
-          const { todolistId, taskId, status } = payload
+        async (
+          payload: { todolistId: string; taskId: string; domainModel: Partial<UpdateTaskModel> },
+          { dispatch, rejectWithValue, getState },
+        ) => {
+          const { todolistId, taskId, domainModel } = payload
 
           const allTodolistTasks = (getState() as RootState).tasks[todolistId]
           const task = allTodolistTasks.find((task) => task.id === taskId)
@@ -89,13 +92,14 @@ export const tasksSlice = createAppSlice({
             priority: task.priority,
             startDate: task.startDate,
             deadline: task.deadline,
-            status,
+            status: task.status,
+            ...domainModel,
           }
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
-            const res = await tasksApi.changeTask({ todolistId, taskId, model })
+            const res = await tasksApi.updateTask({ todolistId, taskId, model })
             dispatch(setAppStatusAC({ status: "succeeded" }))
-            return {task: (res.data.data as { item: DomainTask }).item }//typization for item property
+            return { task: (res.data.data as { item: DomainTask }).item } //typization for item property
           } catch (error) {
             dispatch(setAppStatusAC({ status: "failed" }))
             return rejectWithValue(null)
@@ -110,18 +114,6 @@ export const tasksSlice = createAppSlice({
           },
         },
       ),
-
-    
-      changeTaskTitleAC: create.reducer<{
-        todolistId: string
-        taskId: string
-        newTitle: string
-      }>((state, action) => {
-        const task = state[action.payload.todolistId].find((task) => task.id === action.payload.taskId)
-        if (task) {
-          task.title = action.payload.newTitle
-        }
-      }),
     }
   },
   extraReducers: (builder) => {
@@ -135,7 +127,7 @@ export const tasksSlice = createAppSlice({
   },
 })
 
-export const { fetchTasksTC, deleteTaskTC, createTaskTC, updateTaskTC, changeTaskTitleAC } = tasksSlice.actions
+export const { fetchTasksTC, deleteTaskTC, createTaskTC, updateTaskTC } = tasksSlice.actions
 export const tasksReducer = tasksSlice.reducer
 export const { selectTasks } = tasksSlice.selectors
 

@@ -3,7 +3,7 @@ import DeleteIcon from "@mui/icons-material/Delete"
 import React, { type ChangeEvent } from "react"
 import { EditableSpan } from "../../../../../../../common/components"
 import { useAppDispatch } from "../../../../../../../common/hooks"
-import { changeTaskTitleAC, deleteTaskTC, updateTaskTC } from "../../../../../model/tasks-slice"
+import { deleteTaskTC, updateTaskTC } from "../../../../../model/tasks-slice"
 import { getBoxSx, getListItemSx } from "./Task.styles"
 import type { DomainTask } from "../../../../../api"
 import { TaskStatus } from "../../../../../../../common/enums"
@@ -28,20 +28,20 @@ export const Task = React.memo(({ task, todolistId }: Props) => {
       updateTaskTC({
         todolistId,
         taskId: task.id,
-        status: newStatusValue ? TaskStatus.Completed : TaskStatus.New,
+        domainModel: { status: newStatusValue ? TaskStatus.Completed : TaskStatus.New },
       }),
     )
   }
 
-  const updateTask = (title: string) => {
-    dispatch(changeTaskTitleAC({ taskId: task.id, newTitle: title, todolistId }))
+  const changeTaskTitle = (title: string) => {
+    dispatch(updateTaskTC({ todolistId, taskId: task.id, domainModel: { title } }))
   }
 
   return (
     <ListItem key={task.id} sx={getListItemSx(isTaskCompleted)}>
       <Box sx={getBoxSx()}>
         <Checkbox checked={isTaskCompleted} onChange={changeTaskStatus} sx={{ m: "0" }} />
-        <EditableSpan oldTitle={task.title} onClick={updateTask} />
+        <EditableSpan oldTitle={task.title} onClick={changeTaskTitle} />
       </Box>
       <IconButton onClick={removeTask} sx={{ m: "0" }}>
         <DeleteIcon />
