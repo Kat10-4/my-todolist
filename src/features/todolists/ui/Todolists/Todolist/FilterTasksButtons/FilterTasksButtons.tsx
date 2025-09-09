@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material"
 import React from "react"
 import { v1 } from "uuid"
 import { useAppDispatch } from "../../../../../../common/hooks"
-import { changeToDoListFilterAC, type FilterValues, type DomainTodolist } from "../../../../model/todolists-slice"
+import { changeToDoListFilterAC, type FilterValues, type DomainTodolist } from "../../../../model/lists-slice"
 import { filterButtonsContainerSx } from "./FilterTasksButton.styles"
 
 export type FilterButtons = {

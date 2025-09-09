@@ -2,7 +2,7 @@ import { Container, Grid2 } from "@mui/material"
 import { useCallback } from "react"
 import { AddItemForm } from "../common/components"
 import { ToDoLists } from "../features/todolists/ui/Todolists/ToDoLists"
-import { createTodolistTC } from "../features/todolists/model/todolists-slice"
+import { createTodolistTC } from "../features/todolists/model/lists-slice"
 import { useAppDispatch } from "../common/hooks"
 
 export const Main = () => {

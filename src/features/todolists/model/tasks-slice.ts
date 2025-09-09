@@ -1,7 +1,6 @@
-import { createTodolistTC, deleteTodolistTC } from "./todolists-slice"
+import { createTodolistTC, deleteTodolistTC } from "./lists-slice"
 import { createAppSlice } from "../../../common/utils"
 import { tasksApi, type DomainTask, type UpdateTaskModel } from "../api"
-import { TaskPriority } from "../../../common/enums"
 import type { RootState } from "../../../app/store"
 import { setAppStatusAC } from "../../../app/app-slice"
 
@@ -138,6 +137,6 @@ export const tasksSlice = createAppSlice({
 
 export const { fetchTasksTC, deleteTaskTC, createTaskTC, updateTaskTC } = tasksSlice.actions
 export const tasksReducer = tasksSlice.reducer
-export const { selectTasks } = tasksSlice.selectors
+export const {  } = tasksSlice.selectors
 
 export type TasksState = Record<string, DomainTask[]>

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react"
 import List from "@mui/material/List"
 import { useAppDispatch, useAppSelector } from "../../../../../../common/hooks"
 import { fetchTasksTC, selectTasks } from "../../../../model/tasks-slice"
-import type { DomainTodolist } from "../../../../model/todolists-slice"
+import type { DomainTodolist } from "../../../../model/lists-slice"
 import { Task } from "./Task/Task"
 import { TaskStatus } from "../../../../../../common/enums"
 

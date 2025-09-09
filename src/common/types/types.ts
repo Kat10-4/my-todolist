@@ -1,7 +1,4 @@
-export type FieldError = {
-  error: string
-  field: string
-}
+export type RequestStatus = "idle" | "loading" | "succeeded" | "failed"
 
 export type BaseResponse<T = {}> = {
   data: T
@@ -10,4 +7,7 @@ export type BaseResponse<T = {}> = {
   fieldsErrors: FieldError[]
 }
 
-export type RequestStatus = "idle" | "loading" | "succeeded" | "failed"
+export type FieldError = {
+  error: string
+  field: string
+}

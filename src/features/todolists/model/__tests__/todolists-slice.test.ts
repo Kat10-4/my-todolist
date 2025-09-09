@@ -7,7 +7,7 @@ import {
   todolistsReducer,
   type DomainTodolist,
   type FilterValues,
-} from "../todolists-slice"
+} from "../lists-slice"
 
 let todolistId1: string
 let todolistId2: string
