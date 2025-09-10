@@ -1,33 +1,27 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useMemo } from "react"
 import List from "@mui/material/List"
 import { useAppDispatch, useAppSelector } from "../../../../../../common/hooks"
-import { fetchTasksTC, selectTasks } from "../../../../model/tasks-slice"
-import type { DomainTodolist } from "../../../../model/lists-slice"
+import { selectTasksByParent, type DomainList } from "../../../../model/lists-slice"
 import { Task } from "./Task/Task"
 import { TaskStatus } from "../../../../../../common/enums"
 
 type Props = {
-  todolist: DomainTodolist
+  todolist: DomainList
 }
 
 export const Tasks = React.memo(({ todolist }: Props) => {
-const { id, filter } = todolist
+  const { id, filter } = todolist
 
-  const tasks = useAppSelector(selectTasks)
+  const todolistTasks = useAppSelector((state) => selectTasksByParent(state)(Number(id)))
 
-  const dispatch = useAppDispatch()
+  const filteredTasks = useMemo(() => {
+    if (!todolistTasks) return []
 
-  const todolistTasks = tasks[id]
-  let filteredTasks = todolistTasks
-  if (filter === "active") {
-    filteredTasks = todolistTasks.filter((task) => task.status === TaskStatus.New)
-  }
-  if (filter === "completed") {
-    filteredTasks = todolistTasks.filter((task) => task.status === TaskStatus.Completed)
-  }
-  useEffect(() => {
-    dispatch(fetchTasksTC(id))
-  }, [])
+    if (filter === "active") return todolistTasks.filter((task) => task.status === TaskStatus.Active)
+    if (filter === "completed") return todolistTasks.filter((task) => task.status === TaskStatus.Done)
+
+    return todolistTasks
+  }, [todolistTasks, filter])
 
   return (
     <>

@@ -4,11 +4,24 @@ import { setAppStatusAC } from "../../../app/app-slice"
 import type { TaskStatus } from "../../../common/enums"
 
 export const listsSlice = createAppSlice({
-  name: "todolists",
+  name: "lists",
   initialState: [] as DomainList[],
   selectors: {
     selectTodolist: (state) => state.filter((list) => list.parent === 0),
-    selectTasks: (state) => state.filter((list) => list.parent !== 0),
+    selectTasksByParent: (state) => (parentId: number) => {
+      const result: DomainList[] = []
+
+      const collectChildren = (id: number) => {
+        const children = state.filter((item) => item.parent === id)
+        children.forEach((child) => {
+          result.push(child)
+          collectChildren(Number(child.id)) // recursive
+        })
+      }
+
+      collectChildren(parentId)
+      return result
+    },
   },
   reducers: (create) => {
     return {
@@ -45,7 +58,7 @@ export const listsSlice = createAppSlice({
         },
       ),
 
-      changeTodolistTitleTC: create.asyncThunk(
+      changeListTitleTC: create.asyncThunk(
         async (payload: { id: string; title: string }, { dispatch, rejectWithValue }) => {
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
@@ -87,6 +100,7 @@ export const listsSlice = createAppSlice({
                   title: action.payload?.list.title.rendered,
                   parent: action.payload?.list.parent,
                   filter: "all",
+                  children: [],
                 }) //todolist
               : state.unshift({
                   id: action.payload?.list.id,
@@ -102,9 +116,9 @@ export const listsSlice = createAppSlice({
         async (id: string, { dispatch, rejectWithValue }) => {
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
-            const res = await todolistsApi.deleteList(id)
+            const res = await todolistsApi.deleteList(id) // backend deletes parent + children
             dispatch(setAppStatusAC({ status: "succeeded" }))
-            return { id }
+            return { id, children: res.data.children ?? [] } // return all deleted IDs
           } catch (error) {
             dispatch(setAppStatusAC({ status: "failed" }))
             return rejectWithValue(null)
@@ -112,10 +126,10 @@ export const listsSlice = createAppSlice({
         },
         {
           fulfilled: (state, action) => {
-            const index = state.findIndex((todolist) => todolist.id === action.payload.id)
-            if (index !== -1) {
-              state.splice(index, 1)
-            }
+            const allDeleted = [action.payload.id, ...action.payload.children]
+
+            // Filter state so only non-deleted items remain
+            return state.filter((list) => !allDeleted.includes(list.id.toString()))
           },
         },
       ),
@@ -133,10 +147,10 @@ export const listsSlice = createAppSlice({
   },
 })
 
-export const todolistsReducer = listsSlice.reducer
-export const { changeToDoListFilterAC, fetchListsTC, changeTodolistTitleTC, createListTC, deleteListTC } =
+export const listsReducer = listsSlice.reducer
+export const { changeToDoListFilterAC, fetchListsTC, changeListTitleTC, createListTC, deleteListTC } =
   listsSlice.actions
-export const { selectTodolist, selectTasks } = listsSlice.selectors
+export const { selectTodolist, selectTasksByParent } = listsSlice.selectors
 
 export type DomainList = {
   id: string
@@ -146,6 +160,7 @@ export type DomainList = {
   parent: number | undefined
   filter?: FilterValues
   status?: TaskStatus
+  children?: []
 }
 
 export type FilterValues = "all" | "active" | "completed"

@@ -3,13 +3,13 @@ import React, { useCallback } from "react"
 import { AddItemForm } from "../../../../../common/components"
 import { useAppDispatch } from "../../../../../common/hooks"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
-import { type DomainTodolist } from "../../../model/lists-slice"
+import { type DomainList } from "../../../model/lists-slice"
 import { Tasks } from "./Tasks/Tasks"
 import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
 import { createTaskTC } from "../../../model/tasks-slice"
 
 type PropsType = {
-  todolist: DomainTodolist
+  todolist: DomainList
 }
 
 export const ToDoList = React.memo(({ todolist }: PropsType) => {

@@ -10,6 +10,7 @@ export type WPList = {
   order?: number
   slug:string
   parent?: number
+  children:[]
   status?:string
   acf?: {
     status: TaskStatus

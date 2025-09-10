@@ -8,7 +8,7 @@ export const todolistsApi = {
   },
   createList(payload: { title: string; parent: number }) {
     const { parent, title } = payload
-    return instance.post<BaseResponse<{ item: WPList }>>("/list", { title, status: "publish", parent })
+    return instance.post<BaseResponse<{ item: WPList }>>("/list", { title, status: "publish", parent,children:[] })
   },
   deleteList(id: string) {
     return instance.delete<BaseResponse<WPList>>(`/list/${id}`)

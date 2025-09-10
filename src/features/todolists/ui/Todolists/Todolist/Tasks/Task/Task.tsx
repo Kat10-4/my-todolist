@@ -5,18 +5,18 @@ import { EditableSpan } from "../../../../../../../common/components"
 import { useAppDispatch } from "../../../../../../../common/hooks"
 import { deleteTaskTC, updateTaskTC } from "../../../../../model/tasks-slice"
 import { getBoxSx, getListItemSx } from "./Task.styles"
-import type { DomainTask } from "../../../../../api"
 import { TaskStatus } from "../../../../../../../common/enums"
+import type { DomainList } from "../../../../../model/lists-slice"
 
 type Props = {
-  task: DomainTask
+  task: DomainList
   todolistId: string
 }
 
 export const Task = React.memo(({ task, todolistId }: Props) => {
   const dispatch = useAppDispatch()
 
-  const isTaskCompleted = task.status === TaskStatus.Completed
+  const isTaskCompleted = task.status === TaskStatus.Done
 
   const removeTask = () => {
     dispatch(deleteTaskTC({ todolistId, taskId: task.id }))
@@ -28,7 +28,7 @@ export const Task = React.memo(({ task, todolistId }: Props) => {
       updateTaskTC({
         todolistId,
         taskId: task.id,
-        domainModel: { status: newStatusValue ? TaskStatus.Completed : TaskStatus.New },
+        domainModel: { status: newStatusValue ? TaskStatus.Done : TaskStatus.Active },
       }),
     )
   }

@@ -1,4 +1,3 @@
-import { createTodolistTC, deleteTodolistTC } from "./lists-slice"
 import { createAppSlice } from "../../../common/utils"
 import { tasksApi, type DomainTask, type UpdateTaskModel } from "../api"
 import type { RootState } from "../../../app/store"
@@ -124,15 +123,15 @@ export const tasksSlice = createAppSlice({
     }),
     }
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(createTodolistTC.fulfilled, (state, action) => {
-        state[action.payload.todolist.id] = []
-      })
-      .addCase(deleteTodolistTC.fulfilled, (state, action) => {
-        delete state[action.payload.id]
-      })
-  },
+  // extraReducers: (builder) => {
+  //   builder
+  //     .addCase(createTodolistTC.fulfilled, (state, action) => {
+  //       state[action.payload.todolist.id] = []
+  //     })
+  //     .addCase(deleteTodolistTC.fulfilled, (state, action) => {
+  //       delete state[action.payload.id]
+  //     })
+  // },
 })
 
 export const { fetchTasksTC, deleteTaskTC, createTaskTC, updateTaskTC } = tasksSlice.actions
