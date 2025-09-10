@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material"
 import React from "react"
 import { v1 } from "uuid"
 import { useAppDispatch } from "../../../../../../common/hooks"
-import { changeToDoListFilterAC, type FilterValues, type DomainList } from "../../../../model/lists-slice"
+import { updateListAC, type FilterValues, type DomainList } from "../../../../model/lists-slice"
 import { filterButtonsContainerSx } from "./FilterTasksButton.styles"
 
 export type FilterButtons = {
@@ -22,7 +22,7 @@ export const FilterTasksButtons = ({ todolist }: Props) => {
   const dispatch = useAppDispatch()
 
   const changeFilter = (filter: FilterValues) => {
-    dispatch(changeToDoListFilterAC({ id, filter }))
+    dispatch(updateListAC({ id, value:filter }))
   }
 
   const filterButtonsData: FilterButtons[] = [

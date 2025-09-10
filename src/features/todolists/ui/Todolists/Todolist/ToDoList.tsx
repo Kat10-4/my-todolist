@@ -3,10 +3,9 @@ import React, { useCallback } from "react"
 import { AddItemForm } from "../../../../../common/components"
 import { useAppDispatch } from "../../../../../common/hooks"
 import { FilterTasksButtons } from "./FilterTasksButtons/FilterTasksButtons"
-import { type DomainList } from "../../../model/lists-slice"
+import { createListTC, type DomainList } from "../../../model/lists-slice"
 import { Tasks } from "./Tasks/Tasks"
 import { TodolistTitle } from "./TodolistTitle/TodolistTitle"
-import { createTaskTC } from "../../../model/tasks-slice"
 
 type PropsType = {
   todolist: DomainList
@@ -16,7 +15,7 @@ export const ToDoList = React.memo(({ todolist }: PropsType) => {
   const dispatch = useAppDispatch()
 
   const addTask = useCallback((title: string) => {
-    dispatch(createTaskTC({todolistId: todolist.id, title}))
+    dispatch(createListTC({parent: Number(todolist.id), title}))
   }, [])
 
   return (

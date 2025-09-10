@@ -133,14 +133,19 @@ export const listsSlice = createAppSlice({
           },
         },
       ),
-
-      changeToDoListFilterAC: create.reducer<{
+      updateListAC: create.reducer<{
         id: string
-        filter: FilterValues
+        value: FilterValues | TaskStatus
       }>((state, action) => {
-        const todolist = state.find((todolist) => todolist.id === action.payload.id)
-        if (todolist) {
-          todolist.filter = action.payload.filter
+        const item = state.find((i) => i.id === action.payload.id)
+        if (!item) return
+
+        if (item.parent === 0) {
+          // todolist
+          item.filter = action.payload.value as FilterValues
+        } else {
+          // task
+          item.status = action.payload.value as TaskStatus
         }
       }),
     }
@@ -148,8 +153,13 @@ export const listsSlice = createAppSlice({
 })
 
 export const listsReducer = listsSlice.reducer
-export const { changeToDoListFilterAC, fetchListsTC, changeListTitleTC, createListTC, deleteListTC } =
-  listsSlice.actions
+export const {
+  fetchListsTC,
+  changeListTitleTC,
+  createListTC,
+  deleteListTC,
+  updateListAC,
+} = listsSlice.actions
 export const { selectTodolist, selectTasksByParent } = listsSlice.selectors
 
 export type DomainList = {
