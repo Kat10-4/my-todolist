@@ -18,7 +18,7 @@ export const Task = React.memo(({ task, todolistId }: Props) => {
   const isTaskCompleted = task.status === TaskStatus.Done
 
   const removeTask = () => {
-    dispatch(deleteListTC(id: task.id))
+    dispatch(deleteListTC(task.id))
   }
 
   const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
