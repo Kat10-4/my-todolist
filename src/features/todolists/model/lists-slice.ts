@@ -1,27 +1,34 @@
-import { todolistsApi, type DomainTask } from "../api"
 import { createAppSlice } from "../../../common/utils"
 import { setAppStatusAC } from "../../../app/app-slice"
 import type { TaskStatus } from "../../../common/enums"
+import { createSelector } from "@reduxjs/toolkit"
+import { listsApi } from "../api"
 
 export const listsSlice = createAppSlice({
   name: "lists",
   initialState: [] as DomainList[],
   selectors: {
     selectTodolist: (state) => state.filter((list) => list.parent === 0),
-    selectTasksByParent: (state) => (parentId: number) => {
-      const result: DomainList[] = []
+    selectTasksByParent: createSelector(
+      [
+        (state: DomainList[]) => state, // all lists
+        (_state: DomainList[], parentId: number) => parentId,
+      ],
+      (lists, parentId) => {
+        const result: DomainList[] = []
 
-      const collectChildren = (id: number) => {
-        const children = state.filter((item) => item.parent === id)
-        children.forEach((child) => {
-          result.push(child)
-          collectChildren(Number(child.id)) // recursive
-        })
-      }
+        const collectChildren = (id: number) => {
+          const children = lists.filter((item) => Number(item.parent) === id)
+          children.forEach((child) => {
+            result.push(child)
+            collectChildren(Number(child.id))
+          })
+        }
 
-      collectChildren(parentId)
-      return result
-    },
+        collectChildren(parentId)
+        return result
+      },
+    ),
   },
   reducers: (create) => {
     return {
@@ -29,7 +36,7 @@ export const listsSlice = createAppSlice({
         async (_, { dispatch, rejectWithValue }) => {
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
-            const res = await todolistsApi.getLists()
+            const res = await listsApi.getLists()
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return { todolists: res.data }
           } catch (error) {
@@ -62,7 +69,7 @@ export const listsSlice = createAppSlice({
         async (payload: { id: string; title: string }, { dispatch, rejectWithValue }) => {
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
-            await todolistsApi.changeListTitle(payload)
+            await listsApi.changeListTitle(payload)
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return payload
           } catch (error) {
@@ -84,7 +91,7 @@ export const listsSlice = createAppSlice({
         async (payload: { parent: number; title: string }, { dispatch, rejectWithValue }) => {
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
-            const res = await todolistsApi.createList(payload)
+            const res = await listsApi.createList(payload)
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return { list: res.data.data.item }
           } catch (error) {
@@ -116,9 +123,13 @@ export const listsSlice = createAppSlice({
         async (id: string, { dispatch, rejectWithValue }) => {
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
-            const res = await todolistsApi.deleteList(id) // backend deletes parent + children
+            const res = await listsApi.deleteList(id) // backend deletes parent + children
             dispatch(setAppStatusAC({ status: "succeeded" }))
-            return { id, children: res.data.children ?? [] } // return all deleted IDs
+            // Use type assertion to tell TypeScript the structure
+            const response = res.data as { children?: number[] }
+            // Convert numeric IDs to strings safely
+            const childIds = ((response.children as number[]) || []).map((childId) => childId.toString())
+            return { id, children: childIds } as { id: string; children: string[] }
           } catch (error) {
             dispatch(setAppStatusAC({ status: "failed" }))
             return rejectWithValue(null)
@@ -128,8 +139,10 @@ export const listsSlice = createAppSlice({
           fulfilled: (state, action) => {
             const allDeleted = [action.payload.id, ...action.payload.children]
 
-            // Filter state so only non-deleted items remain
-            return state.filter((list) => !allDeleted.includes(list.id.toString()))
+            // Remove the .toString() conversion since list.id is already string
+            const newState = state.filter((list) => !allDeleted.includes(list.id))
+
+            return newState
           },
         },
       ),
@@ -153,13 +166,7 @@ export const listsSlice = createAppSlice({
 })
 
 export const listsReducer = listsSlice.reducer
-export const {
-  fetchListsTC,
-  changeListTitleTC,
-  createListTC,
-  deleteListTC,
-  updateListAC,
-} = listsSlice.actions
+export const { fetchListsTC, changeListTitleTC, createListTC, deleteListTC, updateListAC } = listsSlice.actions
 export const { selectTodolist, selectTasksByParent } = listsSlice.selectors
 
 export type DomainList = {
@@ -170,9 +177,7 @@ export type DomainList = {
   parent: number | undefined
   filter?: FilterValues
   status?: TaskStatus
-  children?: []
+  children?: DomainList[]
 }
 
 export type FilterValues = "all" | "active" | "completed"
-
-export type TasksState = Record<string, DomainTask[]>

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 import List from "@mui/material/List"
-import { useAppDispatch, useAppSelector } from "../../../../../../common/hooks"
+import { useAppSelector } from "../../../../../../common/hooks"
 import { selectTasksByParent, type DomainList } from "../../../../model/lists-slice"
 import { Task } from "./Task/Task"
 import { TaskStatus } from "../../../../../../common/enums"
@@ -12,15 +12,17 @@ type Props = {
 export const Tasks = React.memo(({ todolist }: Props) => {
   const { id, filter } = todolist
 
-  const todolistTasks = useAppSelector((state) => selectTasksByParent(state)(Number(id)))
-
+const todolistTasks:DomainList[] = useAppSelector((state) =>
+  selectTasksByParent(state, Number(todolist.id))
+)
   const filteredTasks = useMemo(() => {
-    if (!todolistTasks) return []
+  if (!todolistTasks) return []
 
-    if (filter === "active") return todolistTasks.filter((task) => task.status === TaskStatus.Active)
-    if (filter === "completed") return todolistTasks.filter((task) => task.status === TaskStatus.Done)
-
-    return todolistTasks
+    return todolistTasks.filter((task) => {
+    if (filter === "active") return task.status === TaskStatus.Active
+    if (filter === "completed") return task.status === TaskStatus.Done
+    return true
+  })
   }, [todolistTasks, filter])
 
   return (

@@ -8,7 +8,7 @@ export type WPList = {
   date?: string
   modified?: string
   order?: number
-  slug:string
+  slug?:string
   parent?: number
   children:[]
   status?:string

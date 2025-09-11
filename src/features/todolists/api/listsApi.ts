@@ -2,7 +2,7 @@ import { instance } from "../../../common/instance"
 import { BaseResponse } from "../../../common/types"
 import type { WPList } from "./listsApi.types"
 
-export const todolistsApi = {
+export const listsApi = {
   getLists() {
     return instance.get<WPList[]>("/list")
   },
