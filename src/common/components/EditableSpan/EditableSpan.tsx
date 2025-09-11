@@ -13,11 +13,13 @@ export const EditableSpan = ({ oldTitle, onClick }: Props) => {
 
   const editHandler = () => {
     setEdit(!edit)
-    error ? onClick(oldTitle) : onClick(updatedTitle)
+    const trimmedTitle = updatedTitle.trim()
+    setError(!trimmedTitle)
+    onClick(trimmedTitle || oldTitle)
   }
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setUpdatedTitle(e.currentTarget.value.trim())
+    setUpdatedTitle(e.currentTarget.value)
     setError(!e.currentTarget.value.trim())
   }
 

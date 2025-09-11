@@ -1,6 +1,5 @@
 import { instance } from "../../../common/instance"
-import { BaseResponse } from "../../../common/types"
-import type { WPList } from "./listsApi.types"
+import type { BaseResponse, WPList } from "./listsApi.types"
 
 export const listsApi = {
   getLists() {
