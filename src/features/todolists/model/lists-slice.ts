@@ -3,6 +3,7 @@ import { setAppStatusAC } from "../../../app/app-slice"
 import type { TaskStatus } from "../../../common/enums"
 import { createSelector } from "@reduxjs/toolkit"
 import { listsApi } from "../api"
+import { all } from "axios"
 
 export const listsSlice = createAppSlice({
   name: "lists",
@@ -137,11 +138,13 @@ export const listsSlice = createAppSlice({
         },
         {
           fulfilled: (state, action) => {
-            const allDeleted = [action.payload.id, ...action.payload.children]
-
-            // Remove the .toString() conversion since list.id is already string
-            const newState = state.filter((list) => !allDeleted.includes(list.id))
-
+            // Convert all IDs to numbers for consistent comparison
+            const allDeleted = [action.payload.id, ...action.payload.children].map((id) => Number(id)) // Convert strings to numbers, keep numbers as numbers
+            const newState = state.filter((list) => {
+              const listIdNumber = Number(list.id) // Convert list ID to number for comparison
+              const shouldDelete = allDeleted.includes(listIdNumber)
+              return !shouldDelete
+            })
             return newState
           },
         },
