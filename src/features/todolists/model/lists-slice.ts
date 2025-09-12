@@ -1,9 +1,8 @@
-import { createAppSlice } from "../../../common/utils"
+import { createAppSlice, normalizeTaskStatus } from "../../../common/utils"
 import { setAppStatusAC } from "../../../app/app-slice"
-import type { TaskStatus } from "../../../common/enums"
+import { TaskStatus } from "../../../common/enums"
 import { createSelector } from "@reduxjs/toolkit"
 import { listsApi } from "../api"
-import { all } from "axios"
 
 export const listsSlice = createAppSlice({
   name: "lists",
@@ -59,7 +58,7 @@ export const listsSlice = createAppSlice({
                     id: tl.id,
                     title: tl.title.rendered,
                     parent: tl.parent,
-                    status: tl.acf?.status,
+                    status: normalizeTaskStatus(tl.acf?.status),
                   }) //task
             })
           },
@@ -114,7 +113,7 @@ export const listsSlice = createAppSlice({
                   id: action.payload?.list.id,
                   title: action.payload?.list.title.rendered,
                   parent: action.payload?.list.parent,
-                  status: action.payload?.list.acf?.status,
+                  status: normalizeTaskStatus(action.payload?.list.acf?.status),
                 }) //task
           },
         },
@@ -149,27 +148,42 @@ export const listsSlice = createAppSlice({
           },
         },
       ),
-      updateListAC: create.reducer<{
+
+      updateTaskStatusTC: create.asyncThunk(
+        async (payload: { id: string; status: TaskStatus }, { dispatch, rejectWithValue }) => {
+          try {
+            dispatch(setAppStatusAC({ status: "loading" }))
+            const res = await listsApi.updateListStatus(payload)
+            dispatch(setAppStatusAC({ status: "succeeded" }))
+            return payload
+          } catch (error) {
+            dispatch(setAppStatusAC({ status: "failed" }))
+            return rejectWithValue(null)
+          }
+        },
+        {
+          fulfilled: (state, action) => {
+            const item = state.find((el) => el.id === action.payload?.id)
+            if (item) item.status = action.payload?.status
+          },
+        },
+      ),
+
+      updateListFilterAC: create.reducer<{
         id: string
-        value: FilterValues | TaskStatus
+        value: FilterValues
       }>((state, action) => {
         const item = state.find((i) => i.id === action.payload.id)
         if (!item) return
-
-        if (item.parent === 0) {
-          // todolist
-          item.filter = action.payload.value as FilterValues
-        } else {
-          // task
-          item.status = action.payload.value as TaskStatus
-        }
+        item.filter = action.payload.value as FilterValues
       }),
     }
   },
 })
 
 export const listsReducer = listsSlice.reducer
-export const { fetchListsTC, changeListTitleTC, createListTC, deleteListTC, updateListAC } = listsSlice.actions
+export const { fetchListsTC, changeListTitleTC, createListTC, deleteListTC, updateTaskStatusTC, updateListFilterAC } =
+  listsSlice.actions
 export const { selectTodolist, selectTasksByParent } = listsSlice.selectors
 
 export type DomainList = {

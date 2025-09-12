@@ -8,12 +8,12 @@ export type WPList = {
   date?: string
   modified?: string
   order?: number
-  slug?:string
+  slug?: string
   parent?: number
-  children:[]
-  status?:string
+  children: []
+  status?: string
   acf?: {
-    status: TaskStatus
+    status: number | string
   }
 }
 
@@ -22,7 +22,7 @@ export type BaseResponse<T = {}> = {
   resultCode: number
   messages: string[]
   fieldsErrors: FieldError[]
-  children:[]
+  children: []
 }
 
 export type FieldError = {

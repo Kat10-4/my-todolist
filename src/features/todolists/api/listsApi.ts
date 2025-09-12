@@ -1,3 +1,4 @@
+import type { TaskStatus } from "../../../common/enums"
 import { instance } from "../../../common/instance"
 import type { BaseResponse, WPList } from "./listsApi.types"
 
@@ -7,7 +8,7 @@ export const listsApi = {
   },
   createList(payload: { title: string; parent: number }) {
     const { parent, title } = payload
-    return instance.post<BaseResponse<{ item: WPList }>>("/list", { title, status: "publish", parent,children:[] })
+    return instance.post<BaseResponse<{ item: WPList }>>("/list", { title, status: "publish", parent, children: [] })
   },
   deleteList(id: string) {
     return instance.delete<BaseResponse<WPList>>(`/list/${id}`)
@@ -15,5 +16,11 @@ export const listsApi = {
   changeListTitle(payload: { id: string; title: string }) {
     const { id, title } = payload
     return instance.put<BaseResponse<WPList>>(`/list/${id}`, { title, slug: title })
+  },
+  updateListStatus(payload: { id: string; status: TaskStatus }) {
+    const { id, status } = payload
+    return instance.put<BaseResponse<WPList>>(`/list/${id}`, {
+      acf: { status },
+    })
   },
 }

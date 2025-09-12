@@ -5,7 +5,7 @@ import { EditableSpan } from "../../../../../../../common/components"
 import { useAppDispatch } from "../../../../../../../common/hooks"
 import { getBoxSx, getListItemSx } from "./Task.styles"
 import { TaskStatus } from "../../../../../../../common/enums"
-import { changeListTitleTC, deleteListTC, updateListAC,type DomainList } from "../../../../../model/lists-slice"
+import { changeListTitleTC, deleteListTC,updateTaskStatusTC,type DomainList } from "../../../../../model/lists-slice"
 
 type Props = {
   task: DomainList
@@ -24,9 +24,10 @@ export const Task = React.memo(({ task, todolistId }: Props) => {
   const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => {
     const newStatusValue = e.currentTarget.checked
     dispatch(
-      updateListAC({
+      updateTaskStatusTC({
         id: task.id,
-        value: newStatusValue ? TaskStatus.Done : TaskStatus.Active },),
+        status: newStatusValue ? TaskStatus.Done : TaskStatus.Active },),
+        
     )
   }
 
