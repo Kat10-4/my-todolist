@@ -90,18 +90,30 @@ export const listsSlice = createAppSlice({
       createListTC: create.asyncThunk(
         async (payload: { parent: number; title: string }, { dispatch, rejectWithValue }) => {
           try {
+            console.log("try block - before API call")
             dispatch(setAppStatusAC({ status: "loading" }))
+
             const res = await listsApi.createList(payload)
+            console.log("API Response:", res.data) // This won't show if error occurs
+
             dispatch(setAppStatusAC({ status: "succeeded" }))
-            return { list: res.data.data.item }
-          } catch (error) {
+            return { list: res.data}
+          } catch (error: any) {
+            console.log("rejected block")
+            console.log("Error message:", error.message)
+            console.log("Error response:", error.response?.data)
+            console.log("Error status:", error.response?.status)
+            console.log("Error headers:", error.response?.headers)
+            console.log("Full error:", error)
+
             dispatch(setAppStatusAC({ status: "failed" }))
-            return rejectWithValue(null)
+            return rejectWithValue(error.response?.data || null)
           }
         },
         {
           fulfilled: (state, action) => {
-            action.payload?.list.parent == 0
+            console.log("fulfilled block")
+            action.payload?.list.parent === 0
               ? state.unshift({
                   id: action.payload?.list.id,
                   title: action.payload?.list.title.rendered,
