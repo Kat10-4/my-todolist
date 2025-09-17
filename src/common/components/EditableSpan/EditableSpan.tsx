@@ -4,14 +4,16 @@ import { TextField } from "@mui/material"
 type Props = {
   oldTitle: string
   onClick: (updatedTitle: string) => void
+  disabled: boolean
 }
 
-export const EditableSpan = ({ oldTitle, onClick }: Props) => {
+export const EditableSpan = ({ oldTitle, onClick , disabled}: Props) => {
   const [edit, setEdit] = useState<boolean>(false)
   const [updatedTitle, setUpdatedTitle] = useState(oldTitle)
   const [error, setError] = useState<boolean>(false)
 
   const editHandler = () => {
+    if(disabled) return
     setEdit(!edit)
     const trimmedTitle = updatedTitle.trim()
     setError(!trimmedTitle)

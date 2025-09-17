@@ -38,8 +38,8 @@ export const Task = React.memo(({ task, todolistId }: Props) => {
   return (
     <ListItem key={task.id} sx={getListItemSx(isTaskCompleted)}>
       <Box sx={getBoxSx()}>
-        <Checkbox checked={isTaskCompleted} onChange={changeTaskStatus} sx={{ m: "0" }} />
-        <EditableSpan oldTitle={task.title} onClick={changeTaskTitle} />
+        <Checkbox checked={isTaskCompleted} onChange={changeTaskStatus} sx={{ m: "0" }} disabled={task.entityStatus === 'loading'}/>
+        <EditableSpan oldTitle={task.title} onClick={changeTaskTitle} disabled={task.entityStatus === 'loading'}/>
       </Box>
       <IconButton onClick={removeTask} sx={{ m: "0" }} disabled={task.entityStatus === 'loading'}>
         <DeleteIcon />
