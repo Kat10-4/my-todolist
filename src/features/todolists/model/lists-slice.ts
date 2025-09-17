@@ -1,5 +1,5 @@
 import { createAppSlice, normalizeTaskStatus } from "../../../common/utils"
-import { setAppStatusAC, setEntityStatusAC } from "../../../app/app-slice"
+import { setAppErrorAC, setAppStatusAC } from "../../../app/app-slice"
 import { TaskStatus } from "../../../common/enums"
 import { createSelector } from "@reduxjs/toolkit"
 import { listsApi } from "../api"
@@ -42,6 +42,7 @@ export const listsSlice = createAppSlice({
             return { todolists: res.data }
           } catch (error) {
             dispatch(setAppStatusAC({ status: "failed" }))
+            dispatch(setAppErrorAC({ error: "API call returned rejected" }))
             return rejectWithValue(null)
           }
         },
@@ -54,14 +55,14 @@ export const listsSlice = createAppSlice({
                     title: tl.title.rendered,
                     parent: tl.parent,
                     filter: "all",
-                    entityStatus:"succeeded"
+                    entityStatus: "succeeded",
                   }) //todolist
                 : state.push({
                     id: tl.id,
                     title: tl.title.rendered,
                     parent: tl.parent,
                     status: normalizeTaskStatus(tl.acf?.status),
-                    entityStatus:"succeeded"
+                    entityStatus: "succeeded",
                   }) //task
             })
           },
@@ -77,6 +78,7 @@ export const listsSlice = createAppSlice({
             return payload
           } catch (error) {
             dispatch(setAppStatusAC({ status: "failed" }))
+            dispatch(setAppErrorAC({ error: "API call returned rejected" }))
             return rejectWithValue(null)
           }
         },
@@ -93,23 +95,13 @@ export const listsSlice = createAppSlice({
       createListTC: create.asyncThunk(
         async (payload: { parent: number; title: string }, { dispatch, rejectWithValue }) => {
           try {
-            console.log("try block - before API call")
             dispatch(setAppStatusAC({ status: "loading" }))
-
             const res = await listsApi.createList(payload)
-            console.log("API Response:", res.data) // This won't show if error occurs
-
             dispatch(setAppStatusAC({ status: "succeeded" }))
-            return { list: res.data}
+            return { list: res.data }
           } catch (error: any) {
-            console.log("rejected block")
-            console.log("Error message:", error.message)
-            console.log("Error response:", error.response?.data)
-            console.log("Error status:", error.response?.status)
-            console.log("Error headers:", error.response?.headers)
-            console.log("Full error:", error)
-
             dispatch(setAppStatusAC({ status: "failed" }))
+            dispatch(setAppErrorAC({ error: "API call returned rejected" }))
             return rejectWithValue(error.response?.data || null)
           }
         },
@@ -123,14 +115,14 @@ export const listsSlice = createAppSlice({
                   parent: action.payload?.list.parent,
                   filter: "all",
                   children: [],
-                  entityStatus:"succeeded"
+                  entityStatus: "succeeded",
                 }) //todolist
               : state.unshift({
                   id: action.payload?.list.id,
                   title: action.payload?.list.title.rendered,
                   parent: action.payload?.list.parent,
                   status: normalizeTaskStatus(action.payload?.list.acf?.status),
-                  entityStatus:"succeeded"
+                  entityStatus: "succeeded",
                 }) //task
           },
         },
@@ -140,7 +132,7 @@ export const listsSlice = createAppSlice({
         async (id: string, { dispatch, rejectWithValue }) => {
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
-            dispatch(setEntityStatusAC({ entityStatus: "loading" }))
+            dispatch(changeEntityStatusAC({ id, entityStatus: "loading" }))
             const res = await listsApi.deleteList(id) // backend deletes parent + children
             dispatch(setAppStatusAC({ status: "succeeded" }))
             // Use type assertion to tell TypeScript the structure
@@ -150,6 +142,7 @@ export const listsSlice = createAppSlice({
             return { id, children: childIds } as { id: string; children: string[] }
           } catch (error) {
             dispatch(setAppStatusAC({ status: "failed" }))
+            dispatch(setAppErrorAC({ error: "API call returned rejected" }))
             return rejectWithValue(null)
           }
         },
@@ -176,6 +169,7 @@ export const listsSlice = createAppSlice({
             return payload
           } catch (error) {
             dispatch(setAppStatusAC({ status: "failed" }))
+            dispatch(setAppErrorAC({ error: "API call returned rejected" }))
             return rejectWithValue(null)
           }
         },
@@ -195,13 +189,27 @@ export const listsSlice = createAppSlice({
         if (!item) return
         item.filter = action.payload.value as FilterValues
       }),
+
+      changeEntityStatusAC: create.reducer<{ id: string; entityStatus: RequestStatus }>((state, action) => {
+        const todolist = state.find((todolist) => todolist.id === action.payload.id)
+        if (todolist) {
+          todolist.entityStatus = action.payload.entityStatus
+        }
+      }),
     }
   },
 })
 
 export const listsReducer = listsSlice.reducer
-export const { fetchListsTC, changeListTitleTC, createListTC, deleteListTC, updateTaskStatusTC, updateListFilterAC } =
-  listsSlice.actions
+export const {
+  fetchListsTC,
+  changeListTitleTC,
+  createListTC,
+  deleteListTC,
+  updateTaskStatusTC,
+  updateListFilterAC,
+  changeEntityStatusAC,
+} = listsSlice.actions
 export const { selectTodolist, selectTasksByParent } = listsSlice.selectors
 
 export type DomainList = {

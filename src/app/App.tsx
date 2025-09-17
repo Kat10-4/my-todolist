@@ -2,7 +2,7 @@ import "./App.css"
 import { useAppSelector } from "../common/hooks"
 import { getTheme } from "../common/theme"
 import { CssBaseline, ThemeProvider } from "@mui/material"
-import { Header } from "../common/components"
+import { ErrorSnackbar, Header } from "../common/components"
 import { selectThemeMode } from "./app-slice"
 import { Main } from "./Main"
 
@@ -15,6 +15,7 @@ export const App = () => {
       <CssBaseline />
       <Header />
       <Main />
+      <ErrorSnackbar />
     </ThemeProvider>
   )
 }
