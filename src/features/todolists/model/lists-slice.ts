@@ -1,8 +1,9 @@
 import { createAppSlice, normalizeTaskStatus } from "../../../common/utils"
-import { setAppStatusAC } from "../../../app/app-slice"
+import { setAppStatusAC, setEntityStatusAC } from "../../../app/app-slice"
 import { TaskStatus } from "../../../common/enums"
 import { createSelector } from "@reduxjs/toolkit"
 import { listsApi } from "../api"
+import type { RequestStatus } from "../../../common/types"
 
 export const listsSlice = createAppSlice({
   name: "lists",
@@ -53,12 +54,14 @@ export const listsSlice = createAppSlice({
                     title: tl.title.rendered,
                     parent: tl.parent,
                     filter: "all",
+                    entityStatus:"succeeded"
                   }) //todolist
                 : state.push({
                     id: tl.id,
                     title: tl.title.rendered,
                     parent: tl.parent,
                     status: normalizeTaskStatus(tl.acf?.status),
+                    entityStatus:"succeeded"
                   }) //task
             })
           },
@@ -120,12 +123,14 @@ export const listsSlice = createAppSlice({
                   parent: action.payload?.list.parent,
                   filter: "all",
                   children: [],
+                  entityStatus:"succeeded"
                 }) //todolist
               : state.unshift({
                   id: action.payload?.list.id,
                   title: action.payload?.list.title.rendered,
                   parent: action.payload?.list.parent,
                   status: normalizeTaskStatus(action.payload?.list.acf?.status),
+                  entityStatus:"succeeded"
                 }) //task
           },
         },
@@ -135,6 +140,7 @@ export const listsSlice = createAppSlice({
         async (id: string, { dispatch, rejectWithValue }) => {
           try {
             dispatch(setAppStatusAC({ status: "loading" }))
+            dispatch(setEntityStatusAC({ entityStatus: "loading" }))
             const res = await listsApi.deleteList(id) // backend deletes parent + children
             dispatch(setAppStatusAC({ status: "succeeded" }))
             // Use type assertion to tell TypeScript the structure
@@ -207,6 +213,7 @@ export type DomainList = {
   filter?: FilterValues
   status?: TaskStatus
   children?: DomainList[]
+  entityStatus: RequestStatus //when deleting entity deleteicon still active and fire dispatch
 }
 
 export type FilterValues = "all" | "active" | "completed"

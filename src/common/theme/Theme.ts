@@ -6,14 +6,14 @@ export const getTheme = (themeMode: string) => {
     palette: {
       primary: {
         main: common.black,
-        light: "#333333",
-        dark: "#000000",
+        light: "#10479aff",
+        dark: "#10479aff",
         contrastText: common.white,
       },
       secondary: {
         main: common.white,
-        light: "#ffffff",
-        dark: "#cccccc",
+        light: "#f5feffff",
+        dark: "#3583f9ff",
         contrastText: common.black,
       },
       mode: themeMode === "light" ? "light" : "dark",

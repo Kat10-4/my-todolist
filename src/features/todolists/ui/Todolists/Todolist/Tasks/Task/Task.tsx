@@ -41,7 +41,7 @@ export const Task = React.memo(({ task, todolistId }: Props) => {
         <Checkbox checked={isTaskCompleted} onChange={changeTaskStatus} sx={{ m: "0" }} />
         <EditableSpan oldTitle={task.title} onClick={changeTaskTitle} />
       </Box>
-      <IconButton onClick={removeTask} sx={{ m: "0" }}>
+      <IconButton onClick={removeTask} sx={{ m: "0" }} disabled={task.entityStatus === 'loading'}>
         <DeleteIcon />
       </IconButton>
     </ListItem>

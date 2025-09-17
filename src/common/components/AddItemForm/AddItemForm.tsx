@@ -5,9 +5,10 @@ import AddBoxIcon from "@mui/icons-material/AddBox"
 
 type Props = {
   addItem: (newItemTitle: string) => void
+  disabled?:boolean
 }
 
-export const AddItemForm = React.memo(({ addItem }: Props) => {
+export const AddItemForm = React.memo(({ addItem,disabled }: Props) => {
   const [newItemTitle, setNewItemTitle] = useState<string>("")
   const [error, setError] = useState<string | null>("")
 
@@ -53,10 +54,11 @@ export const AddItemForm = React.memo(({ addItem }: Props) => {
           helperText={error}
           label="Enter a title"
           sx={{ width: "20ch" }}
+          disabled={disabled}
         />
       </Grid2>
       <Grid2>
-        <IconButton onClick={addItemHandler} color={"primary"}>
+        <IconButton onClick={addItemHandler} color={"primary"} disabled={disabled}>
           <AddBoxIcon />
         </IconButton>
       </Grid2>

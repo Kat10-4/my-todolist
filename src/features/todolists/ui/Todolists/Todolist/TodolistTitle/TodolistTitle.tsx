@@ -25,7 +25,7 @@ export const TodolistTitle = ({ todolist }: Props) => {
       <h3 className={s.title}>
         <EditableSpan oldTitle={todolist.title} onClick={(updatedTitle) => updateToDoListTitle(updatedTitle)} />
       </h3>
-      <IconButton aria-label="delete" onClick={removeToDoList} sx={{ m: "0" }}>
+      <IconButton aria-label="delete" onClick={removeToDoList} sx={{ m: "0" }} disabled={todolist.entityStatus === 'loading'}>
         <Delete />
       </IconButton>
     </div>
