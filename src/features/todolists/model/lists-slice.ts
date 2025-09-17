@@ -4,6 +4,7 @@ import { TaskStatus } from "../../../common/enums"
 import { createSelector } from "@reduxjs/toolkit"
 import { listsApi } from "../api"
 import type { RequestStatus } from "../../../common/types"
+import { handleServerNetworkError } from "../../../common/utils/handleServerNetworkError"
 
 export const listsSlice = createAppSlice({
   name: "lists",
@@ -41,8 +42,7 @@ export const listsSlice = createAppSlice({
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return { todolists: res.data }
           } catch (error) {
-            dispatch(setAppStatusAC({ status: "failed" }))
-            dispatch(setAppErrorAC({ error: "API call returned rejected" }))
+            handleServerNetworkError(error, dispatch)
             return rejectWithValue(null)
           }
         },
@@ -77,8 +77,7 @@ export const listsSlice = createAppSlice({
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return payload
           } catch (error) {
-            dispatch(setAppStatusAC({ status: "failed" }))
-            dispatch(setAppErrorAC({ error: "API call returned rejected" }))
+            handleServerNetworkError(error, dispatch)
             return rejectWithValue(null)
           }
         },
@@ -100,9 +99,8 @@ export const listsSlice = createAppSlice({
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return { list: res.data }
           } catch (error: any) {
-            dispatch(setAppStatusAC({ status: "failed" }))
-            dispatch(setAppErrorAC({ error: "API call returned rejected" }))
-            return rejectWithValue(error.response?.data || null)
+            handleServerNetworkError(error, dispatch)
+            return rejectWithValue(error)
           }
         },
         {
@@ -141,8 +139,7 @@ export const listsSlice = createAppSlice({
             const childIds = ((response.children as number[]) || []).map((childId) => childId.toString())
             return { id, children: childIds } as { id: string; children: string[] }
           } catch (error) {
-            dispatch(setAppStatusAC({ status: "failed" }))
-            dispatch(setAppErrorAC({ error: "API call returned rejected" }))
+            handleServerNetworkError(error, dispatch)
             return rejectWithValue(null)
           }
         },
@@ -168,8 +165,7 @@ export const listsSlice = createAppSlice({
             dispatch(setAppStatusAC({ status: "succeeded" }))
             return payload
           } catch (error) {
-            dispatch(setAppStatusAC({ status: "failed" }))
-            dispatch(setAppErrorAC({ error: "API call returned rejected" }))
+            handleServerNetworkError(error, dispatch)
             return rejectWithValue(null)
           }
         },
