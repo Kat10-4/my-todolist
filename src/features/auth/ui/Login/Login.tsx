@@ -7,6 +7,9 @@ import FormLabel from "@mui/material/FormLabel"
 import Grid from "@mui/material/Grid2"
 import TextField from "@mui/material/TextField"
 import { Controller, useForm, type SubmitHandler } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { loginSchema } from "../../lib/schemas"
+import styles from "./Login.module.css"
 
 export const Login = () => {
   const {
@@ -15,7 +18,10 @@ export const Login = () => {
     reset,
     control,
     formState: { errors },
-  } = useForm<LoginInputs>({ defaultValues: { login: "", password: "", rememberMe: false } })
+  } = useForm<LoginInputs>({
+    resolver: zodResolver(loginSchema), //validation in runtime of loginization
+    defaultValues: { login: "", password: "", rememberMe: false },
+  })
 
   const onSubmit: SubmitHandler<LoginInputs> = (data) => {
     console.log(data)
@@ -27,11 +33,24 @@ export const Login = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormControl>
           <FormLabel>
-            <p>Pls fill in login credentials below</p>
+            <p>🔐 Please enter your login credentials to continue</p>
           </FormLabel>
           <FormGroup>
-            <TextField label="Login" margin="normal" {...register("login")} />
-            <TextField type="password" label="Password" margin="normal" {...register("password")} />
+            <TextField
+              label="Login"
+              margin="normal"
+              error={!!errors.login}
+              {...register("login")} // REMOVE the inline validation
+            />
+            {errors.login && <span className={styles.errorMessage}>{errors.login?.message}</span>}
+            <TextField
+              type="password"
+              label="Password"
+              margin="normal"
+              error={!!errors.password}
+              {...register("password")}
+            />
+            {errors.login && <span className={styles.errorMessage}>{errors.password?.message}</span>}
             <FormControlLabel
               label="Remember me"
               control={
