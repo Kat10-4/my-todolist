@@ -5,16 +5,24 @@ import { changeThemeModeAC, selectAppStatus, selectThemeMode } from "../../../ap
 import { useAppDispatch, useAppSelector } from "../../hooks"
 import { getTheme } from "../../theme"
 import { MenuButton } from "../"
+import { Link, useNavigate } from "react-router"
+import { Path } from "../../routing"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
   const theme = getTheme(themeMode)
   const status = useAppSelector(selectAppStatus)
+  const navigate = useNavigate() // Get navigate function
+
 
   const dispatch = useAppDispatch()
 
   const changeModeHandler = () => {
     dispatch(changeThemeModeAC({ themeMode: themeMode === "light" ? "dark" : "light" }))
+  }
+
+  const handleLoginClick = () => {
+    navigate(Path.Login) // Navigate programmatically
   }
 
   return (
@@ -27,7 +35,7 @@ export const Header = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             To Do Lists
           </Typography>
-          <MenuButton>Login</MenuButton>
+          <MenuButton onClick={handleLoginClick}>Login</MenuButton>
           <MenuButton>Logout</MenuButton>
           <MenuButton background={theme.palette.primary.dark}>Faq</MenuButton>
           <Switch color={"default"} onChange={changeModeHandler} />

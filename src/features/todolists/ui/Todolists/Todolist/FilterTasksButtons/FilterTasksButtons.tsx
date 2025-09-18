@@ -1,5 +1,4 @@
 import { Box, Button } from "@mui/material"
-import React from "react"
 import { v1 } from "uuid"
 import { useAppDispatch } from "../../../../../../common/hooks"
 import { updateListFilterAC, type FilterValues, type DomainList } from "../../../../model/lists-slice"
