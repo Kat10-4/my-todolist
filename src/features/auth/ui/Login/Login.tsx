@@ -10,6 +10,12 @@ import { Controller, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema } from "../../lib/schemas"
 import styles from "./Login.module.css"
+import { useNavigate } from "react-router"
+import { Alert, CircularProgress, Snackbar } from "@mui/material"
+import { useAppDispatch } from "../../../../common/hooks"
+import { useState } from "react"
+import { setAppErrorAC } from "../../../../app/app-slice"
+import { login } from "../../model/auth-slice"
 
 export const Login = () => {
   const {
@@ -23,10 +29,28 @@ export const Login = () => {
     defaultValues: { login: "", password: "", rememberMe: false },
   })
 
-  const onSubmit: SubmitHandler<LoginInputs> = (data) => {
-    console.log(data)
-    reset()
-  }
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
+    setIsLoading(true);
+    try {
+      // Dispatch login action - this should be an async thunk
+      await dispatch(login({ 
+        username: data.login, 
+        password: data.password, 
+        rememberMe: data.rememberMe 
+      })).unwrap();
+      
+      reset();
+      navigate("/dashboard");
+    } catch (error: any) {
+      dispatch(setAppErrorAC(error.message || "Login failed"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Grid container justifyContent={"center"}>
@@ -42,7 +66,7 @@ export const Login = () => {
               error={!!errors.login}
               {...register("login")} // REMOVE the inline validation
               inputProps={{
-                autoComplete: "username"
+                autoComplete: "username",
               }}
             />
             {errors.login && <span className={styles.errorMessage}>{errors.login?.message}</span>}
@@ -53,7 +77,7 @@ export const Login = () => {
               error={!!errors.password}
               {...register("password")}
               inputProps={{
-                autoComplete: "current-password"
+                autoComplete: "current-password",
               }}
             />
             {errors.login && <span className={styles.errorMessage}>{errors.password?.message}</span>}
@@ -69,8 +93,14 @@ export const Login = () => {
                 />
               }
             />{" "}
-            <Button type="submit" variant="contained" color="primary">
-              Login
+            <Button 
+              type="submit" 
+              variant="contained" 
+              color="primary" 
+              disabled={isLoading}
+              sx={{ mt: 2 }}
+            >
+              {isLoading ? <CircularProgress size={24} /> : "Login"}
             </Button>
           </FormGroup>
         </FormControl>
