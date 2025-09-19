@@ -41,6 +41,9 @@ export const Login = () => {
               margin="normal"
               error={!!errors.login}
               {...register("login")} // REMOVE the inline validation
+              inputProps={{
+                autoComplete: "username"
+              }}
             />
             {errors.login && <span className={styles.errorMessage}>{errors.login?.message}</span>}
             <TextField
@@ -49,6 +52,9 @@ export const Login = () => {
               margin="normal"
               error={!!errors.password}
               {...register("password")}
+              inputProps={{
+                autoComplete: "current-password"
+              }}
             />
             {errors.login && <span className={styles.errorMessage}>{errors.password?.message}</span>}
             <FormControlLabel

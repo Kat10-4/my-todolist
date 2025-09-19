@@ -14,7 +14,6 @@ export const Header = () => {
   const status = useAppSelector(selectAppStatus)
   const navigate = useNavigate() // Get navigate function
 
-
   const dispatch = useAppDispatch()
 
   const changeModeHandler = () => {
@@ -32,7 +31,7 @@ export const Header = () => {
           <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" sx={{ flexGrow: 1, textDecoration:'none' }} color='secondary' component={Link} to={Path.Main}>
             To Do Lists
           </Typography>
           <MenuButton onClick={handleLoginClick}>Login</MenuButton>
@@ -41,8 +40,7 @@ export const Header = () => {
           <Switch color={"default"} onChange={changeModeHandler} />
         </Toolbar>
       </Container>
-     {status === "loading" && <LinearProgress />}
+      {status === "loading" && <LinearProgress />}
     </AppBar>
   )
 }
-

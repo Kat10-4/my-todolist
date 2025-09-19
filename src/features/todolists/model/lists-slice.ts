@@ -1,5 +1,5 @@
 import { createAppSlice, normalizeTaskStatus } from "../../../common/utils"
-import { setAppErrorAC, setAppStatusAC } from "../../../app/app-slice"
+import { setAppStatusAC } from "../../../app/app-slice"
 import { TaskStatus } from "../../../common/enums"
 import { createSelector } from "@reduxjs/toolkit"
 import { listsApi } from "../api"
@@ -10,26 +10,8 @@ export const listsSlice = createAppSlice({
   name: "lists",
   initialState: [] as DomainList[],
   selectors: {
-    selectTodolist: (state) => state.filter((list) => list.parent === 0),
-    selectTasksByParent: createSelector(
-      [
-        (state: DomainList[]) => state, // all lists
-        (_state: DomainList[], parentId: number) => parentId,
-      ],
-      (lists, parentId) => {
-        const result: DomainList[] = []
-
-        const collectChildren = (id: number) => {
-          const children = lists.filter((item) => Number(item.parent) === id)
-          children.forEach((child) => {
-            result.push(child)
-            collectChildren(Number(child.id))
-          })
-        }
-
-        collectChildren(parentId)
-        return result
-      },
+    selectTodolist: createSelector([(state: DomainList[]) => state], (state) =>
+      state.filter((list) => list.parent === 0),
     ),
   },
   reducers: (create) => {
@@ -48,6 +30,7 @@ export const listsSlice = createAppSlice({
         },
         {
           fulfilled: (state, action) => {
+            state.length = 0
             action.payload?.todolists.forEach((tl) => {
               tl.parent == 0
                 ? state.push({
@@ -105,7 +88,6 @@ export const listsSlice = createAppSlice({
         },
         {
           fulfilled: (state, action) => {
-            console.log("fulfilled block")
             action.payload?.list.parent === 0
               ? state.unshift({
                   id: action.payload?.list.id,
@@ -206,7 +188,7 @@ export const {
   updateListFilterAC,
   changeEntityStatusAC,
 } = listsSlice.actions
-export const { selectTodolist, selectTasksByParent } = listsSlice.selectors
+export const { selectTodolist } = listsSlice.selectors
 
 export type DomainList = {
   id: string

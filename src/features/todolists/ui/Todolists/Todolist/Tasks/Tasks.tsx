@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import List from "@mui/material/List"
 import { useAppSelector } from "../../../../../../common/hooks"
-import { selectTasksByParent, type DomainList } from "../../../../model/lists-slice"
+import { type DomainList } from "../../../../model/lists-slice"
 import { Task } from "./Task/Task"
 import { TaskStatus } from "../../../../../../common/enums"
 
@@ -12,7 +12,13 @@ type Props = {
 export const Tasks = React.memo(({ todolist }: Props) => {
   const { id, filter } = todolist
 
-  const todolistTasks: DomainList[] = useAppSelector((state) => selectTasksByParent(state, Number(todolist.id)))
+  const todolists: DomainList[] = useAppSelector((state) => state.lists)
+
+  const todolistTasks = useMemo(() => {
+    return todolists.filter(item => 
+      item.parent !== null && Number(item.parent) === Number(id)
+    )
+  }, [todolists, id])
 
 
   const filteredTasks = useMemo(() => {
@@ -31,7 +37,7 @@ export const Tasks = React.memo(({ todolist }: Props) => {
         <p style={{ margin: "30px 0" }}>No tasks</p>
       ) : (
         <List sx={{ m: "30px 0", p: "0" }}>
-          {filteredTasks?.map((task) => <Task key={task.id} task={task} todolistId={todolist.id} />)}
+          {filteredTasks?.map((task) => <Task key={`task-${task.id}-${todolist.id}`} task={task} />)}
         </List>
       )}
     </>

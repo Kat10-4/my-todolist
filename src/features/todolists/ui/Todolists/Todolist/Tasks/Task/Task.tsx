@@ -9,10 +9,9 @@ import { changeListTitleTC, deleteListTC,updateTaskStatusTC,type DomainList } fr
 
 type Props = {
   task: DomainList
-  todolistId: string
 }
 
-export const Task = React.memo(({ task, todolistId }: Props) => {
+export const Task = React.memo(({ task }: Props) => {
   const dispatch = useAppDispatch()
 
   const isTaskCompleted = task.status === TaskStatus.Done
