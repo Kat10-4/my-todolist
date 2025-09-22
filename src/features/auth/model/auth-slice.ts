@@ -1,103 +1,156 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { setAppErrorAC } from '../../../app/app-slice';
+// slices/authSlice.ts
+
+import { createAppSlice } from "../../../common/utils"
 
 interface AuthState {
-  isAuthenticated: boolean;
-  user: any;
-  token: string | null;
-  isLoading: boolean;
+  user: null | {
+    id: number
+    username: string
+    email: string
+    displayName: string
+  }
+  token: string | null
+  isAuthenticated: boolean
+  isLoading: boolean
+  error: string | null
 }
 
 const initialState: AuthState = {
-  isAuthenticated: false,
   user: null,
-  token: localStorage.getItem('jwt_token') || null,
+  token: localStorage.getItem('wp_jwt_token'),
+  isAuthenticated: !!localStorage.getItem('wp_jwt_token'),
   isLoading: false,
-};
+  error: null,
+}
 
-// Async thunk for login
-export const login = createAsyncThunk(
-  'auth/login',
-  async (credentials: { username: string; password: string; rememberMe: boolean }, { dispatch, rejectWithValue }) => {
-    try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/wp-json/jwt-auth/v1/token`,
-        {
-          username: credentials.username,
-          password: credentials.password,
-        }
-      );
-
-      if (response.data.token) {
-        const jwtToken = response.data.token;
-        
-        if (credentials.rememberMe) {
-          localStorage.setItem('jwt_token', jwtToken);
-        } else {
-          sessionStorage.setItem('jwt_token', jwtToken);
-        }
-
-        // Set default authorization header
-        axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
-
-        return {
-          token: jwtToken,
-          user: response.data.user_display_name || credentials.username,
-        };
-      }
-      
-      return rejectWithValue('Invalid response from server');
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
-      dispatch(setAppErrorAC(errorMessage));
-      return rejectWithValue(errorMessage);
-    }
-  }
-);
-
-const authSlice = createSlice({
+export const authSlice = createAppSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    logout: (state) => {
-      state.isAuthenticated = false;
-      state.user = null;
-      state.token = null;
-      localStorage.removeItem('jwt_token');
-      sessionStorage.removeItem('jwt_token');
-      delete axios.defaults.headers.common['Authorization'];
-    },
-    setCredentials: (state, action: PayloadAction<{ token: string; user: any }>) => {
-      state.isAuthenticated = true;
-      state.token = action.payload.token;
-      state.user = action.payload.user;
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(login.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isAuthenticated = true;
-        state.token = action.payload.token;
-        state.user = action.payload.user;
-      })
-      .addCase(login.rejected, (state) => {
-        state.isLoading = false;
-        state.isAuthenticated = false;
-        state.token = null;
-        state.user = null;
-      });
-  },
-});
+  reducers: (create) => ({
+    // Login async thunk
+    login: create.asyncThunk(
+      async (credentials: { username: string; password: string }) => {
+        const response = await jwtAuth.login(credentials)
+        return response
+      },
+      {
+        pending: (state) => {
+          state.isLoading = true
+          state.error = null
+        },
+        fulfilled: (state, action) => {
+          state.isLoading = false
+          state.isAuthenticated = true
+          state.token = action.payload.token
+          state.user = action.payload.user
+          
+          // Store token in localStorage
+          localStorage.setItem('wp_jwt_token', action.payload.token)
+        },
+        rejected: (state, action) => {
+          state.isLoading = false
+          state.error = action.error.message || 'Login failed'
+          state.isAuthenticated = false
+          state.token = null
+          state.user = null
+        },
+      }
+    ),
 
-export const { logout, setCredentials } = authSlice.actions;
-export const selectIsAuthenticated = (state: { auth: AuthState }) => state.auth.isAuthenticated;
-export const selectAuthUser = (state: { auth: AuthState }) => state.auth.user;
-export const selectAuthToken = (state: { auth: AuthState }) => state.auth.token;
-export const selectAuthLoading = (state: { auth: AuthState }) => state.auth.isLoading;
+    // Register async thunk
+    register: create.asyncThunk(
+      async (userData: {
+        username: string
+        email: string
+        password: string
+        displayName?: string
+      }) => {
+        const response = await jwtAuthAPI.register(userData)
+        return response
+      },
+      {
+        pending: (state) => {
+          state.isLoading = true
+          state.error = null
+        },
+        fulfilled: (state, action) => {
+          state.isLoading = false
+          // Registration might automatically log the user in
+          if (action.payload.token) {
+            state.isAuthenticated = true
+            state.token = action.payload.token
+            state.user = action.payload.user
+            localStorage.setItem('wp_jwt_token', action.payload.token)
+          }
+        },
+        rejected: (state, action) => {
+          state.isLoading = false
+          state.error = action.error.message || 'Registration failed'
+        },
+      }
+    ),
 
-export default authSlice.reducer;
+    // Validate token async thunk
+    validateToken: create.asyncThunk(
+      async (token: string) => {
+        const response = await jwtAuthAPI.validateToken(token)
+        return response
+      },
+      {
+        pending: (state) => {
+          state.isLoading = true
+        },
+        fulfilled: (state, action) => {
+          state.isLoading = false
+          state.isAuthenticated = true
+          state.user = action.payload.user
+        },
+        rejected: (state, action) => {
+          state.isLoading = false
+          state.isAuthenticated = false
+          state.token = null
+          state.user = null
+          localStorage.removeItem('wp_jwt_token')
+        },
+      }
+    ),
+
+    // Logout sync action
+    logout: create.reducer((state) => {
+      state.isAuthenticated = false
+      state.token = null
+      state.user = null
+      localStorage.removeItem('wp_jwt_token')
+    }),
+
+    // Clear error action
+    clearError: create.reducer((state) => {
+      state.error = null
+    }),
+  }),
+  selectors: {
+    selectUser: (auth) => auth.user,
+    selectToken: (auth) => auth.token,
+    selectIsAuthenticated: (auth) => auth.isAuthenticated,
+    selectIsLoading: (auth) => auth.isLoading,
+    selectError: (auth) => auth.error,
+  },
+})
+
+export const authReducer = authSlice.reducer
+
+export const {
+  login,
+  register,
+  validateToken,
+  logout,
+  clearError,
+} = authSlice.actions
+
+export const {
+  selectUser,
+  selectToken,
+  selectIsAuthenticated,
+  selectIsLoading,
+  selectError,
+} = authSlice.selectors

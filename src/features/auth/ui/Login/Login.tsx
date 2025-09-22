@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema } from "../../lib/schemas"
 import styles from "./Login.module.css"
 import { useNavigate } from "react-router"
-import { Alert, CircularProgress, Snackbar } from "@mui/material"
+import { CircularProgress } from "@mui/material"
 import { useAppDispatch } from "../../../../common/hooks"
 import { useState } from "react"
 import { setAppErrorAC } from "../../../../app/app-slice"
@@ -29,28 +29,30 @@ export const Login = () => {
     defaultValues: { login: "", password: "", rememberMe: false },
   })
 
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
 
-const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
-    setIsLoading(true);
+  const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
+    setIsLoading(true)
     try {
       // Dispatch login action - this should be an async thunk
-      await dispatch(login({ 
-        username: data.login, 
-        password: data.password, 
-        rememberMe: data.rememberMe 
-      })).unwrap();
-      
-      reset();
-      navigate("/dashboard");
+      await dispatch(
+        login({
+          username: data.login,
+          password: data.password,
+          rememberMe: data.rememberMe,
+        }),
+      ).unwrap()
+
+      reset()
+      navigate("/dashboard")
     } catch (error: any) {
-      dispatch(setAppErrorAC(error.message || "Login failed"));
+      dispatch(setAppErrorAC(error.message || "Login failed"))
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <Grid container justifyContent={"center"}>
@@ -93,13 +95,7 @@ const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
                 />
               }
             />{" "}
-            <Button 
-              type="submit" 
-              variant="contained" 
-              color="primary" 
-              disabled={isLoading}
-              sx={{ mt: 2 }}
-            >
+            <Button type="submit" variant="contained" color="primary" disabled={isLoading} sx={{ mt: 2 }}>
               {isLoading ? <CircularProgress size={24} /> : "Login"}
             </Button>
           </FormGroup>
