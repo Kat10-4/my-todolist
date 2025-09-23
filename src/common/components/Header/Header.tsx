@@ -7,6 +7,7 @@ import { getTheme } from "../../theme"
 import { MenuButton } from "../"
 import { Link, useNavigate } from "react-router"
 import { Path } from "../../routing"
+import { logout } from "../../../features/auth/model/auth-slice"
 
 export const Header = () => {
   const themeMode = useAppSelector(selectThemeMode)
@@ -24,6 +25,11 @@ export const Header = () => {
     navigate(Path.Login) // Navigate programmatically
   }
 
+  const handleLogoutClick = () => {
+    dispatch(logout())
+    navigate(Path.Main)
+  }
+
   return (
     <AppBar position="static">
       <Container sx={{ maxWidth: "1140px" }} maxWidth={false}>
@@ -35,7 +41,7 @@ export const Header = () => {
             To Do Lists
           </Typography>
           <MenuButton onClick={handleLoginClick}>Login</MenuButton>
-          <MenuButton>Logout</MenuButton>
+          <MenuButton onClick={handleLogoutClick}>Logout</MenuButton>
           <MenuButton background={theme.palette.primary.dark}>Faq</MenuButton>
           <Switch color={"default"} onChange={changeModeHandler} />
         </Toolbar>

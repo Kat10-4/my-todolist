@@ -4,22 +4,22 @@ import type { BaseResponse, WPList } from "./listsApi.types"
 
 export const listsApi = {
   getLists() {
-    return instance.get<WPList[]>("/list")
+    return instance.get<WPList[]>("/wp/v2/list")
   },
   createList(payload: { title: string; parent: number }) {
     const { parent, title } = payload
-    return instance.post<WPList>("/list", { title, status: "publish", parent, children: [] })
+    return instance.post<WPList>("/wp/v2/list", { title, status: "publish", parent, children: [] })
   },
   deleteList(id: string) {
-    return instance.delete<WPList>(`/list/${id}`)
+    return instance.delete<WPList>(`/wp/v2/list/${id}`)
   },
   changeListTitle(payload: { id: string; title: string }) {
     const { id, title } = payload
-    return instance.put<WPList>(`/list/${id}`, { title, slug: title })
+    return instance.put<WPList>(`/wp/v2/list/${id}`, { title, slug: title })
   },
   updateListStatus(payload: { id: string; status: TaskStatus }) {
     const { id, status } = payload
-    return instance.put<WPList>(`/list/${id}`, {
+    return instance.put<WPList>(`/wp/v2/list/${id}`, {
       acf: { status },
     })
   },

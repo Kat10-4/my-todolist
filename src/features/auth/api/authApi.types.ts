@@ -1,6 +1,4 @@
-// features/auth/api/authApi.types.ts
 
-// Success response from /jwt-auth/v1/token
 export type AuthResponse = {
   token: string
   user_display_name: string
@@ -8,8 +6,13 @@ export type AuthResponse = {
   user_nicename: string
 }
 
+export type ValidationResponse={
+  code: string
+      data: {
+        status: number
+      }
+}
 
-// User data from /wp/v2/users/me
 export type WPUser = {
   id: number
   name: string

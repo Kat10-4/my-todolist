@@ -16,6 +16,7 @@ import { useAppDispatch } from "../../../../common/hooks"
 import { useState } from "react"
 import { setAppErrorAC } from "../../../../app/app-slice"
 import { login } from "../../model/auth-slice"
+import { Path } from "../../../../common/routing"
 
 export const Login = () => {
   const {
@@ -46,9 +47,9 @@ export const Login = () => {
       ).unwrap()
 
       reset()
-      navigate("/dashboard")
+      navigate(Path.Main)
     } catch (error: any) {
-      dispatch(setAppErrorAC(error.message || "Login failed"))
+      dispatch(setAppErrorAC({ error: error.message || "Login failed" }))
     } finally {
       setIsLoading(false)
     }
