@@ -3,7 +3,6 @@ import { setAppStatusAC } from "../../../app/app-slice"
 import { handleServerNetworkError } from "../../../common/utils/handleServerNetworkError"
 import { authApi } from "../api/authApi"
 
-
 export const authSlice = createAppSlice({
   name: "auth",
   initialState: {
@@ -44,7 +43,6 @@ export const authSlice = createAppSlice({
               throw new Error("No token received")
             }
           } catch (error: any) {
-
             handleServerNetworkError(error, dispatch)
             return rejectWithValue(error.response?.data?.message || "Login failed")
           }
@@ -112,21 +110,12 @@ export const authSlice = createAppSlice({
           },
         },
       ),
-
-      // ✅ MANUAL LOGOUT (sync action for immediate logout)
-      manualLogout: create.reducer((state) => {
-        state.isLoggedIn = false
-        state.token = null
-        state.user = null
-        localStorage.removeItem("wp_jwt_token")
-        sessionStorage.removeItem("wp_jwt_token")
-      }),
     }
   },
 })
 
 export const authReducer = authSlice.reducer
-export const { login, logout, manualLogout } = authSlice.actions
+export const { login, logout } = authSlice.actions
 export const { selectUser, selectToken } = authSlice.selectors
 
 export type AuthState = {

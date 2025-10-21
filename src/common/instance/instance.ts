@@ -26,12 +26,7 @@ instance.interceptors.request.use((config) => {
   if (token && !config.url?.includes('/jwt-auth/')) {
     // ✅ User is LOGGED IN - use THEIR JWT token for data endpoints
     config.headers.Authorization = `Bearer ${token}`
-  } else if (process.env.REACT_APP_WP_USER && process.env.REACT_APP_WP_APP_PASSWORD) {
-    // ✅ User is NOT logged in - use YOUR Basic auth credentials
-    config.headers.Authorization = `Basic ${btoa(
-      `${process.env.REACT_APP_WP_USER}:${process.env.REACT_APP_WP_APP_PASSWORD}`
-    )}`
-  }
+  } 
   
   return config
 })

@@ -34,15 +34,14 @@ export const Header = () => {
     <AppBar position="static">
       <Container sx={{ maxWidth: "1140px" }} maxWidth={false}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+          {/* <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
             <MenuIcon />
-          </IconButton>
+          </IconButton> */}
           <Typography variant="h6" sx={{ flexGrow: 1, textDecoration:'none' }} color='secondary' component={Link} to={Path.Main}>
             To Do Lists
           </Typography>
           <MenuButton onClick={handleLoginClick}>Login</MenuButton>
           <MenuButton onClick={handleLogoutClick}>Logout</MenuButton>
-          <MenuButton background={theme.palette.primary.dark}>Faq</MenuButton>
           <Switch color={"default"} onChange={changeModeHandler} />
         </Toolbar>
       </Container>
