@@ -2,6 +2,7 @@ import { createAppSlice } from "../../../common/utils"
 import { setAppStatusAC } from "../../../app/app-slice"
 import { handleServerNetworkError } from "../../../common/utils/handleServerNetworkError"
 import { authApi } from "../api/authApi"
+import { listsApi } from "../../todolists/api/listsApi"
 
 export const authSlice = createAppSlice({
   name: "auth",
@@ -70,10 +71,20 @@ export const authSlice = createAppSlice({
             const state = getState() as { auth: AuthState }
             const token = state.auth.token
 
+            //cleaning all list for host user
+            if (state.auth.user?.username === "host" && token) {
+              try {
+                await listsApi.cleanupHostLists()
+              } catch (error: any) {
+                handleServerNetworkError(error, dispatch)
+                return rejectWithValue(error.response?.data?.message || "Logout failed")
+              }
+            }
+
             // Optional: Call logout endpoint if available
             if (token) {
               try {
-                await authApi.logout?.(token)
+                await authApi.logout(token)
               } catch (error) {
                 // Ignore logout API errors - we still want to clear local state
                 console.log("Logout API call failed, but clearing local state anyway")

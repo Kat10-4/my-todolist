@@ -23,4 +23,7 @@ export const listsApi = {
       acf: { status },
     })
   },
+  cleanupHostLists: () => {
+    return instance.delete('/wp/v2/cleanup-host-lists')
+  },
 }
