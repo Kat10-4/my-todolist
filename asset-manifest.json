@@ -1,15 +1,19 @@
 {
   "files": {
-    "main.css": "/my-todolist/static/css/main.e6c13ad2.css",
-    "main.js": "/my-todolist/static/js/main.bdfed77c.js",
-    "static/js/919.dcceb679.chunk.js": "/my-todolist/static/js/919.dcceb679.chunk.js",
+    "main.css": "/my-todolist/static/css/main.6abde6ec.css",
+    "main.js": "/my-todolist/static/js/main.6e47eca5.js",
+    "static/js/453.73b6a78c.chunk.js": "/my-todolist/static/js/453.73b6a78c.chunk.js",
+    "static/media/SourceSans3-Regular.ttf": "/my-todolist/static/media/SourceSans3-Regular.9264dda20a2f22afe52b.ttf",
+    "static/media/SourceSans3-Bold.ttf": "/my-todolist/static/media/SourceSans3-Bold.87cd29d52ade6dbaf2e9.ttf",
+    "static/media/PlayfairDisplaySC-Bold.ttf": "/my-todolist/static/media/PlayfairDisplaySC-Bold.1b17fb4f9060e1d49e27.ttf",
+    "static/media/PlayfairDisplaySC-Regular.ttf": "/my-todolist/static/media/PlayfairDisplaySC-Regular.8c8d2f742833cf9cb110.ttf",
     "index.html": "/my-todolist/index.html",
-    "main.e6c13ad2.css.map": "/my-todolist/static/css/main.e6c13ad2.css.map",
-    "main.bdfed77c.js.map": "/my-todolist/static/js/main.bdfed77c.js.map",
-    "919.dcceb679.chunk.js.map": "/my-todolist/static/js/919.dcceb679.chunk.js.map"
+    "main.6abde6ec.css.map": "/my-todolist/static/css/main.6abde6ec.css.map",
+    "main.6e47eca5.js.map": "/my-todolist/static/js/main.6e47eca5.js.map",
+    "453.73b6a78c.chunk.js.map": "/my-todolist/static/js/453.73b6a78c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e6c13ad2.css",
-    "static/js/main.bdfed77c.js"
+    "static/css/main.6abde6ec.css",
+    "static/js/main.6e47eca5.js"
   ]
 }
