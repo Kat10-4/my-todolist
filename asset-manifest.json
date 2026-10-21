@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/my-todolist/static/css/main.6abde6ec.css",
-    "main.js": "/my-todolist/static/js/main.fb00e1ec.js",
+    "main.js": "/my-todolist/static/js/main.d15c2216.js",
     "static/js/453.73b6a78c.chunk.js": "/my-todolist/static/js/453.73b6a78c.chunk.js",
     "static/media/SourceSans3-Regular.ttf": "/my-todolist/static/media/SourceSans3-Regular.9264dda20a2f22afe52b.ttf",
     "static/media/SourceSans3-Bold.ttf": "/my-todolist/static/media/SourceSans3-Bold.87cd29d52ade6dbaf2e9.ttf",
@@ -9,11 +9,11 @@
     "static/media/PlayfairDisplaySC-Regular.ttf": "/my-todolist/static/media/PlayfairDisplaySC-Regular.8c8d2f742833cf9cb110.ttf",
     "index.html": "/my-todolist/index.html",
     "main.6abde6ec.css.map": "/my-todolist/static/css/main.6abde6ec.css.map",
-    "main.fb00e1ec.js.map": "/my-todolist/static/js/main.fb00e1ec.js.map",
+    "main.d15c2216.js.map": "/my-todolist/static/js/main.d15c2216.js.map",
     "453.73b6a78c.chunk.js.map": "/my-todolist/static/js/453.73b6a78c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6abde6ec.css",
-    "static/js/main.fb00e1ec.js"
+    "static/js/main.d15c2216.js"
   ]
 }
