@@ -1,69 +1,140 @@
-# React TodoList App with WordPress Backend
+# Todo List Manager
 
-A modern, full-stack TodoList application built with React TypeScript, Material-UI, and WordPress REST API with JWT authentication.
+Full-stack todo application: React TypeScript frontend with a headless WordPress backend (REST API + JWT authentication).
 
-## 🚀 Features
+This repository contains the **frontend**. The WordPress backend runs separately (typically via Docker on `localhost:8080`).
 
-- ✅ **User Authentication** - JWT-based login/logout with WordPress
-- ✅ **Todo Management** - Create, read, update, and delete todo lists and tasks
-- ✅ **User Isolation** - Each user sees only their own lists
-- ✅ **Responsive Design** - Built with Material-UI for all screen sizes
-- ✅ **Real-time Updates** - Instant UI updates with Redux state management
-- ✅ **Session Management** - Remember me functionality with localStorage/sessionStorage
-- ✅ **Host User Cleanup** - Automatic list cleanup for demo "host" user
+## Features
 
-## 🛠 Tech Stack
+- JWT login / logout with session persistence (“Remember me”)
+- CRUD for todo lists and nested tasks
+- Per-user data isolation
+- Task filters (All / Active / Completed)
+- Light and dark themes
+- Demo `host` account with automatic list cleanup on logout
 
-### Frontend
-- **React 18** with TypeScript
-- **Redux Toolkit** for state management
-- **Material-UI (MUI)** for UI components
-- **React Hook Form** for form handling
-- **Axios** for API calls
+## Tech stack
 
-### Backend
-- **WordPress** with custom REST API endpoints
-- **JWT Authentication** for secure login
-- **Custom Post Type** for todo lists
-- **ACF** for custom fields
+| Layer | Technologies |
+| --- | --- |
+| Frontend | React 18, TypeScript, Redux Toolkit, React Router, MUI, React Hook Form, Zod, Axios |
+| Backend | WordPress (custom REST endpoints), JWT Authentication plugin, Advanced Custom Fields (ACF) |
 
-## 🏗 Project Structure
-src/
-├── app/                # Redux store configuration
-├── common/             # Shared utilities, types, components, custom hooks, Material UI theme, routing
-├── features/
-│   ├── auth/           # Authentication slice, API and components
-│   └── todolists/      # Todo lists slice, API and components
-└── assets/             # Google Fonts
+## Architecture
 
+```
+Browser (React app :3000)
+    │  HTTPS/HTTP + Bearer JWT
+    ▼
+WordPress REST API (:8080/wp-json)
+    ├── /jwt-auth/v1/token      → authentication
+    └── /wp/v2/...              → lists & tasks
+```
 
-## 📦 Installation
+The UI never talks to the database directly. All business data goes through WordPress REST.
 
-### Prerequisites
-- Node.js 16+ 
-- WordPress 6.0+ with JWT Authentication plugin
-- PHP 7.4+
+## Prerequisites
 
-### Frontend Setup
-# Clone the repository
-git clone [your-repo-url]
+- **Node.js** 18+ (recommended)
+- **npm** or **yarn**
+- A running **WordPress** instance with:
+  - [JWT Authentication for WP REST API](https://wordpress.org/plugins/jwt-authentication-for-wp-rest-api/)
+  - Advanced Custom Fields (if used by your theme/endpoints)
+  - Custom list endpoints / post type configured for this app
+  - CORS allowing `http://localhost:3000`
+- **Docker** + Docker Compose (recommended for the local WordPress stack)
+
+## Getting started
+
+### 1. Clone and install
+
+```bash
+git clone https://github.com/Kat10-4/my-todolist.git
 cd my-todolist
-# Install dependencies
+git checkout wordpress-api-app
 npm install
+```
 
-##🤝 Contributing
-1. Fork the repository
-2. Create a feature branch (git checkout -b feature/amazing-feature)
-3. Commit your changes (git commit -m 'Add amazing feature')
-4. Push to the branch (git push origin feature/amazing-feature)
-5. Open a Pull Request
+### 2. Configure environment
 
-##🆘 Support
-For technical support or access requests:
-Email: diachenko.k.v@gmail.com
-Create an issue in the GitHub repository
+Create a `.env` file in the project root (do not commit secrets):
 
-##🙏 Acknowledgments
-WordPress REST API team
-Material-UI component library
-Redux Toolkit for simplified state management
+```env
+REACT_APP_BASE_URL=http://localhost:8080/wp-json
+```
+
+`REACT_APP_BASE_URL` must point at your WordPress REST root (no trailing path beyond `/wp-json`).
+
+### 3. Start the WordPress backend
+
+Start your WordPress stack so the API is available at `http://localhost:8080`.
+
+Example with Docker Compose (from your backend project directory):
+
+```bash
+docker compose up -d db wordpress
+```
+
+Confirm the API responds:
+
+```bash
+curl http://localhost:8080/wp-json
+```
+
+Ensure a demo user exists (create one in WP Admin or via WP-CLI if needed):
+
+| Field | Value |
+| --- | --- |
+| Login | `host` |
+| Password | `0000` |
+
+### 4. Start the frontend
+
+```bash
+npm start
+```
+
+Open [http://localhost:3000](http://localhost:3000), open **Login**, and sign in with the demo credentials above.
+
+## Project structure
+
+```
+src/
+├── app/                 # Store, app shell, main screen
+├── common/              # Shared UI, theme, routing, Axios instance, utils
+├── features/
+│   ├── auth/            # Login UI, auth API, auth slice
+│   └── todolists/       # Lists/tasks API, slices, UI
+└── assets/              # Fonts and static assets
+```
+
+## Scripts
+
+| Command | Description |
+| --- | --- |
+| `npm start` | Dev server at `http://localhost:3000` |
+| `npm run build` | Production build into `build/` |
+| `npm test` | Run tests |
+| `npm run storybook` | Component Storybook (if used) |
+
+## Authentication notes
+
+- Access is **invite-based**: there is no public self-registration screen.
+- Demo access uses the `host` account; other users can request access via the contact email on the login page.
+- Tokens are stored in `localStorage` (Remember me) or `sessionStorage` (session only).
+- Protected API calls send `Authorization: Bearer <token>`.
+
+## Troubleshooting
+
+| Issue | What to check |
+| --- | --- |
+| Login fails / network error | WordPress is running on port **8080**; `.env` URL matches |
+| `invalid_username` | User `host` exists in WordPress and password is `0000` |
+| CORS errors in the browser | WordPress allows origin `http://localhost:3000` and header `Authorization` |
+| App loads but lists are empty | JWT plugin active; custom list endpoints reachable; user has data |
+
+## License
+
+Private / personal project. Contact the author for access or collaboration.
+
+**Contact:** diachenko.k.v@gmail.com
