@@ -41,7 +41,7 @@ export const Main = () => {
         textAlign="center"
         sx={{ p: 3 }}
       >
-        <Typography variant="h4" component="h1" gutterBottom color="primary.main">
+        <Typography variant="h4" component="h1" gutterBottom >
           Todo List Manager
         </Typography>
         <Typography variant="h6" component="p" color="text.secondary" sx={{ mb: 2 }}>
